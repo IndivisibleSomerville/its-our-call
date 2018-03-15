@@ -4,7 +4,7 @@ import { asResourceRow, ResourceRowProps } from './ResourceRow';
 interface LegislatorRowProps extends ResourceRowProps { }
 
 interface LegislatorRowState {
-
+  // TODO: calculate actual state from props
 }
 
 class LegislatorRow extends React.Component<LegislatorRowProps, LegislatorRowState> {

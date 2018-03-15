@@ -4,7 +4,7 @@ import { asResourceRow, ResourceRowProps } from './ResourceRow';
 interface IssueRowProps extends ResourceRowProps { }
 
 interface IssueRowState {
-
+  // TODO: calculate actual state from props
 }
 
 class IssueRow extends React.Component<IssueRowProps, IssueRowState> {
