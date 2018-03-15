@@ -1,4 +1,7 @@
 import * as React from 'react';
+
+import Http from '../http/Http';
+
 import './Page.css';
 import './Home.css';
 
@@ -17,6 +20,7 @@ interface HomeState {
 }
 
 class Home extends React.Component<HomeProps, HomeState> {
+  http = new Http();
   constructor(props: HomeProps) {
     super(props);
     // TODO: set initial load issues to false & dispatch async load calls to endpoints
@@ -26,6 +30,29 @@ class Home extends React.Component<HomeProps, HomeState> {
       loadedLegislators: true,
       legislatorData: ['legislator', 'legislator'],
     };
+    this.fetchData = this.fetchData.bind(this);
+    this.errorFetchingData = this.errorFetchingData.bind(this);
+  }
+
+  componentDidMount() {
+    this.fetchData();
+  }
+
+  fetchData() {
+    // tslint:disable-next-line:no-any
+    this.http.get('/issue').resp.then((issueListResp: any) => {
+      console.warn(issueListResp);
+      // this.setState({issueData: [issueListResp]});
+    }).catch(this.errorFetchingData);
+    // tslint:disable-next-line:no-any
+    this.http.get('/legislator').resp.then((legislatorListResp: any) => {
+      console.warn(legislatorListResp);
+      // this.setState({legislatorData: [legislatorListResp]});
+    }).catch(this.errorFetchingData);
+  }
+  // tslint:disable-next-line:no-any
+  errorFetchingData(respError: any) {
+    console.warn(respError);
   }
 
   render() {
