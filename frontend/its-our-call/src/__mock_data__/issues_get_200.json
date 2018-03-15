@@ -1,0 +1,89 @@
+{
+   "__note":"example of a successful json get response from http://example.com/api/issue",
+   "__TODO":"http://jsonapi.org/format/#fetching-pagination http://jsonapi.org/format/#fetching-filtering",
+   "data":[
+      {
+         "type":"issue",
+         "id":"1",
+         "attributes":{
+            "title":"Support the Pidgeon Recognition Act",
+            "summary":"Issue Overview. Cras vulputate, turpis lorem ipsum",
+            "explanation":"need example",
+            "progress":"need example",
+            "progress_details":"need example",
+            "progress_date":"2019-04-23T18:25:43.511Z",
+            "goal":"yes",
+            "goal_due_date":"2019-04-23T18:25:43.511Z",
+            "is_current":true,
+            "issue_url":"http://5calls.com/probably",
+            "__note": "*** IDEAS BEYOND THIS POINT ***",
+            "senate_vote_needed_amount":6,
+            "senate_vote_deadline":"2019-05-23T18:25:43.511Z",
+            "house_vote_needed_amount":12,
+            "house_vote_deadline":"2019-05-23T18:25:43.511Z"
+         },
+         "links":{
+            "self":"http://example.com/api/issue/1"
+         },
+         "relationships":{
+            "political_body":{
+               "data":{
+                  "type":"political_body",
+                  "id":"5"
+               },
+               "links":{
+                  "self":"http://example.com/api/political_body/5",
+                  "related":"http://example.com/api/legislators/1/political_body"
+               }
+            },
+            "issue_category":{
+               "data":{
+                  "type":"issue_category",
+                  "id":"10"
+               },
+               "links":{
+                  "self":"http://example.com/api/issue_category/10",
+                  "related":"http://example.com/api/issue/1/issue_category"
+               }
+            },
+            "commmitted_yeas":{
+               "data":[
+                  {
+                     "type":"legislator",
+                     "id":"6"
+                  }
+               ],
+               "links":{
+                  "self":"http://example.com/api/issue/1/relationships/commmitted_yeas",
+                  "related":"http://example.com/api/issue/1/commmitted_yeas"
+               }
+            },
+            "commmitted_nays":{
+               "data":[
+
+               ],
+               "links":{
+                  "self":"http://example.com/api/issue/1/relationships/commmitted_nays",
+                  "related":"http://example.com/api/issue/1/commmitted_nays"
+               }
+            },
+            "uncommitted":{
+               "data":[
+                  {
+                     "type":"legislator",
+                     "id":"5"
+                  },
+                  {
+                     "type":"legislator",
+                     "id":"12"
+                  }
+               ],
+               "links":{
+                  "self":"http://example.com/api/issue/1/relationships/uncommitted",
+                  "related":"http://example.com/api/issue/1/uncommitted"
+               }
+            }
+         }
+      }
+   ]
+}
