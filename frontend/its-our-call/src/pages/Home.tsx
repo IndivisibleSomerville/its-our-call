@@ -1,4 +1,6 @@
 import * as React from 'react';
+import './Page.css';
+import './Home.css';
 
 import { ResourceListSection, Footer } from '../components';
 import { IssueRow, LegislatorRow } from '../components';
