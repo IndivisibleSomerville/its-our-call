@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { asResourceRow, ResourceRowProps } from './ResourceRow';
 
+import './IssueRow.css';
+
 interface IssueRowProps extends ResourceRowProps { }
 
 interface IssueRowState {

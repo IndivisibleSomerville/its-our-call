@@ -1,0 +1,21 @@
+.Home {
+  /* TODO: move these to Page */
+  max-width: 30em;
+  width: 100%;
+}
+
+.InfoRow {
+    width: 100%;
+    background-color: #F2F2F2;
+    padding-top: 2em;
+    padding-bottom: 2em;
+}
+.InfoRow .text {
+  margin-left: 2em;
+  margin-right: 2em;
+}
+.InfoRow .more-button {
+    background-color: #BFBFBF;
+    color: #505050;
+    border-radius: 5px;
+}
