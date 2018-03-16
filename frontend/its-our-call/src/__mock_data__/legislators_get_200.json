@@ -1,0 +1,44 @@
+{
+   "__note":"example of a successful json get response from http://example.com/api/legislator",
+   "__TODO":"http://jsonapi.org/format/#fetching-pagination http://jsonapi.org/format/#fetching-filtering",
+   "data":[
+      {
+         "type":"legislator",
+         "id":"5",
+         "attributes":{
+            "name":"Jack Sparrow",
+            "party":"need example",
+            "role":"need example",
+            "contact_email":"need example",
+            "contact_phone":"need example",
+            "contact_address":"need example",
+            "photo_url":"https://5calls.org/photo/MA-EdwardJMarkey"
+         },
+         "links":{
+            "self":"http://example.com/api/legislator/5"
+         },
+         "relationships":{
+            "political_body":{
+               "data":{
+                  "type":"political_body",
+                  "id":"8"
+               },
+               "links":{
+                  "self":"http://example.com/api/political_body/8",
+                  "related":"http://example.com/api/legislator/5/political_body"
+               }
+            },
+            "jurisdiction":{
+               "data":{
+                  "type":"jurisdiction",
+                  "id":"11"
+               },
+               "links":{
+                  "self":"http://example.com/api/jurisdiction/11",
+                  "related":"http://example.com/api/legislator/5/jurisdiction"
+               }
+            }
+         }
+      }
+   ]
+}
