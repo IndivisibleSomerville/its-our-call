@@ -1,4 +1,4 @@
-The original readme generated with this react project is available [here](https://github.com/facebookincubator/create-react-app).
+The original readme generated with this react project is available [here](https://github.com/IndivisibleSomerville/its-our-call/blob/home-wireframe/frontend/its-our-call/orig-README.md).
 
 
 ## Running
