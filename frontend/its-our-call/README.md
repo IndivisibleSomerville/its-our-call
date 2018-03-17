@@ -11,4 +11,4 @@ Run `npm run test` to run the jest tests.
 
 ## Deploying
 
-TODO: webpack
+[TODO: add webpack to our stack](https://github.com/IndivisibleSomerville/its-our-call/issues/33)
