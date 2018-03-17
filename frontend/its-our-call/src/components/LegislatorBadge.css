@@ -1,0 +1,11 @@
+.LegislatorBadge {
+  float: left;
+}
+
+/* TODO: actual implementation */
+.state-icon.dem {
+  background-color: #305FBC;
+}
+.state-icon.repub {
+  background-color: #D33236;
+}

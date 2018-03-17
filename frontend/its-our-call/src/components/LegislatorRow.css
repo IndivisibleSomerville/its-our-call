@@ -2,19 +2,43 @@
   background-color: #F8F8F8;
   color: #414141;
   width: 100%;
-  height: 69px;
+  min-height: 69px;
   border-bottom: 1px dashed #646464;
+  float: left;
+  clear: both;
+  text-align: left;
 }
 
-.state-icon.dem {
-  background-color: #305FBC;
+.LegislatorRow:last-of-type {
+  border-bottom-style: none;
 }
-.state-icon.repub {
-  background-color: #D33236;
+
+.LegislatorRow .content {
+  float: left;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  padding-bottom: 1rem;
 }
-.star.unfilled {
-  background-color: #FFF;
+.LegislatorRow .content div {
+  float: left;
 }
-.star.filled {
-  background-color: #FA904A;
+
+.LegislatorRow .left {
+  margin-top: 1rem;
+}
+.LegislatorRow .middle {
+  margin-top: 1rem;
+  margin-left: .5rem;
+  margin-right: .5rem;
+}
+
+.LegislatorRow .name {
+  clear: both;
+  font-size: 1.25em;
+  font-weight: bold;
+  margin-bottom: .25rem;
+}
+
+.LegislatorRow .desc {
+  clear: both;
 }

@@ -1,10 +1,78 @@
 .IssueRow {
   background-color: #F8F8F8;
   color: #414141;
-  height: 118px;
   width: 100%;
+  float: left;
+  text-align: left;
+  border-bottom: 1px dashed #646464;
 }
-/* issue bg-color #F8F8F8 */
-/* issue title color #414141 */
-/* issue title style border */
-/* issue vote link #585858 */
+
+.IssueRow:last-of-type {
+  border-bottom-style: none;
+}
+
+/* TODO: info-btn and bold can move to pages */
+
+.IssueRow .content {
+  padding-top: 2rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-bottom: 2rem;
+  float: left;
+}
+
+.IssueRow .title {
+  font-size: 1.45em;
+  font-weight: bold;
+}
+.IssueRow .vote-deadline {
+  padding-top: .5rem;
+  text-decoration: underline;
+  text-transform: lowercase;
+  font-size: 0.85em;
+}
+.IssueRow .needed-votes {
+  float: left;
+  clear:both;
+  padding-top: .5rem;
+  text-transform: lowercase;
+}
+.IssueRow .needed-votes div {
+  float: left;
+}
+.IssueRow .needed-votes .bold {
+  font-size: 1.25em;
+  font-weight: bold;
+}
+.IssueRow .needed-votes .desc {
+  padding: 0.2em;
+}
+.IssueRow .confidence {
+  padding-top: .4em;
+  float: left;
+  clear:both;
+  text-transform: lowercase;
+}
+
+.IssueRow .confidence div {
+  float: left;
+}
+
+.IssueRow .confidence .bold {
+  font-weight: bold;
+}
+.IssueRow .confidence .percent {
+  padding-left: .3em;
+  padding-right: .5em;
+}
+.IssueRow .info-btn {
+  font-size: .95em;
+  border-radius: 1em;
+  background-color: darkgray;
+  color: white;
+  text-align: center;
+  overflow: hidden;
+  width: 1.35em;
+  height: 1.35em;
+  transform: translateY(-15%);
+}

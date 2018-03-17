@@ -8,15 +8,15 @@
 }
 
 .ListSectionHeaderRow .title {
-    padding-top: 0.2em;
+    padding-top: 0.2rem;
     transform: translateY(50%);
     float: left;
-    margin-left: 1.5em;
+    margin-left: 1.5rem;
 }
 
 .ListSectionHeaderRow .link {
-  padding-top: 0.2em;
+  padding-top: 0.2rem;
   transform: translateY(50%);
   float: right;
-  margin-right: 1.5em;
+  margin-right: 1.5rem;
 }

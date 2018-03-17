@@ -46,14 +46,15 @@ class InfoRow extends React.Component<InfoRowProps, InfoRowState> {
   render() {
     let displayText = this.props.text;
     if (!this.state.expanded) {
-      displayText = this.props.text.substr(0, 300);
+      displayText = this.props.text.substr(0, 105);
     }
     return (
       <div className="InfoRow">
-        <div className="text">{displayText}</div>
-        <button className="more-button" onClick={this.expandClick}>
-          {this.state.expanded ? 'less' : 'more'}
-        </button>
+        <div className="text">{displayText}
+          <button className="more-button" onClick={this.expandClick}>
+            {this.state.expanded ? '←' : '→'}
+          </button>
+        </div>
       </div>
     );
   }
@@ -68,7 +69,7 @@ class Home extends React.Component<HomeProps, HomeState> {
       loadedIssues: true,
       issueData: ['issue'],
       loadedLegislators: true,
-      legislatorData: ['legislator', 'legislator'],
+      legislatorData: ['legislator', 'legislator', 'legislator', 'legislator', 'legislator'],
     };
     this.fetchData = this.fetchData.bind(this);
     this.errorFetchingData = this.errorFetchingData.bind(this);

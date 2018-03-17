@@ -2,3 +2,8 @@
   margin-left: auto;
   margin-right: auto;
 }
+
+.ResourceListSection {
+  float: left;
+  width: 100%;
+}

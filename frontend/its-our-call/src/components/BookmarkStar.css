@@ -1,0 +1,13 @@
+.BookmarkStar {
+  float: left;
+  font-size: 3em;
+  color:#FA904A;
+}
+
+/* TODO: actual implementation */
+.star.unfilled {
+  background-color: #FFF;
+}
+.star.filled {
+  background-color: #FA904A;
+}
