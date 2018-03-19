@@ -1,0 +1,44 @@
+.LegislatorRow {
+  background-color: #F8F8F8;
+  color: #414141;
+  width: 100%;
+  min-height: 69px;
+  border-bottom: 1px dashed #646464;
+  float: left;
+  clear: both;
+  text-align: left;
+}
+
+.LegislatorRow:last-of-type {
+  border-bottom-style: none;
+}
+
+.LegislatorRow .content {
+  float: left;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  padding-bottom: 1rem;
+}
+.LegislatorRow .content div {
+  float: left;
+}
+
+.LegislatorRow .left {
+  margin-top: 1rem;
+}
+.LegislatorRow .middle {
+  margin-top: 1rem;
+  margin-left: .5rem;
+  margin-right: .5rem;
+}
+
+.LegislatorRow .name {
+  clear: both;
+  font-size: 1.25em;
+  font-weight: bold;
+  margin-bottom: .25rem;
+}
+
+.LegislatorRow .desc {
+  clear: both;
+}

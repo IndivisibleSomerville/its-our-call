@@ -19,6 +19,47 @@ interface HomeState {
   legislatorData: any[];
 }
 
+const infoRowText = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. \
+Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, \
+when an unknown printer took a galley of type and scrambled it to make a type \
+specimen book. It has survived not only five centuries, but also the leap into \
+electronic typesetting, remaining essentially unchanged. It was popularised in \
+the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, \
+and more recently with desktop publishing software like Aldus PageMaker including \
+versions of Lorem Ipsum.';
+
+interface InfoRowProps {
+  text: string;
+}
+interface InfoRowState {
+  expanded: boolean;
+}
+class InfoRow extends React.Component<InfoRowProps, InfoRowState> {
+  constructor(props: InfoRowProps) {
+    super(props);
+    this.state = { expanded: false };
+    this.expandClick = this.expandClick.bind(this);
+  }
+  expandClick() {
+    this.setState({expanded: !this.state.expanded});
+  }
+  render() {
+    let displayText = this.props.text;
+    if (!this.state.expanded) {
+      displayText = this.props.text.substr(0, 105);
+    }
+    return (
+      <div className="InfoRow">
+        <div className="text">{displayText}
+          <button className="more-button" onClick={this.expandClick}>
+            {this.state.expanded ? '←' : '→'}
+          </button>
+        </div>
+      </div>
+    );
+  }
+}
+
 class Home extends React.Component<HomeProps, HomeState> {
   http = new Http();
   constructor(props: HomeProps) {
@@ -28,7 +69,7 @@ class Home extends React.Component<HomeProps, HomeState> {
       loadedIssues: true,
       issueData: ['issue'],
       loadedLegislators: true,
-      legislatorData: ['legislator', 'legislator'],
+      legislatorData: ['legislator', 'legislator', 'legislator', 'legislator', 'legislator'],
     };
     this.fetchData = this.fetchData.bind(this);
     this.errorFetchingData = this.errorFetchingData.bind(this);
@@ -59,9 +100,7 @@ class Home extends React.Component<HomeProps, HomeState> {
     return (
       <div className="Page Home">
         <div className="full-height scrollable">
-          <div className="intro">
-            Lorem ipsum <button>arrow</button>
-          </div>
+          <InfoRow text={infoRowText} />
           <ResourceListSection
             headerTitle="ISSUE"
             headerLink="/issues"

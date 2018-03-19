@@ -1,5 +1,9 @@
 import * as React from 'react';
 import { asResourceRow, ResourceRowProps } from './ResourceRow';
+import BookmarkStar from './BookmarkStar';
+import LegislatorBadge from './LegislatorBadge';
+
+import './LegislatorRow.css';
 
 interface LegislatorRowProps extends ResourceRowProps { }
 
@@ -11,9 +15,19 @@ class LegislatorRow extends React.Component<LegislatorRowProps, LegislatorRowSta
   render() {
     return (
       <div className="LegislatorRow">
-        Jack Sparrow <br/>
-        US Senator, Vermont
+        <div className="content">
+          <div className="left">
+            <LegislatorBadge type={'dem'}/>
+          </div>
+          <div className="middle">
+            <div className="name">Jack Sparrow </div>
+            <div className="desc">US Senator, Vermont </div>
+          </div>
+          <div className="right">
+            <BookmarkStar />
+          </div>
       </div>
+    </div>
     );
   }
 }
