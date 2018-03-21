@@ -13,6 +13,7 @@ class App extends React.Component {
           <Header />
           <Switch>
             <Route exact={true} path="/" component={pages.Home}/>
+            <Route exact={true} path="/legislators" component={pages.LegislatorList}/>
           </Switch>
         </div>
       </BrowserRouter>

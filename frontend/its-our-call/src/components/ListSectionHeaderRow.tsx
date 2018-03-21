@@ -18,7 +18,7 @@ interface ListSectionHeaderRowState {
 class ListSectionHeaderRow extends React.Component<ListSectionHeaderRowProps, ListSectionHeaderRowState> {
   constructor(props: ListSectionHeaderRowProps) {
     super(props);
-    this.state = { linkTo: this.props.linkTo ? this.props.linkTo : '/' };
+    this.state = { linkTo: this.props.linkTo ? this.props.linkTo : '#' };
   }
 
   render() {
