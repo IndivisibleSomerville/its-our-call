@@ -20,3 +20,8 @@
   float: right;
   margin-right: 1.5rem;
 }
+
+/* TODO: make this a global class */
+.hidden {
+  display: none;
+}
