@@ -5,13 +5,22 @@ import LegislatorBadge from './LegislatorBadge';
 
 import './LegislatorRow.css';
 
-interface LegislatorRowProps extends ResourceRowProps { }
-
-interface LegislatorRowState {
-  // TODO: calculate actual state from props
+interface LegislatorRowWrappedProps extends ResourceRowProps {
+  data: LegislatorRowDataProps;
 }
 
-class LegislatorRow extends React.Component<LegislatorRowProps, LegislatorRowState> {
+export interface LegislatorRowDataProps {
+  isBookmarkRow: boolean;
+}
+
+interface LegislatorRowState {
+}
+
+class LegislatorRow extends React.Component<LegislatorRowWrappedProps, LegislatorRowState> {
+  constructor(props: LegislatorRowWrappedProps) {
+    super(props);
+  }
+
   render() {
     return (
       <div className="LegislatorRow">
@@ -24,7 +33,7 @@ class LegislatorRow extends React.Component<LegislatorRowProps, LegislatorRowSta
             <div className="desc">US Senator, Vermont </div>
           </div>
           <div className="right">
-            <BookmarkStar />
+            <BookmarkStar isHidden={!this.props.data.isBookmarkRow}/>
           </div>
       </div>
     </div>

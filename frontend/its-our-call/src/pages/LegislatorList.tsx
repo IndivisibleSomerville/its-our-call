@@ -7,19 +7,17 @@ import './LegislatorList.css';
 
 import { ResourceListSection, Footer } from '../components';
 import { LegislatorRow } from '../components';
+import { LegislatorRowDataProps } from '../components/LegislatorRow';
 
 interface LegislatorListProps { }
 
 interface LegislatorListState {
-  loadedBookmarks: boolean;
-  // tslint:disable-next-line:no-any
-  bookmarkedLegislatorData: any[];
+  loadedBookmarkedLegislators: boolean;
+  bookmarkedLegislatorData: LegislatorRowDataProps[];
   loadedSenateLegislators: boolean;
+  senateLegislatorData: LegislatorRowDataProps[];
   loadedHouseLegislators: boolean;
-  // tslint:disable-next-line:no-any
-  senateLegislatorData: any[];
-  // tslint:disable-next-line:no-any
-  houseLegislatorData: any[];
+  houseLegislatorData: LegislatorRowDataProps[];
 }
 
 class LegislatorList extends React.Component<LegislatorListProps, LegislatorListState> {
@@ -28,12 +26,12 @@ class LegislatorList extends React.Component<LegislatorListProps, LegislatorList
     super(props);
     // TODO: set initial load issues to false & dispatch async load calls to endpoints
     this.state = {
-      loadedBookmarks: true,
-      bookmarkedLegislatorData: ['bookmarked legislator'],
+      loadedBookmarkedLegislators: true,
+      bookmarkedLegislatorData: [{ isBookmarkRow: true }],
       loadedSenateLegislators: true,
-      senateLegislatorData: ['senate legislator', 'senate legislator'],
+      senateLegislatorData: [{ isBookmarkRow: false }, { isBookmarkRow: false }],
       loadedHouseLegislators: true,
-      houseLegislatorData: ['house legislator', 'house legislator', 'house legislator'],
+      houseLegislatorData: [{ isBookmarkRow: false }, { isBookmarkRow: false }, { isBookmarkRow: false }],
     };
     this.fetchData = this.fetchData.bind(this);
     this.errorFetchingData = this.errorFetchingData.bind(this);
@@ -46,7 +44,7 @@ class LegislatorList extends React.Component<LegislatorListProps, LegislatorList
   fetchData() {
     // TODO: fetch each type of legislator & check local bookmarks
     // tslint:disable-next-line:no-any
-    this.http.get('/legislator').resp.then((legislatorListResp: any) => {
+    this.http.get('/api/legislator').resp.then((legislatorListResp: any) => {
       console.warn(legislatorListResp);
       // this.setState({legislatorData: [legislatorListResp]});
     }).catch(this.errorFetchingData);
@@ -64,7 +62,7 @@ class LegislatorList extends React.Component<LegislatorListProps, LegislatorList
           <ResourceListSection
             headerTitle="BOOKMARKS"
             rowClass={LegislatorRow}
-            loaded={this.state.loadedBookmarks}
+            loaded={this.state.loadedBookmarkedLegislators}
             data={this.state.bookmarkedLegislatorData}
           />
           <ResourceListSection

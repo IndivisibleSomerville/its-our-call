@@ -36,7 +36,7 @@ class ResourceListSection extends React.Component<ResourceListSectionProps, Reso
       if (this.props.data.length > 0) {
         // tslint:disable-next-line:no-any
         let rows = this.props.data.map((datum: any, index: number) => {
-          return (<this.props.rowClass key={index} data={datum}/>);
+          return (<this.props.rowClass key={index} data={datum} />);
         });
         sectionBody = (<div className="rows">{rows}</div>);
       }
