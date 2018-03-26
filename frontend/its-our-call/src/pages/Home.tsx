@@ -5,6 +5,8 @@ import Http from '../http/Http';
 import './Page.css';
 import './Home.css';
 
+import { urlLegislatorsList } from './urls';
+
 import { ResourceListSection, Footer } from '../components';
 import { IssueRow, LegislatorRow } from '../components';
 import { LegislatorRowDataProps } from '../components/LegislatorRow';
@@ -85,12 +87,12 @@ class Home extends React.Component<HomeProps, HomeState> {
   fetchData() {
     // tslint:disable-next-line:no-any
     this.http.get('/api/issue').resp.then((issueListResp: any) => {
-      console.warn(issueListResp);
+      // console.warn(issueListResp);
       // this.setState({issueData: [issueListResp]});
     }).catch(this.errorFetchingData);
     // tslint:disable-next-line:no-any
     this.http.get('/api/legislator').resp.then((legislatorListResp: any) => {
-      console.warn(legislatorListResp);
+      // console.warn(legislatorListResp);
       // this.setState({legislatorData: [legislatorListResp]});
     }).catch(this.errorFetchingData);
   }
@@ -113,7 +115,7 @@ class Home extends React.Component<HomeProps, HomeState> {
           />
           <ResourceListSection
             headerTitle="LEGISLATORS"
-            headerLink="/legislators"
+            headerLink={urlLegislatorsList()}
             rowClass={LegislatorRow}
             loaded={this.state.loadedLegislators}
             data={this.state.legislatorData}
