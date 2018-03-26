@@ -25,7 +25,7 @@ it('renders with some issues and legislators', () => {
   let legislatorFilePath = path.resolve(__dirname, '../__mock_data__/issues_get_200.json');
   fs.exists(issueFilePath, (exists: boolean) => { expect(exists).toBe(true); });
   fs.exists(legislatorFilePath, (exists: boolean) => { expect(exists).toBe(true); });
-  // 
+  //
   // tslint:disable-next-line:no-any
   Http.prototype.get = jest.fn().mockImplementation((url: string, options: any) => {
     // TODO: conditionally respond with legislator data
@@ -45,6 +45,6 @@ it('renders with some issues and legislators', () => {
     </MemoryRouter>
   ), div);
   expect(Http.prototype.get).toHaveBeenCalledTimes(2);
-  expect(Http.prototype.get).toHaveBeenCalledWith('/legislator');
-  expect(Http.prototype.get).toHaveBeenCalledWith('/issue');
+  expect(Http.prototype.get).toHaveBeenCalledWith('/api/legislator');
+  expect(Http.prototype.get).toHaveBeenCalledWith('/api/issue');
 });
