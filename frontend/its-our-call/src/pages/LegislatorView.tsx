@@ -45,8 +45,9 @@ class LegislatorView extends React.Component<LegislatorViewProps, LegislatorView
         <div className="full-height scrollable">
           Individual Legislator Placeholder View
           <br/>
-          <Link to={urlLegislatorsList()}>
-            Back to Legislators
+          <br/>
+          <Link className="placeholder-link" to={urlLegislatorsList()}>
+            Go to Legislators List
           </Link>
         </div>
         <Footer />

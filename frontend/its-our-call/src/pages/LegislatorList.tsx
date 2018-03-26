@@ -27,11 +27,12 @@ class LegislatorList extends React.Component<LegislatorListProps, LegislatorList
     // TODO: set initial load issues to false & dispatch async load calls to endpoints
     this.state = {
       loadedBookmarkedLegislators: true,
-      bookmarkedLegislatorData: [{ isBookmarkRow: true }],
+      bookmarkedLegislatorData: [{ isBookmarkRow: true }], // TODO: real data
       loadedSenateLegislators: true,
-      senateLegislatorData: [{ isBookmarkRow: false }, { isBookmarkRow: false }],
+      senateLegislatorData: [{ isBookmarkRow: false }, { isBookmarkRow: false }], // TODO: real data
       loadedHouseLegislators: true,
       houseLegislatorData: [{ isBookmarkRow: false }, { isBookmarkRow: false }, { isBookmarkRow: false }],
+      // TODO: real data
     };
     this.fetchData = this.fetchData.bind(this);
     this.errorFetchingData = this.errorFetchingData.bind(this);
@@ -45,13 +46,13 @@ class LegislatorList extends React.Component<LegislatorListProps, LegislatorList
     // TODO: fetch each type of legislator & check local bookmarks
     // tslint:disable-next-line:no-any
     this.http.get('/api/legislator').resp.then((legislatorListResp: any) => {
-      console.warn(legislatorListResp);
+      // console.warn(legislatorListResp);
       // this.setState({legislatorData: [legislatorListResp]});
     }).catch(this.errorFetchingData);
   }
   // tslint:disable-next-line:no-any
   errorFetchingData(respError: any) {
-    console.warn(respError);
+    // console.warn(respError);
   }
 
   render() {
