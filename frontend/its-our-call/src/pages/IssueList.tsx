@@ -48,7 +48,7 @@ class IssueList extends React.Component<IssueListProps, IssueListState> {
   fetchData() {
     // TODO: fetch each type of legislator & check local bookmarks
     // tslint:disable-next-line:no-any
-    this.http.get('/api/legislator').resp.then((IssueListResp: any) => {
+    this.http.get('/api/issues').resp.then((IssueListResp: any) => {
       // console.warn(IssueListResp);
       // this.setState({legislatorData: [IssueListResp]});
     }).catch(this.errorFetchingData);

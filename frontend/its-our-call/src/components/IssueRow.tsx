@@ -24,6 +24,22 @@ class IssueRow extends React.Component<IssueRowWrappedProps, IssueRowState> {
   }
 
   render() {
+    if (this.props.data.isArchivedRow) {
+      return (
+        <div className="IssueRow">
+          <div className="content">
+            <div className="title">
+              <Link to={'/issues/' + this.state.issueId}>
+                Support the Pidgeon Recognition Act
+              </Link>
+            </div>
+            <div className="passed-date">
+              passed 12/1/2017
+            </div>
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="IssueRow">
         <div className="content">
