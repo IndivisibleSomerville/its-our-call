@@ -60,6 +60,9 @@ class LegislatorList extends React.Component<LegislatorListProps, LegislatorList
     return (
       <div className="Page LegislatorList">
         <div className="full-height scrollable">
+          <div className="list-header">
+            Legislator List
+          </div>
           <ResourceListSection
             headerTitle="BOOKMARKS"
             rowClass={LegislatorRow}
