@@ -49,6 +49,11 @@ class LegislatorView extends React.Component<LegislatorViewProps, LegislatorView
           <Link className="placeholder-link" to={urlLegislatorsList()}>
             Go to Legislators List
           </Link>
+          <br/>
+          <br/>
+          <Link className="placeholder-link" to={'/'}>
+            Go to Main Page
+          </Link>
         </div>
         <Footer />
       </div>
