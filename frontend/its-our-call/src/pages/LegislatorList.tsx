@@ -14,10 +14,13 @@ interface LegislatorListProps { }
 interface LegislatorListState {
   loadedBookmarkedLegislators: boolean;
   bookmarkedLegislatorData: LegislatorRowDataProps[];
+  loadedRecentlyViewedLegislators: boolean;
+  recentlyViewedLegislatorData: LegislatorRowDataProps[];
   loadedSenateLegislators: boolean;
   senateLegislatorData: LegislatorRowDataProps[];
   loadedHouseLegislators: boolean;
   houseLegislatorData: LegislatorRowDataProps[];
+  hasBookmarks: boolean;
 }
 
 class LegislatorList extends React.Component<LegislatorListProps, LegislatorListState> {
@@ -28,11 +31,14 @@ class LegislatorList extends React.Component<LegislatorListProps, LegislatorList
     this.state = {
       loadedBookmarkedLegislators: true,
       bookmarkedLegislatorData: [{ isBookmarkRow: true }], // TODO: real data
+      loadedRecentlyViewedLegislators: true,
+      recentlyViewedLegislatorData: [{ isBookmarkRow: false }, { isBookmarkRow: false }], // TODO: real data
       loadedSenateLegislators: true,
       senateLegislatorData: [{ isBookmarkRow: false }, { isBookmarkRow: false }], // TODO: real data
       loadedHouseLegislators: true,
       houseLegislatorData: [{ isBookmarkRow: false }, { isBookmarkRow: false }, { isBookmarkRow: false }],
-      // TODO: real data
+      // TODO: real data, real logic
+      hasBookmarks: (Math.random() < .5),
     };
     this.fetchData = this.fetchData.bind(this);
     this.errorFetchingData = this.errorFetchingData.bind(this);
@@ -49,6 +55,7 @@ class LegislatorList extends React.Component<LegislatorListProps, LegislatorList
       // console.warn(legislatorListResp);
       // this.setState({legislatorData: [legislatorListResp]});
     }).catch(this.errorFetchingData);
+    // TODO: if no bookmarks, show recently viewed instead
   }
   // tslint:disable-next-line:no-any
   errorFetchingData(respError: any) {
@@ -56,19 +63,34 @@ class LegislatorList extends React.Component<LegislatorListProps, LegislatorList
   }
 
   render() {
-    // TODO: if no bookmarks, show recently viewed
+    let topResourceListSectionHeaderTitle = 'RECENTLY VIEWED';
+    let topResourceListSectionLoaded = this.state.loadedRecentlyViewedLegislators;
+    let topResourceListSectionData = this.state.recentlyViewedLegislatorData;
+    if (this.state.hasBookmarks) {
+      topResourceListSectionHeaderTitle = 'BOOKMARKS';
+      topResourceListSectionLoaded = this.state.loadedBookmarkedLegislators;
+      topResourceListSectionData = this.state.bookmarkedLegislatorData;
+    }
+
+    let topResourceListSection: JSX.Element | null = (
+      <ResourceListSection
+        headerTitle={topResourceListSectionHeaderTitle}
+        rowClass={LegislatorRow}
+        loaded={topResourceListSectionLoaded}
+        data={topResourceListSectionData}
+      />
+    );
+    if (topResourceListSectionData.length === 0) {
+      topResourceListSection = (null);
+    }
+
     return (
       <div className="Page LegislatorList">
         <div className="full-height scrollable">
           <div className="list-header">
             Legislator List
           </div>
-          <ResourceListSection
-            headerTitle="BOOKMARKS"
-            rowClass={LegislatorRow}
-            loaded={this.state.loadedBookmarkedLegislators}
-            data={this.state.bookmarkedLegislatorData}
-          />
+          {topResourceListSection}
           <ResourceListSection
             headerTitle="SENATE"
             rowClass={LegislatorRow}
