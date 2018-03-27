@@ -5,7 +5,7 @@ import Http from '../http/Http';
 import './Page.css';
 import './Home.css';
 
-import { urlLegislatorsList } from './urls';
+import * as urls from './urls';
 
 import { ResourceListSection, Footer } from '../components';
 import { IssueRow, LegislatorRow } from '../components';
@@ -108,14 +108,14 @@ class Home extends React.Component<HomeProps, HomeState> {
           <InfoRow text={infoRowText} />
           <ResourceListSection
             headerTitle="ISSUE"
-            headerLink="/issues"
+            headerLink={urls.urlIssuesList()}
             rowClass={IssueRow}
             loaded={this.state.loadedIssues}
             data={this.state.issueData}
           />
           <ResourceListSection
             headerTitle="LEGISLATORS"
-            headerLink={urlLegislatorsList()}
+            headerLink={urls.urlLegislatorsList()}
             rowClass={LegislatorRow}
             loaded={this.state.loadedLegislators}
             data={this.state.legislatorData}

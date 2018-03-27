@@ -2,6 +2,8 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { asResourceRow, ResourceRowProps } from './ResourceRow';
 
+import * as urls from '../pages/urls';
+
 import './IssueRow.css';
 
 interface IssueRowWrappedProps extends ResourceRowProps {
@@ -29,7 +31,7 @@ class IssueRow extends React.Component<IssueRowWrappedProps, IssueRowState> {
         <div className="IssueRow">
           <div className="content">
             <div className="title">
-              <Link to={'/issues/' + this.state.issueId}>
+              <Link to={urls.urlFmtIssueView(this.state.issueId)}>
                 Support the Pidgeon Recognition Act
               </Link>
             </div>
@@ -44,7 +46,7 @@ class IssueRow extends React.Component<IssueRowWrappedProps, IssueRowState> {
       <div className="IssueRow">
         <div className="content">
           <div className="title">
-            <Link to={'/issues/' + this.state.issueId}>
+            <Link to={urls.urlFmtIssueView(this.state.issueId)}>
               Support the Pidgeon Recognition Act
             </Link>
           </div>
