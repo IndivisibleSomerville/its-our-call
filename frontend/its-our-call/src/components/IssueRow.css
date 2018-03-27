@@ -76,3 +76,9 @@
   height: 1.35em;
   transform: translateY(-15%);
 }
+
+/* archive subtype */
+
+.passed-date {
+  padding-top: .5rem;
+}
