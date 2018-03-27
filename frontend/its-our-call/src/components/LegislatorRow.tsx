@@ -1,17 +1,32 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
+
+import { urlFmtLegislatorView } from '../pages/urls';
+
 import { asResourceRow, ResourceRowProps } from './ResourceRow';
 import BookmarkStar from './BookmarkStar';
 import LegislatorBadge from './LegislatorBadge';
 
 import './LegislatorRow.css';
 
-interface LegislatorRowProps extends ResourceRowProps { }
-
-interface LegislatorRowState {
-  // TODO: calculate actual state from props
+interface LegislatorRowWrappedProps extends ResourceRowProps {
+  data: LegislatorRowDataProps;
 }
 
-class LegislatorRow extends React.Component<LegislatorRowProps, LegislatorRowState> {
+export interface LegislatorRowDataProps {
+  isBookmarkRow: boolean;
+}
+
+interface LegislatorRowState {
+  legislatorId: number;
+}
+
+class LegislatorRow extends React.Component<LegislatorRowWrappedProps, LegislatorRowState> {
+  constructor(props: LegislatorRowWrappedProps) {
+    super(props);
+    this.state = { legislatorId: 1 }; // TODO: get the real id from data props
+  }
+
   render() {
     return (
       <div className="LegislatorRow">
@@ -20,11 +35,15 @@ class LegislatorRow extends React.Component<LegislatorRowProps, LegislatorRowSta
             <LegislatorBadge type={'dem'}/>
           </div>
           <div className="middle">
-            <div className="name">Jack Sparrow </div>
+            <div className="name">
+              <Link to={urlFmtLegislatorView(this.state.legislatorId)}>
+              Jack Sparrow
+              </Link>
+            </div>
             <div className="desc">US Senator, Vermont </div>
           </div>
           <div className="right">
-            <BookmarkStar />
+            <BookmarkStar isHidden={!this.props.data.isBookmarkRow}/>
           </div>
       </div>
     </div>
