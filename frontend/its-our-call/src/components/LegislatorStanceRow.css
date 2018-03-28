@@ -1,0 +1,110 @@
+.LegislatorStanceRow {
+  background-color: #F8F8F8;
+  color: #414141;
+  width: 100%;
+  float: left;
+  text-align: left;
+  border-bottom: 1px dashed #646464;
+}
+
+.LegislatorStanceRow:last-of-type {
+  border-bottom-style: none;
+}
+
+/* TODO: info-btn and bold can move to pages */
+
+.LegislatorStanceRow .content {
+  padding-top: 2rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-bottom: 2rem;
+  float: left;
+}
+.LegislatorStanceRow .bold {
+  font-weight: bold;
+}
+
+.LegislatorStanceRow .title {
+  font-size: 1.45em;
+  font-weight: bold;
+}
+.LegislatorStanceRow .commitment-info {
+  float: left;
+  clear:both;
+  padding-top: .5rem;
+}
+
+.LegislatorStanceRow .sources {
+  float: left;
+  clear:both;
+}
+
+.LegislatorStanceRow .sources div {
+  float: left;
+}
+
+.LegislatorStanceRow .confidence {
+  padding-top: .4em;
+  float: left;
+  clear:both;
+  text-transform: lowercase;
+}
+
+.LegislatorStanceRow .confidence div {
+  float: left;
+}
+
+.LegislatorStanceRow .confidence .percent {
+  padding-left: .3em;
+  padding-right: .5em;
+}
+
+.LegislatorStanceRow .info-btn {
+  font-size: .95em;
+  border-radius: 1em;
+  background-color: darkgray;
+  color: white;
+  text-align: center;
+  overflow: hidden;
+  width: 1.35em;
+  height: 1.35em;
+  transform: translateY(-15%);
+}
+
+.LegislatorStanceRow .last-update {
+  float: left;
+  clear:both;
+  padding-top: .25rem;
+}
+
+.LegislatorStanceRow .call-btn {
+  float: left;
+  clear:both;
+  margin-top: 1rem;
+  padding: .75rem;
+  border: solid gray 1px;
+  border-radius: .5em;
+}
+
+.LegislatorStanceRow .call-btn:hover {
+  color: white;
+  background: darkgray;
+}
+
+.LegislatorStanceRow .call-btn .text {
+  float: left;
+}
+
+.LegislatorStanceRow .call-btn .arrow {
+  float: left;
+  padding-left: 1rem;
+  padding-right: .25rem;
+}
+
+/* archive subtype */
+
+.passed-date {
+  padding-top: .5rem;
+  float: left;
+  clear:both;
+}

@@ -7,3 +7,7 @@ export { default as ListSectionHeaderRow } from './ListSectionHeaderRow';
 
 export { default as IssueRow } from './IssueRow';
 export { default as LegislatorRow } from './LegislatorRow';
+
+// Legislator View
+export { default as LegislatorViewInfoRow } from './LegislatorViewInfoRow';
+export { default as LegislatorStanceRow } from './LegislatorStanceRow';

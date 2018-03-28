@@ -1,19 +1,23 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 
-import Http from '../http/Http';
+import { ResourceListSection, Footer } from '../components';
+import { LegislatorViewInfoRow, LegislatorStanceRow } from '../components';
+import { LegislatorStanceRowDataProps } from '../components/LegislatorStanceRow';
 
-import { urlLegislatorsList } from './urls';
+import Http from '../http/Http';
 
 import './Page.css';
 import './LegislatorView.css';
 
-import { Footer } from '../components';
-
 interface LegislatorViewProps { }
 
 interface LegislatorViewState {
+  backLink: string;
   loadedLegislator: boolean;
+  // tslint:disable-next-line:no-any
+  legislatorData: any;
+  legislatorStanceData: LegislatorStanceRowDataProps[];
 }
 
 class LegislatorView extends React.Component<LegislatorViewProps, LegislatorViewState> {
@@ -21,7 +25,12 @@ class LegislatorView extends React.Component<LegislatorViewProps, LegislatorView
   constructor(props: LegislatorViewProps) {
     super(props);
     // TODO: set initial load issues to false & dispatch async load calls to endpoints
-    this.state = { loadedLegislator: true };
+    this.state = {
+      backLink: '',
+      loadedLegislator: true,
+      legislatorData: {},
+      legislatorStanceData: [],
+    };
     this.fetchData = this.fetchData.bind(this);
     this.errorFetchingData = this.errorFetchingData.bind(this);
   }
@@ -39,23 +48,36 @@ class LegislatorView extends React.Component<LegislatorViewProps, LegislatorView
   }
 
   render() {
-    // TODO: if no bookmarks, show recently viewed
+    let optionalBackLink: JSX.Element | null = (null);
+    if (this.state.backLink.length !== 0) {
+      optionalBackLink = (
+        <Link className="back-link" to={this.state.backLink}>
+          Pidgeon Recognition Act
+        </Link>
+      );
+    }
+
     return (
       <div className="Page LegislatorView">
         <div className="full-height scrollable">
-          Individual Legislator Placeholder View
-          <br/>
-          <br/>
-          <Link className="placeholder-link" to={urlLegislatorsList()}>
-            Go to Legislators List
-          </Link>
-          <br/>
-          <br/>
-          <Link className="placeholder-link" to={'/'}>
-            Go to Main Page
-          </Link>
+          {optionalBackLink}
+          <LegislatorViewInfoRow
+            legislatorData={this.state.legislatorData}
+          />
+          <ResourceListSection
+            headerTitle="CURRENT"
+            rowClass={LegislatorStanceRow}
+            loaded={true}
+            data={[{isArchivedRow: false}, {isArchivedRow: false}]}
+          />
+          <ResourceListSection
+            headerTitle="ARCHIVE"
+            rowClass={LegislatorStanceRow}
+            loaded={true}
+            data={[{isArchivedRow: true}]}
+          />
+          <Footer />
         </div>
-        <Footer />
       </div>
     );
   }
