@@ -13,22 +13,28 @@ interface ListSectionHeaderRowProps {
 
 interface ListSectionHeaderRowState {
   linkTo: string;
+  isHidingLink: boolean;
 }
 
 class ListSectionHeaderRow extends React.Component<ListSectionHeaderRowProps, ListSectionHeaderRowState> {
   constructor(props: ListSectionHeaderRowProps) {
     super(props);
-    this.state = { linkTo: this.props.linkTo ? this.props.linkTo : '/' };
+    this.state = {
+      linkTo: this.props.linkTo ? this.props.linkTo : '#',
+      isHidingLink: this.props.linkTo === undefined
+    };
   }
 
   render() {
     if (this.props.title === undefined && this.props.linkLabel === undefined) {
       return null;
     }
+
+    let optionalLinkClasses = 'link' + (this.state.isHidingLink ? ' hidden' : '');
     return (
       <div className="ListSectionHeaderRow">
         <div className="title">{this.props.title}</div>
-        <Link className="link" to={this.state.linkTo}>{this.props.linkLabel}</Link>
+        <Link className={optionalLinkClasses} to={this.state.linkTo}>{this.props.linkLabel}</Link>
       </div>
     );
   }

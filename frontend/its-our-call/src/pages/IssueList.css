@@ -1,0 +1,13 @@
+.IssueList {
+  /* TODO: move these to Page */
+  max-width: 30rem;
+  width: 100%;
+}
+
+/* TODO: move this to pages or to another component */
+.list-header {
+  font-size: 2rem;
+  text-align: left;
+  padding:  2rem;
+  font-weight: bold;
+}

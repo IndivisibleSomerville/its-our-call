@@ -5,8 +5,11 @@ import Http from '../http/Http';
 import './Page.css';
 import './Home.css';
 
+import * as urls from './urls';
+
 import { ResourceListSection, Footer } from '../components';
 import { IssueRow, LegislatorRow } from '../components';
+import { LegislatorRowDataProps } from '../components/LegislatorRow';
 
 interface HomeProps { }
 
@@ -16,7 +19,7 @@ interface HomeState {
   issueData: any[];
   loadedLegislators: boolean;
   // tslint:disable-next-line:no-any
-  legislatorData: any[];
+  legislatorData: LegislatorRowDataProps[];
 }
 
 const infoRowText = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. \
@@ -69,7 +72,9 @@ class Home extends React.Component<HomeProps, HomeState> {
       loadedIssues: true,
       issueData: ['issue'],
       loadedLegislators: true,
-      legislatorData: ['legislator', 'legislator', 'legislator', 'legislator', 'legislator'],
+      legislatorData: [
+        {isBookmarkRow: true},
+        {isBookmarkRow: false}, {isBookmarkRow: false}, {isBookmarkRow: false}],
     };
     this.fetchData = this.fetchData.bind(this);
     this.errorFetchingData = this.errorFetchingData.bind(this);
@@ -81,13 +86,13 @@ class Home extends React.Component<HomeProps, HomeState> {
 
   fetchData() {
     // tslint:disable-next-line:no-any
-    this.http.get('/issue').resp.then((issueListResp: any) => {
-      console.warn(issueListResp);
+    this.http.get('/api/issue').resp.then((issueListResp: any) => {
+      // console.warn(issueListResp);
       // this.setState({issueData: [issueListResp]});
     }).catch(this.errorFetchingData);
     // tslint:disable-next-line:no-any
-    this.http.get('/legislator').resp.then((legislatorListResp: any) => {
-      console.warn(legislatorListResp);
+    this.http.get('/api/legislator').resp.then((legislatorListResp: any) => {
+      // console.warn(legislatorListResp);
       // this.setState({legislatorData: [legislatorListResp]});
     }).catch(this.errorFetchingData);
   }
@@ -103,14 +108,14 @@ class Home extends React.Component<HomeProps, HomeState> {
           <InfoRow text={infoRowText} />
           <ResourceListSection
             headerTitle="ISSUE"
-            headerLink="/issues"
+            headerLink={urls.urlIssuesList()}
             rowClass={IssueRow}
             loaded={this.state.loadedIssues}
             data={this.state.issueData}
           />
           <ResourceListSection
             headerTitle="LEGISLATORS"
-            headerLink="/legislators"
+            headerLink={urls.urlLegislatorsList()}
             rowClass={LegislatorRow}
             loaded={this.state.loadedLegislators}
             data={this.state.legislatorData}
