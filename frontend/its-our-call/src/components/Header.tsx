@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { GoSearch, GoThreeBars } from 'react-icons/lib/go';
 
 import './Header.css';
 // The general global header for the web app. (a.k.a. the Nav Bar)
@@ -15,13 +16,13 @@ class Header extends React.Component<HeaderProps, HeaderState> {
     // TODO: Search button, Nav Menu
     return (
       <div className="Header">
-        It's Our Call
-        <button className="search-button" onClick={this.props.handleSearchClick}>
-          Search
-        </button>
-        <button className="menu-button" onClick={this.props.handleMenuClick}>
-          Menu
-        </button>
+        <div className="title">
+          It's Our Call
+        </div>
+        <div className="button-section" >
+          <GoSearch className="button" onClick={this.props.handleSearchClick} />
+          <GoThreeBars className="button" onClick={this.props.handleMenuClick} />
+        </div>
       </div>
     );
   }
