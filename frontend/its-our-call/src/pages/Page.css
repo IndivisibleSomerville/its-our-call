@@ -1,6 +1,8 @@
 .Page {
   margin-left: auto;
   margin-right: auto;
+  position: relative;
+  top: 70px;
 }
 
 .ResourceListSection {

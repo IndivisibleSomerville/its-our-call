@@ -1,5 +1,32 @@
 .Header {
   padding: 1rem;
-  font-size: 1.2em;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  background-color: #FFFFFF;
+  font-size: 1.4em;
   font-weight: bold;
+  border-bottom: 2px solid #C2C2C2;
+  text-align: right;
+  height: 70px;
+  box-sizing: border-box;
+  z-index: 1000;
+}
+
+.Header .title {
+  position: absolute;
+  margin: auto;
+  height: 1em;
+  top: 0px;
+  bottom: 0px;
+}
+
+.Header .button {
+  padding: 0.5rem;
+  color: #777777
+}
+
+.Header .button:hover {
+  background-color:  #DDDDDD;
 }
