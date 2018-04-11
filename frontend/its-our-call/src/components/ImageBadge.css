@@ -1,0 +1,26 @@
+.ImageBadge {
+  background-color: #eee;
+  border-radius: 50%;
+  border: solid 3px transparent;
+  width: 3rem;
+  height: 3rem;
+  box-sizing: border-box;
+}
+
+.ImageBadge.red {
+  border-color: #FF3333;
+  /* E81B23 */
+}
+.ImageBadge.blue {
+  border-color: #3333FF;
+  /* 00A6EF */
+}
+
+
+.ImageBadge > svg {
+  float: left;
+  margin-left: 30%;
+  margin-top: 30%;
+  width: 40%;
+  height: 40%;
+}
