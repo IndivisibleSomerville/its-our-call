@@ -12,4 +12,5 @@ export { default as LegislatorRow } from './LegislatorRow';
 
 // Legislator View
 export { default as LegislatorViewInfoRow } from './LegislatorViewInfoRow';
-export { default as LegislatorStanceRow } from './LegislatorStanceRow';
+export { default as LegislatorStanceCurrentRow } from './LegislatorStanceCurrentRow';
+export { default as LegislatorStanceArchiveRow } from './LegislatorStanceArchiveRow';

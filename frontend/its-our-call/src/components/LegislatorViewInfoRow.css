@@ -17,6 +17,7 @@
   margin-left: 2rem;
   margin-right: 2rem;
   padding-bottom: 1rem;
+  padding-top: 1rem;
 }
 .LegislatorViewInfoRow .content div {
   float: left;
@@ -24,20 +25,51 @@
 
 .LegislatorViewInfoRow .left {
   margin-top: 1rem;
+  width: 70%;
 }
-.LegislatorViewInfoRow .middle {
+.LegislatorViewInfoRow .right {
   margin-top: 1rem;
-  margin-left: .5rem;
-  margin-right: .5rem;
+  margin-left: 5%;
+  max-width: 15%;
+}
+
+.LegislatorViewInfoRow .BookmarkStar {
+  width: 7%;
+  margin-left: 3%;
+  margin-top: 1rem;
+  transform: translateY(-22%);
+}
+.LegislatorViewInfoRow .ImageBadge {
+  margin-top: .3rem;
+  width: 4rem;
+  height: 4rem;
 }
 
 .LegislatorViewInfoRow .name {
   clear: both;
-  font-size: 1.25em;
+  font-size: 1.75em;
   font-weight: bold;
   margin-bottom: .25rem;
 }
 
 .LegislatorViewInfoRow .desc {
   clear: both;
+  margin-top: .1rem;
+  font-size: 1.1rem;
+}
+
+.LegislatorViewInfoRow .additional-desc {
+  clear: both;
+  margin-top: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.LegislatorViewInfoRow .full-profile {
+  clear: both;
+  margin-top: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.LegislatorViewInfoRow .full-profile a {
+  text-decoration: underline;
 }

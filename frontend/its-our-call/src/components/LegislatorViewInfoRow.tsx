@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { urlFmtLegislatorView } from '../pages/urls';
 
 import BookmarkStar from './BookmarkStar';
-import LegislatorBadge from './LegislatorBadge';
+import ImageBadge from './ImageBadge';
 
 import './LegislatorViewInfoRow.css';
 
@@ -31,20 +31,22 @@ class LegislatorViewInfoRow extends React.Component<LegislatorViewInfoRowWrapped
       <div className="LegislatorViewInfoRow">
         <div className="content">
           <div className="left">
-            <LegislatorBadge type={'dem'}/>
-          </div>
-          <div className="middle">
             <div className="name">
-              <Link to={urlFmtLegislatorView(this.state.legislatorId)}>
-              Jack Sparrow
-              </Link>
+              Catherine Cortez Masto
             </div>
-            <div className="desc">US Senator, Vermont </div>
+            <div className="desc">Senator, Nevada </div>
           </div>
+          <BookmarkStar />
           <div className="right">
-            <BookmarkStar />
+            <ImageBadge type={'dem'}/>
           </div>
-      </div>
+          <div className="additional-desc">answers the phone 50% of the time</div>
+          <div className="full-profile">
+            <Link to={urlFmtLegislatorView(this.state.legislatorId)}>
+              Full Profile
+            </Link>
+          </div>
+        </div>
     </div>
     );
   }

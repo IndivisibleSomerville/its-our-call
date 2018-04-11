@@ -4,14 +4,12 @@
   width: 100%;
   float: left;
   text-align: left;
-  border-bottom: 1px dashed #646464;
+  border-bottom: 1px solid #DBDBDB;
 }
 
 .LegislatorStanceRow:last-of-type {
   border-bottom-style: none;
 }
-
-/* TODO: info-btn and bold can move to pages */
 
 .LegislatorStanceRow .content {
   padding-top: 2rem;
@@ -24,25 +22,41 @@
   font-weight: bold;
 }
 
+.LegislatorStanceRow .left {
+  float: left;
+  width: 80%;
+}
+
+
+.LegislatorStanceRow .right {
+  float: right;
+  width: 20%;
+}
+
 .LegislatorStanceRow .title {
   font-size: 1.45em;
   font-weight: bold;
+  line-height: 125%;
 }
-.LegislatorStanceRow .commitment-info {
+
+.LegislatorStanceRow .vote-deadline {
+  clear: both;
   float: left;
-  clear:both;
+  text-decoration: underline;
   padding-top: .5rem;
+  padding-bottom: 1.5rem;
 }
 
-.LegislatorStanceRow .sources {
+.LegislatorStanceRow .votes-needed {
+  clear: both;
+  font-size: 1.5rem;
+}
+.LegislatorStanceRow .votes-needed div {
   float: left;
-  clear:both;
 }
-
-.LegislatorStanceRow .sources div {
-  float: left;
+.LegislatorStanceRow .votes-needed .detail {
+  padding-left: .2rem;
 }
-
 .LegislatorStanceRow .confidence {
   padding-top: .4em;
   float: left;
@@ -59,52 +73,33 @@
   padding-right: .5em;
 }
 
-.LegislatorStanceRow .info-btn {
-  font-size: .95em;
-  border-radius: 1em;
-  background-color: darkgray;
-  color: white;
-  text-align: center;
-  overflow: hidden;
-  width: 1.35em;
-  height: 1.35em;
-  transform: translateY(-15%);
+.LegislatorStanceRow .CommitmentInfo {
+  float: left;
+  clear:both;
+  padding-top: 1.25rem;
+  font-size: 1.5rem;
+}
+
+.LegislatorStanceRow .votes-needed {
+  float: left;
+}
+
+.LegislatorStanceRow .sources {
+  float: left;
+  clear: both;
+  margin-top: .7rem;
+}
+
+.LegislatorStanceRow .sources div {
+  float: left;
+}
+.LegislatorStanceRow .sources .detail {
+  padding-left: .2rem;
 }
 
 .LegislatorStanceRow .last-update {
   float: left;
   clear:both;
-  padding-top: .25rem;
-}
-
-.LegislatorStanceRow .call-btn {
-  float: left;
-  clear:both;
-  margin-top: 1rem;
-  padding: .75rem;
-  border: solid gray 1px;
-  border-radius: .5em;
-}
-
-.LegislatorStanceRow .call-btn:hover {
-  color: white;
-  background: darkgray;
-}
-
-.LegislatorStanceRow .call-btn .text {
-  float: left;
-}
-
-.LegislatorStanceRow .call-btn .arrow {
-  float: left;
-  padding-left: 1rem;
-  padding-right: .25rem;
-}
-
-/* archive subtype */
-
-.passed-date {
-  padding-top: .5rem;
-  float: left;
-  clear:both;
+  padding-top: .45rem;
+  font-size: .9em;
 }

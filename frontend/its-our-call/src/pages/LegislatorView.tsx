@@ -2,8 +2,9 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 
 import { ResourceListSection, Footer } from '../components';
-import { LegislatorViewInfoRow, LegislatorStanceRow } from '../components';
-import { LegislatorStanceRowDataProps } from '../components/LegislatorStanceRow';
+import { LegislatorViewInfoRow, LegislatorStanceCurrentRow, LegislatorStanceArchiveRow } from '../components';
+import { LegislatorStanceCurrentRowDataProps } from '../components/LegislatorStanceCurrentRow';
+import { LegislatorStanceArchiveRowDataProps } from '../components/LegislatorStanceArchiveRow';
 
 import Http from '../http/Http';
 
@@ -17,7 +18,8 @@ interface LegislatorViewState {
   loadedLegislator: boolean;
   // tslint:disable-next-line:no-any
   legislatorData: any;
-  legislatorStanceData: LegislatorStanceRowDataProps[];
+  legislatorCurrentStanceData: LegislatorStanceCurrentRowDataProps[];
+  legislatorArchiveStanceData: LegislatorStanceArchiveRowDataProps[];
 }
 
 class LegislatorView extends React.Component<LegislatorViewProps, LegislatorViewState> {
@@ -29,7 +31,8 @@ class LegislatorView extends React.Component<LegislatorViewProps, LegislatorView
       backLink: '',
       loadedLegislator: true,
       legislatorData: {},
-      legislatorStanceData: [],
+      legislatorCurrentStanceData: [],
+      legislatorArchiveStanceData: [],
     };
     this.fetchData = this.fetchData.bind(this);
     this.errorFetchingData = this.errorFetchingData.bind(this);
@@ -65,16 +68,25 @@ class LegislatorView extends React.Component<LegislatorViewProps, LegislatorView
             legislatorData={this.state.legislatorData}
           />
           <ResourceListSection
-            headerTitle="CURRENT"
-            rowClass={LegislatorStanceRow}
+            headerTitle="Current"
+            rowClass={LegislatorStanceCurrentRow}
             loaded={true}
-            data={[{isArchivedRow: false}, {isArchivedRow: false}]}
+            data={[
+              {issueTitle: 'Support the Pidgeon Recognition Act'},
+              {issueTitle: 'Support the Pidgeon Recognition Act', desiredType: 'yea', actualType: 'yea'},
+              {issueTitle: 'Oppose the Pidgeon Hunting Act', desiredType: 'nay', actualType: 'nay'},
+            ]}
           />
           <ResourceListSection
-            headerTitle="ARCHIVE"
-            rowClass={LegislatorStanceRow}
+            headerTitle="Archive"
+            rowClass={LegislatorStanceArchiveRow}
             loaded={true}
-            data={[{isArchivedRow: true}]}
+            data={[
+              {issueTitle: 'Support the Pidgeon Recognition Act 2', desiredType: 'yea', actualType: 'yea'},
+              {issueTitle: 'Support the Pidgeon Recognition Act 2', desiredType: 'yea', actualType: 'nay'},
+              {issueTitle: 'Oppose the Pidgeon Hunting Act 2', desiredType: 'nay', actualType: 'yea'},
+              {issueTitle: 'Oppose the Pidgeon Hunting Act 2', desiredType: 'nay', actualType: 'nay'}
+            ]}
           />
           <Footer />
         </div>
