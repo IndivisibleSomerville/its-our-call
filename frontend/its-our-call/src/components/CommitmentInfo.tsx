@@ -1,18 +1,18 @@
 import * as React from 'react';
 import './CommitmentInfo.css';
 
-type Commitment = 'yea' | 'nay' | 'uncommitted';
-type ColorClass = 'success' | 'failure' | 'uncommitted';
+export type CommitmentType = 'yea' | 'nay' | 'uncommitted';
+type ColorClassType = 'success' | 'failure' | 'uncommitted';
 
 interface CommitmentInfoProps {
-  desiredType?: Commitment;
-  actualType?: Commitment;
+  desiredType?: CommitmentType;
+  actualType?: CommitmentType;
 }
 
 interface CommitmentInfoState {
   symbol: string;
   text: string;
-  colorClass: ColorClass;
+  colorClass: ColorClassType;
 }
 
 class CommitmentInfo extends React.Component<CommitmentInfoProps, CommitmentInfoState> {
@@ -20,8 +20,9 @@ class CommitmentInfo extends React.Component<CommitmentInfoProps, CommitmentInfo
     super(props);
     let symbol = '';
     let text = 'uncommitted';
-    let colorClass: ColorClass = 'uncommitted';
+    let colorClass: ColorClassType = 'uncommitted';
     if (props.desiredType !== undefined && props.actualType !== undefined) {
+      text = props.actualType;
       if (props.desiredType !== props.actualType) {
         symbol = '☹';
         colorClass = 'failure';
