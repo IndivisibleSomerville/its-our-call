@@ -2,6 +2,7 @@ import * as React from 'react';
 import './BookmarkStar.css';
 
 import { IoIosStarOutline, IoIosStar } from 'react-icons/lib/io/';
+import ReactPopover from 'react-tiny-popover';
 
 interface BookmarkStarProps {
   isHidden?: boolean;
@@ -11,6 +12,7 @@ interface BookmarkStarProps {
 
 interface BookmarkStarState {
   isBookmarked: boolean;
+  isShowingPopover: boolean;
 }
 
 class BookmarkStar extends React.Component<BookmarkStarProps, BookmarkStarState> {
@@ -18,11 +20,12 @@ class BookmarkStar extends React.Component<BookmarkStarProps, BookmarkStarState>
     super(props);
     this.state = {
       isBookmarked: this.props.isBookmarked === true,
+      isShowingPopover: false,
     };
     this.toggleBookmark = this.toggleBookmark.bind(this);
   }
   toggleBookmark() {
-    this.setState({isBookmarked: !this.state.isBookmarked});
+    this.setState({isBookmarked: !this.state.isBookmarked, isShowingPopover: !this.state.isBookmarked});
     // TODO: prompt other ui callbacks
   }
 
@@ -37,12 +40,23 @@ class BookmarkStar extends React.Component<BookmarkStarProps, BookmarkStarState>
       bookmarkClass = 'checked';
     }
     return (
-      <div
-        className={'BookmarkStar ' + bookmarkClass}
-        onClick={this.toggleBookmark}
+      <ReactPopover
+          isOpen={this.state.isShowingPopover}
+          position={'bottom'} // preferred position
+          containerClassName="BookmarkPopoverContainer"
+          content={(
+              <div>
+                  Bookmark Message Content.
+              </div>
+          )}
       >
-        {starIcon}
-      </div>
+        <div
+          className={'BookmarkStar ' + bookmarkClass}
+          onClick={this.toggleBookmark}
+        >
+          {starIcon}
+        </div>
+      </ReactPopover>
     );
   }
 }

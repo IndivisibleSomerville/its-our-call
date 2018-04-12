@@ -10,3 +10,11 @@
 .BookmarkStar.checked {
   color: #FA904A;
 }
+
+
+.BookmarkPopoverContainer {
+  background-color: #eee;
+  min-height: 3rem;
+  min-width: 3rem;
+  max-width: 8rem;
+}
