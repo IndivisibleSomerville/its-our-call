@@ -1,0 +1,10 @@
+.LegislatorStanceArchiveRow {
+  color: #9E9E9E;
+}
+
+ .LegislatorStanceArchiveRow .passed-date {
+  padding-top: .5rem;
+  float: left;
+  clear:both;
+  text-decoration: underline;
+}

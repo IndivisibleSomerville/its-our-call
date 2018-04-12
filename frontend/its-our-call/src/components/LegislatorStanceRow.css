@@ -1,0 +1,105 @@
+.LegislatorStanceRow {
+  background-color: #F8F8F8;
+  color: #414141;
+  width: 100%;
+  float: left;
+  text-align: left;
+  border-bottom: 1px solid #DBDBDB;
+}
+
+.LegislatorStanceRow:last-of-type {
+  border-bottom-style: none;
+}
+
+.LegislatorStanceRow .content {
+  padding-top: 2rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-bottom: 2rem;
+  float: left;
+}
+.LegislatorStanceRow .bold {
+  font-weight: bold;
+}
+
+.LegislatorStanceRow .left {
+  float: left;
+  width: 80%;
+}
+
+
+.LegislatorStanceRow .right {
+  float: right;
+  width: 20%;
+}
+
+.LegislatorStanceRow .title {
+  font-size: 1.45em;
+  font-weight: bold;
+  line-height: 125%;
+}
+
+.LegislatorStanceRow .vote-deadline {
+  clear: both;
+  float: left;
+  text-decoration: underline;
+  padding-top: .5rem;
+  padding-bottom: 1.5rem;
+}
+
+.LegislatorStanceRow .votes-needed {
+  clear: both;
+  font-size: 1.5rem;
+}
+.LegislatorStanceRow .votes-needed div {
+  float: left;
+}
+.LegislatorStanceRow .votes-needed .detail {
+  padding-left: .2rem;
+}
+.LegislatorStanceRow .confidence {
+  padding-top: .4em;
+  float: left;
+  clear:both;
+  text-transform: lowercase;
+}
+
+.LegislatorStanceRow .confidence div {
+  float: left;
+}
+
+.LegislatorStanceRow .confidence .percent {
+  padding-left: .3em;
+  padding-right: .5em;
+}
+
+.LegislatorStanceRow .CommitmentInfo {
+  float: left;
+  clear:both;
+  padding-top: 1.25rem;
+  font-size: 1.5rem;
+}
+
+.LegislatorStanceRow .votes-needed {
+  float: left;
+}
+
+.LegislatorStanceRow .sources {
+  float: left;
+  clear: both;
+  margin-top: .7rem;
+}
+
+.LegislatorStanceRow .sources div {
+  float: left;
+}
+.LegislatorStanceRow .sources .detail {
+  padding-left: .2rem;
+}
+
+.LegislatorStanceRow .last-update {
+  float: left;
+  clear:both;
+  padding-top: .45rem;
+  font-size: .9em;
+}

@@ -1,13 +1,12 @@
 .BookmarkStar {
   float: left;
-  font-size: 3em;
-  color:#FA904A;
+  font-size: 2em;
+  color: #BBB;
 }
 
-/* TODO: actual implementation */
-.star.unfilled {
-  background-color: #FFF;
+.BookmarkStar.unchecked {
+  color: #BBB;
 }
-.star.filled {
-  background-color: #FA904A;
+.BookmarkStar.checked {
+  color: #FA904A;
 }

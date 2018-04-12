@@ -1,6 +1,8 @@
 .Page {
   margin-left: auto;
   margin-right: auto;
+  max-width: 30rem;
+  width: 100%;
   position: relative;
   top: 70px;
 }

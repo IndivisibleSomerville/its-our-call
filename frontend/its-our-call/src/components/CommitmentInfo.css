@@ -1,0 +1,20 @@
+.CommitmentInfo div {
+  float:left;
+}
+.CommitmentInfo .symbol {
+  padding-right: .3rem;
+  transform: translateY(10%);
+}
+.CommitmentInfo .text {
+    text-decoration: underline;
+}
+
+.CommitmentInfo.uncommitted {
+  color:#4F4F4F;
+}
+.CommitmentInfo.success {
+  color:#ABC596;
+}
+.CommitmentInfo.failure {
+  color:#F7C8A7;
+}

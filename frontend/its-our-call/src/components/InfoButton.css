@@ -1,0 +1,10 @@
+.InfoButton {
+  border-radius: 50%;
+  background-color: darkgray;
+  color: white;
+  text-align: center;
+  overflow: hidden;
+  width: 1.35rem;
+  height: 1.35rem;
+  transform: scale(.75) translateY(-15%);
+}
