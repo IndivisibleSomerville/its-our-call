@@ -8,9 +8,11 @@ import ImageBadge from './ImageBadge';
 
 import './LegislatorViewInfoRow.css';
 
+import { Legislator as LegislatorData } from '../data/Legislator';
+
 interface LegislatorViewInfoRowWrappedProps {
   // tslint:disable-next-line:no-any
-  legislatorData: any;
+  legislatorData: LegislatorData;
 }
 
 export interface LegislatorViewInfoRowDataProps {

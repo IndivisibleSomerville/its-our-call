@@ -15,15 +15,22 @@ interface LegislatorStanceCurrentRowWrappedProps extends ResourceRowProps {
 }
 
 export interface LegislatorStanceCurrentRowDataProps {
-  issueTitle: boolean;
-  desiredType?: CommitmentType;
+  issueTitle: string;
+  remainingTimeLabel: string;
+  numNeededVotes: string;
+  desiredType: CommitmentType;
+  confidencePercent: string;
+  numReports: string;
+  lastUpdatedAt: string;
   actualType?: CommitmentType;
+  callLink: string;
 }
 
 interface LegislatorStanceCurrentRowState {
   // TODO: calculate actual state from props
   issueId: number;
   isFaded: boolean;
+  desiredTypeLabel: string;
 }
 
 class LegislatorStanceCurrentRow extends React.Component<
@@ -36,7 +43,8 @@ class LegislatorStanceCurrentRow extends React.Component<
     if (props.data.desiredType && props.data.actualType) {
       isFaded = true;
     }
-    this.state = { issueId: 1, isFaded }; // TODO: get the real id from data props
+    let desiredTypeLabel = props.data.desiredType === 'yea' ? 'yeas' : 'nays';
+    this.state = { issueId: 1, isFaded, desiredTypeLabel }; // TODO: get the real id from data props
   }
 
   render() {
@@ -54,15 +62,15 @@ class LegislatorStanceCurrentRow extends React.Component<
               </Link>
             </div>
             <div className="vote-deadline">
-              senate vote in 11 days
+              {this.props.data.remainingTimeLabel}
             </div>
             <div className="votes-needed">
-              <div className="bold">6</div>
-              <div className="detail"> more yeas needed</div>
+              <div className="bold">{this.props.data.numNeededVotes}</div>
+              <div className="detail"> more {this.state.desiredTypeLabel} needed</div>
             </div>
             <div className="confidence">
               <div className="bold">our confidence:</div>
-              <div className="percent">95%</div>
+              <div className="percent">{this.props.data.confidencePercent}</div>
               <InfoButton />
             </div>
             <CommitmentInfo
@@ -71,14 +79,14 @@ class LegislatorStanceCurrentRow extends React.Component<
             />
             <div className="sources">
               <div className="bold">number of reports</div>
-              <div className="detail">15</div>
+              <div className="detail">{this.props.data.numReports}</div>
             </div>
             <div className="last-update">
-              last update: 1/29/2018 4:56 PM
+              last update: {this.props.data.lastUpdatedAt}
             </div>
           </div>
           <div className="right">
-            <Link className="call-btn" to="#">
+            <Link className="call-btn" to={this.props.data.callLink}>
               <div className="text">
                 call...
               </div>

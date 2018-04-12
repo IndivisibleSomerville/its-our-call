@@ -17,6 +17,8 @@ export interface LegislatorStanceArchiveRowDataProps {
   desiredType: CommitmentType;
   actualType:  CommitmentType;
   issueTitle: string;
+  passedAt: string;
+  lastUpdatedAt: string;
 }
 
 interface LegislatorStanceArchiveRowState {
@@ -42,14 +44,14 @@ class LegislatorStanceArchiveRow extends React.Component<LegislatorStanceArchive
               </Link>
             </div>
             <div className="passed-date">
-              passed 12/1/2017
+              passed {this.props.data.passedAt}
             </div>
             <CommitmentInfo
               desiredType={this.props.data.desiredType}
               actualType={this.props.data.actualType}
             />
             <div className="last-update">
-              last update: 1/29/2018 4:56 PM
+              last update: {this.props.data.lastUpdatedAt}
             </div>
           </div>
         </div>
