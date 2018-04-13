@@ -26,33 +26,33 @@ interface BookmarkSuggestionProps {
 }
 
 interface BookmarkSuggestionState {
-  isBookmarked: boolean;
+  isSubBookmarked: boolean;
 }
 
 class BookmarkSuggestion extends React.Component<BookmarkSuggestionProps, BookmarkSuggestionState> {
   constructor(props: BookmarkSuggestionProps) {
     super(props);
     this.state = {
-      isBookmarked: this.props.startsBookmarked === true,
+      isSubBookmarked: this.props.startsBookmarked === true,
     };
-    this.toggleBookmark = this.toggleBookmark.bind(this);
+    this.toggleSubBookmark = this.toggleSubBookmark.bind(this);
   }
 
-  toggleBookmark() {
-    this.setState({isBookmarked: !this.state.isBookmarked});
+  toggleSubBookmark() {
+    this.setState({isSubBookmarked: !this.state.isSubBookmarked});
     // TODO: prompt other ui callbacks
   }
 
   render() {
     let starIcon = (<IoIosStarOutline />);
     let bookmarkClass = 'unchecked';
-    if (this.state.isBookmarked) {
+    if (this.state.isSubBookmarked) {
       starIcon = (<IoIosStar />);
       bookmarkClass = 'checked';
     }
     return (
       <div className="suggestion">
-        <div className={'embedded-bookmark-star ' + bookmarkClass} onClick={this.toggleBookmark}>{starIcon}</div>
+        <div className={'embedded-bookmark-star ' + bookmarkClass} onClick={this.toggleSubBookmark}>{starIcon}</div>
         <div className="title">{this.props.title}</div>
       </div>
     );
@@ -72,10 +72,22 @@ class BookmarkStar extends React.Component<BookmarkStarProps, BookmarkStarState>
       ],
     };
     this.toggleBookmark = this.toggleBookmark.bind(this);
+    this.onClickOutside = this.onClickOutside.bind(this);
   }
   toggleBookmark() {
-    this.setState({isBookmarked: !this.state.isBookmarked, isShowingPopover: !this.state.isBookmarked});
+    this.setState({isBookmarked: !this.state.isBookmarked});
+    this.setState({isShowingPopover: !this.state.isShowingPopover});
     // TODO: prompt other ui callbacks
+  }
+
+  onClickOutside(e: MouseEvent) {
+      if (e.target instanceof SVGSVGElement) {
+        return;
+        // the svg icon triggers onClickOutside, even on first click
+        // early exit to prevent the popover from immediately hiding
+        // TODO: fix this to only exit on the embedded svg of *this* component
+      }
+      this.setState({isShowingPopover: false});
   }
 
   render() {
@@ -105,9 +117,9 @@ class BookmarkStar extends React.Component<BookmarkStarProps, BookmarkStarState>
     return (
       <ReactPopover
           isOpen={this.state.isShowingPopover}
-          disableReposition={false}
           position={['bottom']} // preferred position
           containerClassName="BookmarkPopoverContainer"
+          onClickOutside={this.onClickOutside}
           content={({ position, targetRect, popoverRect }) => (
             <ArrowContainer // if you'd like an arrow, you can import the ArrowContainer!
                 position={position}
