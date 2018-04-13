@@ -1,8 +1,9 @@
 import * as React from 'react';
 import './BookmarkStar.css';
 
+import { MdDone } from 'react-icons/lib/md/';
 import { IoIosStarOutline, IoIosStar } from 'react-icons/lib/io/';
-import ReactPopover from 'react-tiny-popover';
+import ReactPopover, { ArrowContainer } from 'react-tiny-popover';
 
 interface BookmarkStarProps {
   isHidden?: boolean;
@@ -39,16 +40,30 @@ class BookmarkStar extends React.Component<BookmarkStarProps, BookmarkStarState>
       starIcon = (<IoIosStar />);
       bookmarkClass = 'checked';
     }
+
     return (
       <ReactPopover
           isOpen={this.state.isShowingPopover}
           position={'bottom'} // preferred position
           containerClassName="BookmarkPopoverContainer"
-          content={(
-              <div>
-                  Bookmark Message Content.
+          content={({ position, targetRect, popoverRect }) => (
+            <ArrowContainer // if you'd like an arrow, you can import the ArrowContainer!
+                position={position}
+                targetRect={targetRect}
+                popoverRect={popoverRect}
+                arrowColor={'#fff'}
+                arrowSize={10}
+                arrowStyle={{}}
+            >
+              <div className="inner-content">
+                <div className="header">
+                  <MdDone/> <div className="text">bookmarked</div>
+                </div>
+                <div className="content">
+                TODO: more content
+                </div>
               </div>
-          )}
+            </ArrowContainer>)}
       >
         <div
           className={'BookmarkStar ' + bookmarkClass}
@@ -56,6 +71,7 @@ class BookmarkStar extends React.Component<BookmarkStarProps, BookmarkStarState>
         >
           {starIcon}
         </div>
+
       </ReactPopover>
     );
   }

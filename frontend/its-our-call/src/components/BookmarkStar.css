@@ -2,6 +2,7 @@
   float: left;
   font-size: 2em;
   color: #BBB;
+  padding-left: .1em;
 }
 
 .BookmarkStar.unchecked {
@@ -13,8 +14,37 @@
 
 
 .BookmarkPopoverContainer {
-  background-color: #eee;
+  overflow: visible !important;
+  filter: drop-shadow(0px 0px 2px #656565);
+}
+
+.BookmarkPopoverContainer .inner-content {
+  background-color: #fff;
   min-height: 3rem;
   min-width: 3rem;
-  max-width: 8rem;
+  padding: .5em;
+  float: left;
+}
+/* filter: 'drop-shadow(#656565 0px 0px 2px 0px)' */
+
+.BookmarkPopoverContainer .header {
+  float: left;
+  clear: both;
+  font-size: 1.25rem;
+}
+.BookmarkPopoverContainer .header svg {
+  float: left;
+  font-size: 1.35em;
+  margin-top: -.2rem;
+}
+
+.BookmarkPopoverContainer .header .text {
+  float: left;
+  padding-left: .5rem;
+}
+.BookmarkPopoverContainer .content {
+  float: left;
+  clear: both;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
