@@ -7,4 +7,28 @@
   width: 1.35rem;
   height: 1.35rem;
   transform: scale(.75) translateY(-15%);
+  cursor: pointer;
+}
+
+
+.InfoButtonPopoverContainer {
+  overflow: visible !important;
+  filter: drop-shadow(0px 0px 2px #656565);
+}
+
+.InfoButtonPopoverContainer .inner-content {
+  background-color: #fff;
+  min-height: 3rem;
+  width: 17rem;
+  padding: 1em 1em;
+  float: left;
+}
+
+.InfoButtonPopoverContainer .inner-content .header {
+  font-weight: bold;
+  padding-bottom: .7em;
+}
+
+.InfoButtonPopoverContainer .inner-content .text {
+
 }
