@@ -74,7 +74,7 @@ class Home extends React.Component<HomeProps, HomeState> {
       loadedLegislators: true,
       legislatorData: [
         {isBookmarkRow: true},
-        {isBookmarkRow: false}, {isBookmarkRow: false}, {isBookmarkRow: false}],
+        {isBookmarkRow: true}, {isBookmarkRow: true}, {isBookmarkRow: true}],
     };
     this.fetchData = this.fetchData.bind(this);
     this.errorFetchingData = this.errorFetchingData.bind(this);

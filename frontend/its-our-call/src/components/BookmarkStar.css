@@ -3,6 +3,7 @@
   font-size: 2em;
   color: #BBB;
   padding-left: .1em;
+  cursor: pointer;
 }
 
 .BookmarkStar.unchecked {
@@ -21,8 +22,8 @@
 .BookmarkPopoverContainer .inner-content {
   background-color: #fff;
   min-height: 3rem;
-  min-width: 3rem;
-  padding: .5em;
+  width: 17rem;
+  padding: 1em 1em;
   float: left;
 }
 /* filter: 'drop-shadow(#656565 0px 0px 2px 0px)' */
@@ -41,10 +42,48 @@
 .BookmarkPopoverContainer .header .text {
   float: left;
   padding-left: .5rem;
+  font-weight: bold;
 }
 .BookmarkPopoverContainer .content {
   float: left;
   clear: both;
   padding-top: 1rem;
   padding-bottom: 1rem;
+}
+
+.BookmarkPopoverContainer .content .top {
+  font-weight: bold;
+  padding-bottom: .5rem;
+}
+
+.BookmarkPopoverContainer .content .suggestion {
+  font-size: 1.1em;
+  float: left;
+  clear: both;
+}
+
+
+.BookmarkPopoverContainer .content .suggestion svg {
+  font-size: 1.8rem;
+  padding-left: .2rem;
+}
+
+.BookmarkPopoverContainer .content .suggestion .title {
+  padding-top: .4rem;
+  float: left;
+  width: calc(100% - 2.5rem);
+}
+
+.BookmarkPopoverContainer .content .suggestion .embedded-bookmark-star {
+  float: left;
+  width: 2.5rem;
+  color: #BBB;
+  cursor: pointer;
+}
+
+.BookmarkPopoverContainer .content .suggestion .embedded-bookmark-star.unchecked {
+  color: #BBB;
+}
+.BookmarkPopoverContainer .content .suggestion .embedded-bookmark-star.checked {
+  color: #FA904A;
 }
