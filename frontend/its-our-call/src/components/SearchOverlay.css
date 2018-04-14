@@ -1,0 +1,7 @@
+.SearchOverlay {
+  display: none;
+}
+
+.SearchOverlay.open {
+  display: block;
+}

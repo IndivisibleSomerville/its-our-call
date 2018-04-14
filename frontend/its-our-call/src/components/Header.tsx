@@ -7,15 +7,26 @@ import './Header.css';
 interface HeaderProps {
   handleSearchClick: () => void;
   handleMenuClick: () => void;
+  searchOpen: boolean;
+  menuOpen: boolean;
 }
 
 interface HeaderState { }
 
 class Header extends React.Component<HeaderProps, HeaderState> {
   render() {
-    // TODO: Search button, Nav Menu
+    let otherClasses = '';
+    if (this.props.searchOpen) {
+      otherClasses += ' searchOpen';
+    }
+    if (this.props.menuOpen) {
+      otherClasses += ' menuOpen';
+    }
+
     return (
-      <div className="Header">
+      <div
+        className={'Header' + otherClasses}
+      >
         <div className="title">
           It's Our Call
         </div>

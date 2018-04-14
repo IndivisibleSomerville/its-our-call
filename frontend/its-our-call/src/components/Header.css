@@ -7,11 +7,21 @@
   background-color: #FFFFFF;
   font-size: 1.4em;
   font-weight: bold;
-  border-bottom: 2px solid #C2C2C2;
+  border-bottom: 2px solid #DDDDDD;
   text-align: right;
   height: 70px;
   box-sizing: border-box;
-  z-index: 1000;
+  z-index: 100;
+  transition: 0.4s ease;
+}
+
+.Header.searchOpen {
+  /* TODO */
+}
+
+.Header.menuOpen {
+  right: 17rem;
+  left: -17rem;
 }
 
 .Header .title {
@@ -20,13 +30,14 @@
   height: 1em;
   top: 0px;
   bottom: 0px;
+  color: #5C2F5A
 }
 
 .Header .button {
   padding: 0.5rem;
-  color: #777777
+  color: #ADADAD
 }
 
 .Header .button:hover {
-  background-color:  #DDDDDD;
+  background-color: #EEEEEE;
 }

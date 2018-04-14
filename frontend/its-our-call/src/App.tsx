@@ -7,34 +7,40 @@ import './App.css';
 import Header from './components/Header';
 import { SearchOverlay, MainMenu } from './components';
 
+enum Overlay {
+  None,
+  Search,
+  Menu,
+}
+
 interface AppProps { }
 
 interface AppState {
-  searchHidden: boolean;
-  menuHidden: boolean;
+  overlay: Overlay;
 }
 
 class App extends React.Component<AppProps, AppState> {
   constructor(props: AppProps) {
     super(props);
     this.state = {
-      searchHidden: true,
-      menuHidden: true,
+      overlay: Overlay.None,
     };
   }
 
   handleSearchClick = () => {
-    this.setState({
-      searchHidden: !this.state.searchHidden,
-      menuHidden: true,
-    });
+    if (this.state.overlay === Overlay.Search) {
+      this.setState({ overlay: Overlay.None });
+    } else {
+      this.setState({ overlay: Overlay.Search });
+    }
   }
 
   handleMenuClick = () => {
-    this.setState({
-      searchHidden: true,
-      menuHidden: !this.state.menuHidden,
-    });
+    if (this.state.overlay === Overlay.Menu) {
+      this.setState({ overlay: Overlay.None });
+    } else {
+      this.setState({ overlay: Overlay.Menu });
+    }
   }
 
   render() {
@@ -44,6 +50,8 @@ class App extends React.Component<AppProps, AppState> {
           <Header
             handleSearchClick={this.handleSearchClick}
             handleMenuClick={this.handleMenuClick}
+            searchOpen={this.state.overlay === Overlay.Search}
+            menuOpen={this.state.overlay === Overlay.Menu}
           />
           <Switch>
             <Route exact={true} path="/" component={pages.Home}/>
@@ -52,8 +60,11 @@ class App extends React.Component<AppProps, AppState> {
             <Route exact={true} path={urls.urlLegislatorsList()} component={pages.LegislatorList}/>
             <Route exact={true} path={urls.urlFmtLegislatorView(':id')} component={pages.LegislatorView}/>
           </Switch>
-          <SearchOverlay hidden={this.state.searchHidden} />
-          <MainMenu hidden={this.state.menuHidden} />
+          <SearchOverlay open={this.state.overlay === Overlay.Search} />
+          <MainMenu
+            open={this.state.overlay === Overlay.Menu}
+            handleClose={this.handleMenuClick}
+          />
         </div>
       </BrowserRouter>
     );
