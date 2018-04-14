@@ -2,8 +2,9 @@
   padding: 1rem;
   position: fixed;
   top: 0px;
-  left: 0px;
   right: 0px;
+  width: 100%;
+  min-width: 240px;
   background-color: #FFFFFF;
   font-size: 1.4em;
   font-weight: bold;
@@ -21,7 +22,7 @@
 
 .Header.menuOpen {
   right: 17rem;
-  left: -17rem;
+  width: calc(100% - 17rem);
 }
 
 .Header .title {
