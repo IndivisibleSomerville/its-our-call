@@ -1,7 +1,8 @@
 import * as React from 'react';
+import './SearchOverlay.css';
 
 interface SearchOverlayProps {
-  hidden: boolean;
+  open: boolean;
 }
 
 interface SearchOverlayState { }
@@ -10,7 +11,7 @@ class SearchOverlay extends React.Component<SearchOverlayProps, SearchOverlaySta
   render() {
     return  (
       // TODO make this actually an overlay
-      <div className="search" hidden={this.props.hidden}>
+      <div className={'SearchOverlay' + (this.props.open ? ' open' : '')}>
       [Search overlay]
       </div>
     );
