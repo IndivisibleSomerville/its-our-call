@@ -2,6 +2,8 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { asResourceRow, ResourceRowProps } from './ResourceRow';
 
+import InfoButton from './InfoButton';
+
 import * as urls from '../pages/urls';
 
 import './IssueRow.css';
@@ -60,7 +62,7 @@ class IssueRow extends React.Component<IssueRowWrappedProps, IssueRowState> {
           <div className="confidence">
             <div className="bold">our confidence:</div>
             <div className="percent">95%</div>
-            <div className="info-btn">﹖</div>
+            <InfoButton />
           </div>
         </div>
       </div>
