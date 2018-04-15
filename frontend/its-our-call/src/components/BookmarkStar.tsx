@@ -1,6 +1,8 @@
 import * as React from 'react';
 import './BookmarkStar.css';
 
+import * as uuid from 'uuid';
+
 // import { MdDone } from 'react-icons/lib/md/';
 // import { FaCheck } from 'react-icons/lib/fa/';
 import { IoCheckmark } from 'react-icons/lib/io/';
@@ -18,15 +20,18 @@ interface BookmarkStarState {
   isShowingPopover: boolean;
   isLoadedSuggestions?: boolean;
   suggestions: BookmarkSuggestionProps[];
+  uniqueClickableAreaID: string;
 }
 
 interface BookmarkSuggestionProps {
   startsBookmarked: boolean;
+  uniqueContainerID: string;
   title: string;
 }
 
 interface BookmarkSuggestionState {
   isSubBookmarked: boolean;
+  uniqueClickableAreaID: string;
 }
 
 class BookmarkSuggestion extends React.Component<BookmarkSuggestionProps, BookmarkSuggestionState> {
@@ -34,6 +39,7 @@ class BookmarkSuggestion extends React.Component<BookmarkSuggestionProps, Bookma
     super(props);
     this.state = {
       isSubBookmarked: this.props.startsBookmarked === true,
+      uniqueClickableAreaID: `${props.uniqueContainerID}_clickableArea_${ uuid.v1() }`,
     };
     this.toggleSubBookmark = this.toggleSubBookmark.bind(this);
   }
@@ -52,7 +58,16 @@ class BookmarkSuggestion extends React.Component<BookmarkSuggestionProps, Bookma
     }
     return (
       <div className="suggestion">
-        <div className={'embedded-bookmark-star ' + bookmarkClass} onClick={this.toggleSubBookmark}>{starIcon}</div>
+        <div className={'embedded-bookmark-star ' + bookmarkClass}>
+          {starIcon}
+          <div
+            id={this.state.uniqueClickableAreaID}
+            className="clickable-area"
+            onClick={this.toggleSubBookmark}
+          >
+              &nbsp;
+          </div>
+        </div>
         <div className="title">{this.props.title}</div>
       </div>
     );
@@ -63,12 +78,13 @@ class BookmarkStar extends React.Component<BookmarkStarProps, BookmarkStarState>
   constructor(props: BookmarkStarProps) {
     super(props);
     this.state = {
+      uniqueClickableAreaID: `clickableArea_${ uuid.v1() }`,
       isBookmarked: this.props.isBookmarked === true,
       isShowingPopover: false,
       isLoadedSuggestions: true,
       suggestions: [
-        {startsBookmarked: false, title: 'Example one (Senator, VT)'},
-        {startsBookmarked: false, title: 'Example two (Representative 9th District, VT)'}
+        {startsBookmarked: false, title: 'Example one (Senator, VT)', uniqueContainerID: ''},
+        {startsBookmarked: false, title: 'Example two (Representative 9th District, VT)', uniqueContainerID: ''}
       ],
     };
     this.toggleBookmark = this.toggleBookmark.bind(this);
@@ -81,13 +97,20 @@ class BookmarkStar extends React.Component<BookmarkStarProps, BookmarkStarState>
   }
 
   onClickOutside(e: MouseEvent) {
-      if (e.target instanceof SVGSVGElement) {
+    let targetIsInsidePopoverContainer = (t: Element | null): boolean => {
+      // all legal clickable areas need ids beginning with the same unique clickable string
+      return (t instanceof Element && (t.id).startsWith(this.state.uniqueClickableAreaID));
+    };
+    if (e.currentTarget instanceof Element) {
+      if (e.currentTarget.id === this.state.uniqueClickableAreaID) {
+        // ignore ourselves so that the popover does not immediately dismiss
         return;
-        // the svg icon triggers onClickOutside, even on first click
-        // early exit to prevent the popover from immediately hiding
-        // TODO: fix this to only exit on the embedded svg of *this* component
       }
-      this.setState({isShowingPopover: false});
+      if (targetIsInsidePopoverContainer(e.currentTarget)) {
+        return;
+      }
+    }
+    this.setState({isShowingPopover: false});
   }
 
   render() {
@@ -108,7 +131,12 @@ class BookmarkStar extends React.Component<BookmarkStarProps, BookmarkStarState>
           <div className="top">bookmark more</div>
           {this.state.suggestions.map((s: BookmarkSuggestionProps, indx: number) => {
               return (
-                <BookmarkSuggestion key={indx} title={s.title} startsBookmarked={s.startsBookmarked} />
+                <BookmarkSuggestion
+                  key={indx}
+                  uniqueContainerID={this.state.uniqueClickableAreaID}
+                  title={s.title}
+                  startsBookmarked={s.startsBookmarked}
+                />
               ); })}
         </div>
       );
@@ -139,9 +167,15 @@ class BookmarkStar extends React.Component<BookmarkStarProps, BookmarkStarState>
       >
         <div
           className={'BookmarkStar ' + bookmarkClass}
-          onClick={this.toggleBookmark}
         >
           {starIcon}
+          <div
+            id={this.state.uniqueClickableAreaID}
+            className="clickable-area"
+            onClick={this.toggleBookmark}
+          >
+              &nbsp;
+          </div>
         </div>
 
       </ReactPopover>

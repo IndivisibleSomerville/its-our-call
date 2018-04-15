@@ -12,7 +12,8 @@
     "react-router-dom": "^4.2.2",
     "react-scripts-ts": "2.13.0",
     "react-tiny-popover": "^3.4.0",
-    "redux": "^3.7.2"
+    "redux": "^3.7.2",
+    "uuid": "^3.2.1"
   },
   "scripts": {
     "start": "react-scripts-ts start",
@@ -29,6 +30,7 @@
     "@types/react-dom": "^16.0.4",
     "@types/react-icons": "^2.2.5",
     "@types/react-router-dom": "^4.2.4",
+    "@types/uuid": "^3.4.3",
     "enzyme": "^3.3.0",
     "typescript": "^2.7.2"
   }

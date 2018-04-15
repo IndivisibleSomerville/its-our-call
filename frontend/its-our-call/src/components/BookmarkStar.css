@@ -3,7 +3,7 @@
   font-size: 2em;
   color: #BBB;
   padding-left: .1em;
-  cursor: pointer;
+  position: relative;
 }
 
 .BookmarkStar.unchecked {
@@ -11,6 +11,16 @@
 }
 .BookmarkStar.checked {
   color: #FA904A;
+}
+.BookmarkStar svg {
+}
+.BookmarkStar .clickable-area {
+  cursor: pointer;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  top: 0;
+  height: 100%;
 }
 
 
@@ -79,6 +89,16 @@
   width: 2.5rem;
   color: #BBB;
   cursor: pointer;
+  position: relative;
+}
+
+.BookmarkPopoverContainer .content .suggestion .embedded-bookmark-star .clickable-area {
+  cursor: pointer;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  top: 0;
+  height: 100%;
 }
 
 .BookmarkPopoverContainer .content .suggestion .embedded-bookmark-star.unchecked {
