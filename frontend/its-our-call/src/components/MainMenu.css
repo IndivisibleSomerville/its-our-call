@@ -1,0 +1,43 @@
+.MainMenu {
+  position: fixed;
+  width: 16.6rem;
+  top: 0px;
+  bottom: 0px;
+  right: -17rem;
+  transition: 0.4s ease;
+  border-left: 0.4rem solid #DDDDDD;
+  background-color: #FFFFFF;
+  z-index: 200;
+}
+
+.MainMenu.open {
+  right: 0rem
+}
+
+.MainMenu .head {
+  height: 80px;
+}
+
+.MainMenu .close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  border: none;
+  background: inherit;
+  font-size: 30px;
+  color: #ADADAD;
+  width: 35px;
+  height: 35px;
+}
+
+.MainMenu .close-button:hover {
+  background-color: #EEEEEE;
+}
+
+.MainMenu .menu-link {
+  text-align: left;
+  padding: 10px 0px 10px 30px;
+  color: #5C2F5A;
+  font-size: 30px;
+  font-weight: bold;
+}

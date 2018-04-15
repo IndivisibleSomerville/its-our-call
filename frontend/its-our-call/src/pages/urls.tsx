@@ -13,3 +13,7 @@ export function urlIssuesList(): string {
 export function urlFmtIssueView(id: number | string): string {
   return '/issues/' + id;
 }
+
+export function urlAbout(): string {
+  return '/about';
+}
