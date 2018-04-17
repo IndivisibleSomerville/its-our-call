@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  font-family: 'Montserrat', sans-serif;
 }
 
 a:-webkit-any-link {
@@ -9,4 +10,8 @@ a:-webkit-any-link {
 
 .placeholder-link {
   font-weight: bold;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
 }
