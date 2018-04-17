@@ -1,0 +1,42 @@
+.About {
+
+}
+
+.About .content {
+  float: left;
+  clear: both;
+  text-align: left;
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+.About h1 {
+  color: #5E355C;
+  font-weight: 900;
+}
+.About h2 {
+  font-weight: 900;
+  margin-bottom: .5rem;
+  margin-top: .5rem;
+}
+.About h3 {
+  color: #5E355C;
+}
+.About p {
+  margin-bottom: .5rem;
+  margin-top: .5rem;
+}
+.About ul {
+  margin-top: 0rem;
+      list-style-type: disc;
+  padding-left: .5rem;
+}
+
+.About li {
+    list-style: none;
+}
+.About li:before {
+    content:"·";
+    vertical-align:middle;
+    padding-right: .5rem;
+}

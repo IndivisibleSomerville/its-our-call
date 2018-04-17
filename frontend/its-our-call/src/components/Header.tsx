@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import { GoSearch, GoThreeBars } from 'react-icons/lib/go';
 
 import './Header.css';
@@ -24,11 +25,9 @@ class Header extends React.Component<HeaderProps, HeaderState> {
     }
 
     return (
-      <div
-        className={'Header' + otherClasses}
-      >
+      <div className={'Header' + otherClasses}>
         <div className="title">
-          It's Our Call
+          <Link to="/">It's Our Call</Link>
         </div>
         <div className="button-section" >
           <GoSearch className="button" onClick={this.props.handleSearchClick} />

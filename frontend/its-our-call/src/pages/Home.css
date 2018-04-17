@@ -19,11 +19,14 @@
 }
 
 .InfoRow .more-button {
-    background-color: #BFBFBF;
-    color: #505050;
-    border-radius: 5px;
     margin-left: .75rem;
-    font-size: 1.2rem;
-    height: 2rem;
-    width: 2rem;
+}
+.InfoRow .more-button svg {
+  background-color: #BFBFBF;
+  color: #505050;
+  padding: .25rem;
+  border-radius: 2rem;
+  height: 1.5rem;
+  width: 1.5rem;
+  margin-bottom: -.5rem;
 }

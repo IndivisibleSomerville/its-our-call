@@ -29,7 +29,7 @@
     "@types/react": "^16.0.40",
     "@types/react-dom": "^16.0.4",
     "@types/react-icons": "^2.2.5",
-    "@types/react-router-dom": "^4.2.4",
+    "@types/react-router-dom": "^4.2.6",
     "@types/uuid": "^3.4.3",
     "enzyme": "^3.3.0",
     "typescript": "^2.7.2"

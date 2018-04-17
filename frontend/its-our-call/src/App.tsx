@@ -55,6 +55,7 @@ class App extends React.Component<AppProps, AppState> {
           />
           <Switch>
             <Route exact={true} path="/" component={pages.Home}/>
+            <Route exact={true} path="/about" component={pages.About}/>
             <Route exact={true} path={urls.urlIssuesList()} component={pages.IssueList}/>
             <Route exact={true} path={urls.urlFmtIssueView(':id')} component={pages.IssueView}/>
             <Route exact={true} path={urls.urlLegislatorsList()} component={pages.LegislatorList}/>
