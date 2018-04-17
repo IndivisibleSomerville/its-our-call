@@ -1,2 +1,150 @@
 .IssueView {
 }
+
+.IssueView *.content {
+  width: 100%;
+  max-width: 30rem;
+}
+
+.IssueView .info-row {
+  position: relative;
+  width: 100%;
+  height:100%;
+  min-width: 25rem;
+  min-height:25rem;
+  max-width: 30rem;
+  max-height: 30rem;
+  overflow: hidden;
+}
+
+.IssueView .info-row .title {
+  position: absolute;
+  font-size: 3.25rem;
+  text-align: left;
+  padding: 3rem 2rem;
+  color: white;
+  font-weight: bold;
+  left: 0;
+  bottom: 0;
+}
+
+.IssueView .info-row img.background-image {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  height: 100%;
+  filter:blur(5px);
+}
+
+.IssueView .overview-wrapper {
+  font-size: 1.35rem;
+  overflow: hidden;
+  height: auto;
+  position: relative;
+  text-align: left;
+  transition: .5s;
+  margin-bottom:1rem;
+}
+
+.IssueView .overview-wrapper.expanded {
+  max-height:999px;
+}
+
+.IssueView .overview-wrapper.collapsed {
+  max-height: 14.75rem;
+}
+
+
+.IssueView .overview-wrapper .overview {
+  padding: 3rem 2rem 2rem 2rem;
+  line-height: 1.5;
+  font-size: 1.5rem;
+}
+
+.IssueView .overview-wrapper .bottomShadow {
+  position: absolute;
+  bottom: -.5rem;
+  left: 0;
+  right: 0;
+  height:1.5rem;
+  background-color: white;
+  box-shadow: white 0px -10px 7px;
+}
+
+.IssueView .overview-wrapper .toggleButton {
+  position: absolute;
+  text-align: center;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  color: #ccc;
+  font-size: .9rem;
+  text-transform:uppercase;
+  font-weight: 400;
+}
+
+.IssueView .tab-list-wrapper {
+  float: left;
+  clear: both;
+  width: 100%;
+}
+
+.IssueView .tab-list-header {
+  text-transform:uppercase;
+  width: 100%;
+  float: left;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  position: relative;
+}
+.IssueView .tab-list-header .btn {
+  float: left;
+  width: 20%;
+  margin-right: 5%;
+  margin-bottom: .85rem;
+  font-size: 1.15rem;
+  letter-spacing: 4px;
+  font-weight: bold;
+}
+
+.IssueView .tab-list-header .btn.selected {
+  color:#5C2F5A;
+}
+
+.IssueView .tab-list-header .btn.first {
+  margin-left: 2.5%;
+}
+
+.IssueView .tab-list-header .moving-underline {
+  height: .25rem;
+  width: 25%;
+  margin: 0;
+  transition: .3s ease-in-out;
+  clear: left;
+}
+.IssueView .second.selected ~ .moving-underline {
+  margin-left: 25%;
+}
+.IssueView .third.selected ~ .moving-underline {
+  margin-left: 50%;
+}
+.IssueView .fourth.selected ~ .moving-underline {
+  margin-left: 75%;
+}
+.IssueView .tab-list-header .moving-underline .inner-content {
+  background: #5C2F5A;
+  height: 100%;
+  width: 80%;
+  margin: auto;
+}
+
+.IssueView .tab-list-header .bottomShadow {
+  box-shadow: #ccc 0px .3rem .3rem;
+  width: 100%;
+  height: .3rem;
+  float: left;
+  clear: both;
+  position: absolute;
+  bottom: 0;
+}
