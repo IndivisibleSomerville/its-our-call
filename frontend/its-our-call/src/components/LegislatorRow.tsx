@@ -32,7 +32,7 @@ class LegislatorRow extends React.Component<LegislatorRowWrappedProps, Legislato
       <div className="LegislatorRow">
         <div className="content">
           <div className="left">
-            <LegislatorBadge type={'dem'}/>
+            <LegislatorBadge type={'dem'} state={'VT'}/>
           </div>
           <div className="middle">
             <div className="name">
