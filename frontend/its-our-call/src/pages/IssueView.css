@@ -1,7 +1,7 @@
 .IssueView {
 }
 
-.IssueView *.content {
+.IssueView .content {
   width: 100%;
   max-width: 30rem;
 }
@@ -94,48 +94,45 @@
   text-transform:uppercase;
   width: 100%;
   float: left;
-  padding-left: 1rem;
-  padding-right: 1rem;
   position: relative;
 }
 .IssueView .tab-list-header .btn {
   float: left;
   width: 20%;
   margin-right: 5%;
+  margin-left: 2.5%;
   margin-bottom: .85rem;
   font-size: 1.15rem;
   letter-spacing: 4px;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .IssueView .tab-list-header .btn.selected {
   color:#5C2F5A;
 }
 
-.IssueView .tab-list-header .btn.first {
-  margin-left: 2.5%;
-}
-
 .IssueView .tab-list-header .moving-underline {
   height: .25rem;
   width: 25%;
+  min-width: 120px;
   margin: 0;
   transition: .3s ease-in-out;
   clear: left;
 }
 .IssueView .second.selected ~ .moving-underline {
-  margin-left: 25%;
+  margin-left: 27%;
 }
 .IssueView .third.selected ~ .moving-underline {
-  margin-left: 50%;
+  margin-left: 52%;
 }
 .IssueView .fourth.selected ~ .moving-underline {
-  margin-left: 75%;
+  margin-left: 77%;
 }
 .IssueView .tab-list-header .moving-underline .inner-content {
   background: #5C2F5A;
   height: 100%;
-  width: 80%;
+  width: 90%;
   margin: auto;
 }
 
@@ -147,4 +144,9 @@
   clear: both;
   position: absolute;
   bottom: 0;
+}
+
+.IssueView .tab-list-content-scrollable {
+  width: 100%;
+  float: left;
 }

@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 
+import PlusMinusButton from './PlusMinusButton';
+
 import './IssueViewTopRow.css';
 
 export interface TimelineCheckpoint {
@@ -72,11 +74,12 @@ class IssueViewTopRow extends React.Component<IssueViewTopRowProps, IssueViewTop
       );
     }
     return (
-      <div className={'IssueViewTopRow ' + this.state.expanded ? 'expanded' : 'collapsed'}>
+      <div className={'IssueViewTopRow ' + (this.state.expanded ? 'expanded' : 'collapsed')}>
         <div className="header">
-          <div className="expand-button">
-            +
-          </div>
+          <PlusMinusButton
+            showMinus={this.state.expanded}
+            onClick={() => {this.setState({expanded: this.state.expanded}); }}
+          />
           <div className="title">
             {this.props.headerTitle}
           </div>

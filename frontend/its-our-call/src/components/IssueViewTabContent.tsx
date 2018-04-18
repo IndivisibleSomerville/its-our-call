@@ -7,10 +7,12 @@ import './IssueViewTabContent.css';
 
 export interface IssueViewTabContentProps {
   id: string; // for scrolling
+  primaryType: string; // 'Senate' | 'House';
 }
 
 interface IssueViewTabContentState {
   isVoteInfoSectionExpanded: boolean;
+  headerTitle: string;
   timelineCheckpoints: TimelineCheckpoint[];
 }
 
@@ -19,6 +21,7 @@ class IssueViewTabContent extends React.Component<IssueViewTabContentProps, Issu
     super(props);
     this.state = {
       isVoteInfoSectionExpanded: false,
+      headerTitle: (props.primaryType + ' vote'),
       timelineCheckpoints: [
         {
           title: 'Senate',
@@ -43,6 +46,11 @@ class IssueViewTabContent extends React.Component<IssueViewTabContentProps, Issu
         }]
     };
   }
+
+  componentWillReceiveProps(props: IssueViewTabContentProps) {
+    this.setState({headerTitle: (props.primaryType + ' vote')});
+  }
+
   render() {
     let uncommittedSectionData = { startExpanded: true, legislators: [] };
     let committedYeaSectionData = { startExpanded: true, legislators: [] };
@@ -52,7 +60,7 @@ class IssueViewTabContent extends React.Component<IssueViewTabContentProps, Issu
         <div className="content">
           <IssueViewTopRow
             startExpanded={true}
-            headerTitle="Senate vote"
+            headerTitle={this.state.headerTitle}
             headerDetail="in 11 days"
             voteTitle="s.123 The Pidgeon Recognition Act of 2017"
             timelineCheckpoints={this.state.timelineCheckpoints}

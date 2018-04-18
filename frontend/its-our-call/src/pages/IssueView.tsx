@@ -111,7 +111,7 @@ class IssueView extends React.Component<IssueViewProps, IssueViewState> {
                 <div className="bottomShadow">&nbsp;</div>
               </div>
               <div className="tab-list-content-scrollable">
-                <IssueViewTabContent id="senateContent" />
+                <IssueViewTabContent id="senateContent" primaryType={tabButtons[this.state.selectedTabIndex]} />
               </div>
           </div>
           <Footer />
