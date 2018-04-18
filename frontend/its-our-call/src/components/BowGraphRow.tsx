@@ -1,31 +1,16 @@
 import * as React from 'react';
 import InfoButton from './InfoButton';
+import PartyBreakDown from './PartyBreakDown';
 
 import './BowGraphRow.css';
-
-type OutcomeType = 'yea' | 'nay';
-type StanceType = OutcomeType | 'uncommitted';
-type PartyType = 'R' | 'D';
 
 interface StanceInfo {
   type: StanceType;
   party: PartyType;
 }
-
-interface PartyBreakDownProps {
-  r: number;
-  d: number;
-}
-
-class PartyBreakDown extends React.Component<PartyBreakDownProps> {
-  render() {
-    return (
-      <div className="PartyBreakDown">
-        <div className="R">R:{this.props.r}</div><div className="D">D:{this.props.d}</div>
-      </div>
-    );
-  }
-}
+type OutcomeType = 'yea' | 'nay';
+type StanceType = OutcomeType | 'uncommitted';
+type PartyType = 'R' | 'D';
 
 export interface BowGraphRowProps {
   stances: StanceInfo[];
@@ -109,9 +94,10 @@ class BowGraphRow extends React.Component<BowGraphRowProps, BowGraphRowState> {
     return (
       <div className={'BowGraphRow'}>
         <div className="header">
-          <div className="title">
-            Uncomitted
-            {this.uncommitted()}
+          <div className="middle">
+            <div className="bar-sample uncommitted">&nbsp;</div>
+            <div className="text">Uncommitted</div>
+            <div className="num">{this.uncommitted()}</div>
             <PartyBreakDown
               r={this.state.uncommittedRCount}
               d={this.state.uncommittedDCount}
@@ -120,19 +106,22 @@ class BowGraphRow extends React.Component<BowGraphRowProps, BowGraphRowState> {
           <InfoButton />
         </div>
         <div className="content">
+          <div className="graph">
+            bow graph
+          </div>
           <div className="left">
             <div className="top-details">
-              Yea
-              {this.yeas()}
-              <PartyBreakDown
-                r={this.state.yeaRCount}
-                d={this.state.yeaDCount}
-              />
-            </div>          
+              <div className="bar-sample orange">&nbsp;</div>
+              <div className="icon orange">☺</div>
+              <div className="text orange">Yea</div>
+              <div className="num orange">{this.yeas()}</div>
+              <PartyBreakDown r={this.state.yeaRCount} d={this.state.yeaDCount}/>
+            </div>
             <div className="bottom-details">
               <div className="confidence">
-                our confidence: {this.props.confidencePercentage} <InfoButton />
+                our confidence: {this.props.confidencePercentage}
               </div>
+               <InfoButton />
               <div className="last-update">
                 last update: {this.props.lastUpdated}
               </div>
@@ -140,12 +129,11 @@ class BowGraphRow extends React.Component<BowGraphRowProps, BowGraphRowState> {
           </div>
           <div className="right">
             <div className="top-details">
-              Nay
-              {this.nays()}
-              <PartyBreakDown
-                r={this.state.nayRCount}
-                d={this.state.nayDCount}
-              />
+              <div className="bar-sample green">&nbsp;</div>
+              <div className="icon green">☺</div>
+              <div className="text green">Nay</div>
+              <div className="num green">{this.nays()}</div>
+              <PartyBreakDown r={this.state.nayRCount} d={this.state.nayDCount}/>
             </div>
           </div>
         </div>

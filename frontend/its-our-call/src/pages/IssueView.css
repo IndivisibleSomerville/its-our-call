@@ -151,13 +151,16 @@
   float: left;
   position: relative;
   overflow-x: hidden;
+  overflow-y: visible;
 }
+
 .IssueView .tab-list-content-scrollable .scrollable-content {
   width: 200%;
   float: left;
   transition: .3s ease-in-out;
   position: relative;
   left: 0;
+  overflow-y: hidden;
 }
 .IssueView .tab-list-content-scrollable .scrollable-content.second {
   left: -100%;

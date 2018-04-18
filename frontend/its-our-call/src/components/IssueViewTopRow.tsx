@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+import { FaCircle as CircleIcon } from 'react-icons/lib/fa/';
 
 import PlusMinusButton from './PlusMinusButton';
 
@@ -15,6 +16,7 @@ export interface TimelineCheckpoint {
 export interface TimelineInfo {
   title: string;
   detail: string;
+  subdetail?: string;
 }
 
 export interface LinkInfo {
@@ -52,23 +54,23 @@ class IssueViewTopRow extends React.Component<IssueViewTopRowProps, IssueViewTop
           <div className="title">Sponsor(s)</div>
           {this.props.sponsors.map((l: LinkInfo, indx: number) => {
             if (l.url === undefined) {
-              return (<div key={indx} className="sponsor">{l.text}</div>);
+              return (<div key={indx} className="item sponsor">{l.text}</div>);
             }
-            return (<Link key={indx} className="sponsor" to={l.url}>{l.text}</Link>);
+            return (<Link key={indx} className="item sponsor" to={l.url}>{l.text}</Link>);
           })}
         </div>
       );
     }
     let moreInfo = (null);
     if (this.props.moreInformation.length > 0) {
-      sponsorsList = (
+      moreInfo = (
         <div className="list more-info-list">
           <div className="title">More Information</div>
           {this.props.moreInformation.map((l: LinkInfo, indx: number) => {
             if (l.url === undefined) {
-              return (<div key={indx} className="more-info">{l.text}</div>);
+              return (<div key={indx} className="item more-info">{l.text}</div>);
             }
-            return (<Link key={indx} className="more-info" to={l.url}>{l.text}</Link>);
+            return (<Link key={indx} className="item more-info" to={l.url}>{l.text}</Link>);
           })}
         </div>
       );
@@ -78,7 +80,7 @@ class IssueViewTopRow extends React.Component<IssueViewTopRowProps, IssueViewTop
         <div className="header">
           <PlusMinusButton
             showMinus={this.state.expanded}
-            onClick={() => {this.setState({expanded: this.state.expanded}); }}
+            onClick={() => {this.setState({expanded: !this.state.expanded}); }}
           />
           <div className="title">
             {this.props.headerTitle}
@@ -87,7 +89,8 @@ class IssueViewTopRow extends React.Component<IssueViewTopRowProps, IssueViewTop
             {this.props.headerDetail}
           </div>
         </div>
-        <div className="content">
+        <div className="top-row-content">
+          <div className="topShadow">&nbsp;</div>
           <div className="title">
             {this.props.voteTitle}
           </div>
@@ -99,7 +102,7 @@ class IssueViewTopRow extends React.Component<IssueViewTopRowProps, IssueViewTop
               }
               return (
                 <div className={mainClasses} key={indx}>
-                 <div className="left">{c.statusColor}</div>
+                 <div className={'left ' + c.statusColor}><CircleIcon /></div>
                  <div className="right">
                    <div className="title">{c.title}</div>
                    {c.timeline.map((t: TimelineInfo, i: number) => {
@@ -107,6 +110,7 @@ class IssueViewTopRow extends React.Component<IssueViewTopRowProps, IssueViewTop
                        <div className="timeline-info" key={i}>
                          <div className="title">{t.title}</div>
                          <div className="detail">{t.detail}</div>
+                         <div className="subdetail">{t.subdetail}</div>
                        </div>
                      );
                    })}

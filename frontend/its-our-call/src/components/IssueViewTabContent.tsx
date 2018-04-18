@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import IssueViewTopRow, { TimelineCheckpoint } from './IssueViewTopRow';
 import CollapsibleMapSection from './CollapsibleMapSection';
+import BowGraphRow from './BowGraphRow';
 
 import './IssueViewTabContent.css';
 
@@ -29,9 +30,9 @@ class IssueViewTabContent extends React.Component<IssueViewTabContentProps, Issu
           active: true,
           timeline: [
             {title: 'Introduced', detail: '5/25/2017'},
-            {title: 'Committee', detail: 'Passed Senate Committee on Feather Affairs'},
+            {title: 'Committee', detail: 'Passed', subdetail: 'Senate Committee on Feather Affairs'},
             {title: 'Debate', detail: 'in 2 days'},
-            {title: 'Vote', detail: 'date TDB'},
+            {title: 'Vote', detail: 'date TBD'},
           ]
         }, {
           title: 'House',
@@ -52,9 +53,18 @@ class IssueViewTabContent extends React.Component<IssueViewTabContentProps, Issu
   }
 
   render() {
-    let uncommittedSectionData = { startExpanded: true, legislators: [] };
-    let committedYeaSectionData = { startExpanded: true, legislators: [] };
-    let committedNaySectionData = { startExpanded: true, legislators: [] };
+    let uncommittedSectionData = {
+      title: 'Uncommitted', showInfoButton: true, startExpanded: true,
+      legislators: []
+    };
+    let committedYeaSectionData = {
+      title: 'Committed to Vote Yea', icon: 'frown', startExpanded: true,
+      legislators: []
+    };
+    let committedNaySectionData = {
+      title: 'Committed to Vote Nay', icon: 'smile', startExpanded: true,
+      legislators: []
+    };
     return (
       <div className="IssueViewTabContent">
         <div className="content">
@@ -62,7 +72,7 @@ class IssueViewTabContent extends React.Component<IssueViewTabContentProps, Issu
             startExpanded={true}
             headerTitle={this.state.headerTitle}
             headerDetail="in 11 days"
-            voteTitle="s.123 The Pidgeon Recognition Act of 2017"
+            voteTitle="S.123 The Pidgeon Recognition Act of 2017"
             timelineCheckpoints={this.state.timelineCheckpoints}
             sponsors={[
               {text: 'Jack Sparrow', url: 'http://google.com'}
@@ -72,7 +82,12 @@ class IssueViewTabContent extends React.Component<IssueViewTabContentProps, Issu
               {text: 'congress.gov', url: 'http://congress.gov'}
             ]}
           />
-          <div>bow graph</div>
+          <BowGraphRow
+            stances={[]}
+            desiredOutcome={'yea'}
+            lastUpdated={'3 days ago'}
+            confidencePercentage={'90%'}
+          />
           <CollapsibleMapSection key={0} data={uncommittedSectionData}/>
           <CollapsibleMapSection key={1} data={committedYeaSectionData}/>
           <CollapsibleMapSection key={2} data={committedNaySectionData}/>

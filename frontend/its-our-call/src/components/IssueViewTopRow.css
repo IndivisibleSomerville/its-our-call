@@ -29,3 +29,131 @@
   padding-left: .5rem;
   padding-top: 1.85rem;
 }
+
+.IssueViewTopRow .top-row-content {
+  background-color: #eee;
+  transition: max-height 1s ease-in-out;
+  max-height: 0rem;
+  float: left;
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.IssueViewTopRow .top-row-content .topShadow {
+  position: absolute;
+  top: -6px;
+  height: 8px;
+  width: 100%;
+  background: #ddd;
+  box-shadow: #eee 0px 4px 6px;
+}
+
+.IssueViewTopRow.expanded .top-row-content {
+  max-height: 100rem;
+}
+
+.IssueViewTopRow .top-row-content > .title {
+  padding-top: 2rem;
+  padding-left: 1.75rem;
+  padding-right: 1.75rem;
+  padding-bottom: .75rem;
+  color: #5C2F5A;
+  font-weight: bold;
+  font-size: 1.1rem;
+  word-spacing: 3px;
+  width: 70%;
+}
+
+.IssueViewTopRow .top-row-content .timeline-sections {
+  width: 100%;
+  background: #ddd;
+  padding-left: 1.75rem;
+}
+
+.IssueViewTopRow .top-row-content .timeline-sections .timeline-section {
+  width: 100%;
+  float: left;
+  clear: both;
+  margin-top: .7rem;
+}
+
+.IssueViewTopRow .top-row-content .timeline-sections .left {
+  float: left;
+  clear: left;
+  padding-right: .2rem;
+  width: 5%;
+}
+.IssueViewTopRow .top-row-content .timeline-sections .right {
+  float: left;
+  width: 90%;
+}
+
+.IssueViewTopRow .top-row-content .timeline-sections .right > .title {
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: #5C2F5A;
+  padding-bottom: .5rem;
+}
+
+.IssueViewTopRow .top-row-content .timeline-sections svg {
+  font-size: .75rem;
+  transform: translateY(-10%);
+}
+
+.IssueViewTopRow .top-row-content .timeline-sections .inProgress svg {
+  color: #FB8539;
+}
+.IssueViewTopRow .top-row-content .timeline-sections .disabled {
+  opacity: .5;
+}
+.IssueViewTopRow .top-row-content .timeline-sections .disabled svg {
+  color: #111;
+}
+
+.IssueViewTopRow .top-row-content .timeline-info {
+  float: left;
+  clear: both;
+  width: 100%;
+  line-height: 1.5rem;
+}
+.IssueViewTopRow .top-row-content .timeline-info .title {
+  float: left;
+  font-weight: bold;
+  padding-right: .75rem;
+}
+
+.IssueViewTopRow .top-row-content .timeline-info .detail {
+  float: left;
+}
+.IssueViewTopRow .top-row-content .timeline-info .subdetail {
+  float: left;
+  clear: both;
+}
+
+.IssueViewTopRow .top-row-content .list {
+  float: left;
+  clear: both;
+  width: 100%;
+  margin-top: .75rem;
+  padding-left: 1.75rem;
+}
+
+
+.IssueViewTopRow .top-row-content .list:last-of-type {
+  padding-bottom: 1.75rem;
+}
+
+
+.IssueViewTopRow .top-row-content .list .title {
+  font-weight: bold;
+  padding-top: .75rem;
+}
+
+.IssueViewTopRow .top-row-content .list .item {
+  float: left;
+  clear: both;
+  padding-top: .15rem;
+  text-decoration: underline;
+}
