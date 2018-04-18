@@ -3,6 +3,7 @@ import { asResourceRow, ResourceRowProps } from './ResourceRow';
 import { Legislator as LegislatorData } from '../data/Legislator';
 import PlusMinusButton from './PlusMinusButton';
 import PartyBreakDown from './PartyBreakDown';
+import MapSVG from './MapSVG';
 
 let placeholder = 'Legislator list. Cras vulputate, turpis site amet nisi nisi ullamcorper \
 Dico adhuc oblique sit ne, id homero eripuit appetere per. Vel persecuti forensibus \
@@ -101,7 +102,7 @@ class CollapsibleMapSection extends React.Component<CollapsibleMapSectionWrapped
         <div className="content">
           <div className="topShadow">&nbsp;</div>
           <div className="map">
-            map stuff
+            <MapSVG width={200} height={200} />
           </div>
           <div className={'overview-wrapper ' + (this.state.hasMore ? 'collapsed' : 'expanded')}>
             <div className="overview">{legislatorList}</div>
