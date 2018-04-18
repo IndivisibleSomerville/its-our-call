@@ -1,11 +1,116 @@
 .LegislatorBadge {
   float: left;
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 50%;
 }
 
-/* TODO: actual implementation */
-.state-icon.dem {
+.LegislatorBadge.blue {
   background-color: #305FBC;
 }
-.state-icon.repub {
+.LegislatorBadge.red {
   background-color: #D33236;
+}
+
+.LegislatorBadge .state-icon {
+  stroke-width: 0;
+  fill: white;
+  width: 80%;
+  height: 80%;
+  transform: translateX(-5%) translateY(25%);
+}
+
+/*
+Each state icons has a class .state-icon-MA, .state-icon-NY, etc.
+use these for pixel-futzing
+*/
+
+.LegislatorBadge .state-icon.state-icon-AR {
+  transform: translateX(5%) translateY(20%);
+}
+.LegislatorBadge .state-icon.state-icon-CO {
+  width: 60%;
+  height: 60%;
+  transform: translateX(-5%) translateY(5%);
+}
+.LegislatorBadge .state-icon.state-icon-CT {
+  width: 60%;
+  height: 60%;
+  transform: translateX(-5%) translateY(10%);
+}
+.LegislatorBadge .state-icon.state-icon-GA {
+  transform: translateX(6%) translateY(15%);
+}
+.LegislatorBadge .state-icon.state-icon-IA {
+  transform: translateX(0%) translateY(20%);
+}
+.LegislatorBadge .state-icon.state-icon-KS {
+  width: 60%;
+  height: 60%;
+  transform: translateX(-5%) translateY(10%);
+}
+.LegislatorBadge .state-icon.state-icon-LA {
+  width: 70%;
+  height: 70%;
+  transform: translateX(5%) translateY(15%);
+}
+.LegislatorBadge .state-icon.state-icon-ME {
+  transform: translateX(5%) translateY(15%);
+}
+.LegislatorBadge .state-icon.state-icon-MN {
+  transform: translateX(5%) translateY(20%);
+}
+.LegislatorBadge .state-icon.state-icon-MO {
+  transform: translateX(5%) translateY(20%);
+}
+.LegislatorBadge .state-icon.state-icon-NC {
+  transform: translateX(5%) translateY(20%);
+}
+.LegislatorBadge .state-icon.state-icon-ND {
+  width: 70%;
+  height: 70%;
+  transform: translateX(5%) translateY(15%);
+}
+.LegislatorBadge .state-icon.state-icon-NE {
+  transform: translateX(0%) translateY(15%);
+}
+.LegislatorBadge .state-icon.state-icon-NM {
+  transform: translateX(0%) translateY(20%);
+}
+.LegislatorBadge .state-icon.state-icon-NY {
+  transform: translateX(0%) translateY(20%);
+}
+.LegislatorBadge .state-icon.state-icon-OH {
+  transform: translateX(0%) translateY(25%);
+}
+.LegislatorBadge .state-icon.state-icon-PA {
+  transform: translateX(0%) translateY(15%);
+}
+.LegislatorBadge .state-icon.state-icon-RI {
+  transform: translateX(0%) translateY(25%);
+}
+.LegislatorBadge .state-icon.state-icon-UT {
+  transform: translateX(0%) translateY(15%);
+}
+.LegislatorBadge .state-icon.state-icon-VA {
+  transform: translateX(0%) translateY(15%);
+}
+.LegislatorBadge .state-icon.state-icon-VT {
+  transform: translateX(0%) translateY(25%);
+}
+.LegislatorBadge .state-icon.state-icon-WA {
+  transform: translateX(-5%) translateY(15%);
+}
+.LegislatorBadge .state-icon.state-icon-WI {
+  transform: translateX(0%) translateY(15%);
+}
+.LegislatorBadge .state-icon.state-icon-WV {
+  width: 70%;
+  height: 70%;
+  transform: translateX(0%) translateY(15%);
+}
+.LegislatorBadge .state-icon.state-icon-WY {
+  width: 65%;
+  height: 65%;
+  transform: translateX(0%) translateY(9%);
 }
