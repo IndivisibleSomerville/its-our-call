@@ -96,7 +96,7 @@ use these for pixel-futzing
   transform: translateX(0%) translateY(15%);
 }
 .LegislatorBadge .state-icon.state-icon-VT {
-  transform: translateX(0%) translateY(25%);
+  transform: translateX(10%) translateY(25%);
 }
 .LegislatorBadge .state-icon.state-icon-WA {
   transform: translateX(-5%) translateY(15%);

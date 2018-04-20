@@ -2,27 +2,59 @@ import * as React from 'react';
 
 import IssueViewTopRow, { TimelineCheckpoint } from './IssueViewTopRow';
 import CollapsibleMapSection from './CollapsibleMapSection';
-import BowGraphRow from './BowGraphRow';
+import BowGraphRow, { StanceInfo } from './BowGraphRow';
 
 import './IssueViewTabContent.css';
 
 export interface IssueViewTabContentProps {
   id: string; // for scrolling
   primaryType: string; // 'Senate' | 'House';
+  // legislators by stance
 }
 
 interface IssueViewTabContentState {
   isVoteInfoSectionExpanded: boolean;
   headerTitle: string;
+  desiredOutcome: 'yea' | 'nay';
   timelineCheckpoints: TimelineCheckpoint[];
+  stances: StanceInfo[];
 }
+
+interface ScenarioOpts {
+  overwhelmingYea?: boolean;
+  overwhelmingNay?: boolean;
+}
+
+let placeholderStances = function (opts: ScenarioOpts): StanceInfo[] {
+  // generates stance data to display a random close-call vote scenario
+  let toRet: StanceInfo[] = [];
+  let randomParty = (): 'R' | 'D' => { return Math.random() > .5 ? 'D' : 'R'; };
+  let totalVoters = 100;
+  let baseYeas = opts.overwhelmingYea ? 70 : (opts.overwhelmingNay ? 10 : 40);
+  let baseNays = opts.overwhelmingYea ? 10 : (opts.overwhelmingNay ? 70 : 40);
+  let yeas = Math.floor(Math.random() * 5) + baseYeas;
+  let nays = Math.floor(Math.random() * 5) + baseNays;
+  while (toRet.length < nays) {
+    toRet.push({type: 'nay', party: randomParty()});
+  }
+  while (toRet.length < (nays + yeas)) {
+    toRet.push({type: 'yea', party: randomParty()});
+  }
+  while (toRet.length < totalVoters) {
+    toRet.push({type: 'uncommitted', party: randomParty()});
+  }
+  return toRet;
+};
 
 class IssueViewTabContent extends React.Component<IssueViewTabContentProps, IssueViewTabContentState> {
   constructor(props: IssueViewTabContentProps) {
     super(props);
+    let randomOutcome = (): 'yea' | 'nay' => { return Math.random() > .5 ? 'yea' : 'nay'; };
     this.state = {
+      desiredOutcome: randomOutcome(),
       isVoteInfoSectionExpanded: false,
       headerTitle: (props.primaryType + ' vote'),
+      stances: placeholderStances({overwhelmingNay: true}),
       timelineCheckpoints: [
         {
           title: 'Senate',
@@ -83,8 +115,8 @@ class IssueViewTabContent extends React.Component<IssueViewTabContentProps, Issu
             ]}
           />
           <BowGraphRow
-            stances={[]}
-            desiredOutcome={'yea'}
+            stances={this.state.stances}
+            desiredOutcome={this.state.desiredOutcome}
             lastUpdated={'3 days ago'}
             confidencePercentage={'90%'}
           />
