@@ -7,7 +7,6 @@ import BowGraphRow, { StanceInfo } from './BowGraphRow';
 import './IssueViewTabContent.css';
 
 export interface IssueViewTabContentProps {
-  id: string; // for scrolling
   primaryType: string; // 'Senate' | 'House';
   // legislators by stance
 }

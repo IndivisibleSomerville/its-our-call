@@ -155,19 +155,14 @@
 }
 
 .IssueView .tab-list-content-scrollable .scrollable-content {
-  width: 200%;
+  width: 100%;
   float: left;
-  transition: .3s ease-in-out;
   position: relative;
   left: 0;
   overflow-y: hidden;
 }
-.IssueView .tab-list-content-scrollable .scrollable-content.second {
-  left: -100%;
-}
-
 
 .IssueView .tab-list-content-scrollable .scrollable-content .IssueViewTabContent {
-  width: 50%;
+  width: 100%;
   float: left;
 }

@@ -72,9 +72,9 @@ class IssueView extends React.Component<IssueViewProps, IssueViewState> {
       return (<div>Loading</div>);
     }
     // TODO: determine whether these are optional depending on the issue
-    let tabButtons = ['Senate', 'House'];
+    let sectionList = ['Senate', 'House'];
     let optionClasses = ['first', 'second', 'third', 'fourth'];
-    let headerOptions = tabButtons.map((option: string, indx: number) => {
+    let headerOptions = sectionList.map((option: string, indx: number) => {
       return  (
         <div
           key={indx}
@@ -112,8 +112,7 @@ class IssueView extends React.Component<IssueViewProps, IssueViewState> {
               </div>
               <div className={'tab-list-content-scrollable'}>
                 <div className={'scrollable-content ' + optionClasses[this.state.selectedTabIndex]}>
-                  <IssueViewTabContent id="senateContent" primaryType={'Senate'} />
-                  <IssueViewTabContent id="houseContent" primaryType={'House'} />
+                  <IssueViewTabContent primaryType={sectionList[this.state.selectedTabIndex]} />
                 </div>
               </div>
           </div>
