@@ -15,6 +15,7 @@ interface LegislatorRowWrappedProps extends ResourceRowProps {
 
 export interface LegislatorRowDataProps {
   isBookmarkRow: boolean;
+  callLink?: string;
 }
 
 interface LegislatorRowState {
@@ -24,9 +25,22 @@ interface LegislatorRowState {
 class LegislatorRow extends React.Component<LegislatorRowWrappedProps, LegislatorRowState> {
   constructor(props: LegislatorRowWrappedProps) {
     super(props);
-    this.state = { legislatorId: 1 }; // TODO: get the real id from data props
+    this.state = { legislatorId: 1 }; // TODO: get the real data from props.data
+    this.buildCallButton = this.buildCallButton.bind(this);
   }
 
+  buildCallButton() {
+    if (this.props.data.callLink === undefined) {
+      return (null);
+    }
+    return (
+      <Link className="call-btn" to={this.props.data.callLink}>
+        <div className="text">
+          call...
+        </div>
+      </Link>
+    );
+  }
   render() {
     return (
       <div className="LegislatorRow">
@@ -40,12 +54,13 @@ class LegislatorRow extends React.Component<LegislatorRowWrappedProps, Legislato
               Jack Sparrow
               </Link>
             </div>
-            <div className="desc">US Senator, Vermont </div>
+            <div className="desc">Senator, Vermont </div>
           </div>
           <div className="right">
             <BookmarkStar isHidden={!this.props.data.isBookmarkRow}/>
           </div>
       </div>
+      {this.buildCallButton()}
     </div>
     );
   }

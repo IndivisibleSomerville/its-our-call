@@ -7,7 +7,7 @@
 .IssueViewTopRow .header {
   width: 100%;
   height: 4.5rem;
-  background: #eee;
+  background: #F8F8F8;
   float: left;
 }
 
@@ -31,7 +31,7 @@
 }
 
 .IssueViewTopRow .top-row-content {
-  background-color: #eee;
+  background-color: #F8F8F8;
   transition: max-height 1s ease-in-out;
   max-height: 0rem;
   float: left;
@@ -45,8 +45,8 @@
   top: -6px;
   height: 8px;
   width: 100%;
-  background: #ddd;
-  box-shadow: #eee 0px 4px 6px;
+  background: #F8F8F8;
+  box-shadow: #e2e1e1 0px 4px 6px;
 }
 
 .IssueViewTopRow.expanded .top-row-content {
@@ -67,7 +67,7 @@
 
 .IssueViewTopRow .top-row-content .timeline-sections {
   width: 100%;
-  background: #ddd;
+  background: #F8F8F8;
   padding-left: 1.75rem;
 }
 

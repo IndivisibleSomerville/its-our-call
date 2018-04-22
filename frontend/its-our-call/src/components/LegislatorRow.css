@@ -3,23 +3,24 @@
   color: #414141;
   width: 100%;
   min-height: 69px;
-  border-bottom: 1px dashed #646464;
+  border-bottom: 1px solid #bbb;
   float: left;
   clear: both;
   text-align: left;
+  position: relative;
 }
 
 .LegislatorRow:last-of-type {
   border-bottom-style: none;
 }
 
-.LegislatorRow .content {
+.LegislatorRow > .content {
   float: left;
   margin-left: 2rem;
   margin-right: 2rem;
   padding-bottom: 1rem;
 }
-.LegislatorRow .content div {
+.LegislatorRow > .content div {
   float: left;
 }
 
@@ -34,11 +35,26 @@
 
 .LegislatorRow .name {
   clear: both;
-  font-size: 1.25em;
+  font-size: 1.25rem;
   font-weight: bold;
-  margin-bottom: .25rem;
+  margin-bottom: 0.25rem;
+  margin-top: 0.25rem;
+}
+
+.LegislatorRow > .call-btn {
+  float: right;
+  position:absolute;
+  top: 1rem;
+  right: 1rem;
 }
 
 .LegislatorRow .desc {
   clear: both;
+  font-size: 0.9rem;
+  margin-top: 0.6rem;
+}
+
+.LegislatorRow > .content > .right > .BookmarkStar {
+  margin-top: .7rem;
+  font-size: 1.75rem;
 }

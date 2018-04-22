@@ -1,3 +1,7 @@
 .IssueViewTabContent {
   width: 100%;
 }
+
+.IssueViewTabContent > .content {
+  float: left;
+}

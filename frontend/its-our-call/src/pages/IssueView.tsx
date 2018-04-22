@@ -96,7 +96,7 @@ class IssueView extends React.Component<IssueViewProps, IssueViewState> {
               <div className="title">{this.state.issue.title}</div>
             </div>
             <div className={'overview-wrapper ' + (this.state.expandedOverview ? 'expanded' : 'collapsed')}>
-              <div className="overview">{this.state.issue.overview}</div>
+              <div className="description-overview">{this.state.issue.overview}</div>
               <div className="bottomShadow">&nbsp;</div>
               <div className="toggleButton" onClick={() => {this.toggleOverview(); }}>
                 {this.state.expandedOverview ? 'less -' : 'more +'}

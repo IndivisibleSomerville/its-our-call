@@ -14,6 +14,7 @@ export interface BowGraphSVGProps {
 interface BowGraphSVGState {
   numTotal: number;
   goalpostOuterWidth: number;
+  height: number;
 }
 
 class BowGraphSVG extends React.Component<BowGraphSVGProps, BowGraphSVGState> {
@@ -24,6 +25,7 @@ class BowGraphSVG extends React.Component<BowGraphSVGProps, BowGraphSVGState> {
     this.state = {
       numTotal: (props.numOrange + props.numWhite + props.numGreen),
       goalpostOuterWidth: props.goalpostOuterWidth ? props.goalpostOuterWidth : 20,
+      height: 125,
     };
   }
 
@@ -32,7 +34,7 @@ class BowGraphSVG extends React.Component<BowGraphSVGProps, BowGraphSVGState> {
     let outerRadius = 100;
     let thinBar = 4;
     let thickBar = 15;
-    let height = 150;
+    let height = this.state.height;
     let footLength = 12;
 
     let orangeWhiteEdge = - 90 + 180 * this.props.numOrange / this.state.numTotal;
@@ -56,16 +58,16 @@ class BowGraphSVG extends React.Component<BowGraphSVGProps, BowGraphSVGState> {
 
     d3.select((this.ref as Element)).append('path')
       .attr('d', letOrangeArc)
-      .attr('transform', 'translate(100,150)')
+      .attr('transform', 'translate(100,' + height + ')')
       .attr('fill', '#F7C8A7');
     d3.select((this.ref as Element)).append('path')
       .attr('d', letGreenArc)
-      .attr('transform', 'translate(100,150)')
+      .attr('transform', 'translate(100,' + height + ')')
       .attr('fill', '#3F8014');
     d3.select((this.ref as Element)).append('path')
       .attr('d', letWhiteArc)
       .attr('fill', '#fff').attr('stroke', '#ccc').attr('stroke-width', .5)
-      .attr('transform', 'translate(100,150)');
+      .attr('transform', 'translate(100,' + height + ')');
     // feet are always rendered
     d3.select((this.ref as Element)).append('line')
       .attr('x1', 0).attr('y1', height)
@@ -85,12 +87,12 @@ class BowGraphSVG extends React.Component<BowGraphSVGProps, BowGraphSVGState> {
         .attr('x1', 100 + xRatio * innerBound).attr('y1', yRatio * innerBound)
         .attr('x2', 100 + xRatio * outerBound).attr('y2', yRatio * outerBound)
         .attr('stroke', '#A1A1A1').attr('stroke-width', 1)
-        .attr('transform', 'translate(0,150)');
+        .attr('transform', 'translate(0,' + height + ')');
       d3.select((this.ref as Element)).append('text')
         .attr('x', 100 + xRatio * innerBound).attr('y', yRatio * innerBound + 12)
         .attr('text-anchor', 'middle').attr('font-size', '.6rem').attr('font-weight', 400)
         .text(this.props.goalpost)
-        .attr('transform', 'translate(0,150)');
+        .attr('transform', 'translate(0,' + height + ')');
     }
   }
 
@@ -101,7 +103,7 @@ class BowGraphSVG extends React.Component<BowGraphSVGProps, BowGraphSVGState> {
         ref={(ref: SVGSVGElement) => this.ref = ref}
         width={'100%'}
         height={'100%'}
-        viewBox="0 0 200 150"
+        viewBox={'0 0 200 ' + this.state.height}
       >
         &nbsp;
       </svg>
