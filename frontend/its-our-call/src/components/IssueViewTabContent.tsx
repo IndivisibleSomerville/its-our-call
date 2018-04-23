@@ -120,18 +120,21 @@ class IssueViewTabContent extends React.Component<IssueViewTabContentProps, Issu
       legislators: this.state.uncommittedLegislators,
       lastUpdated: '3 days ago',
       confidencePercentage: '90%',
+      mapType: (this.props.primaryType === 'Senate') ? 'state' : 'district',
     };
     let committedYeaSectionData: CollapsibleMapSectionDataProps = {
       title: 'Committed to Vote Yea', icon: 'frown', startExpanded: true,
       legislators: this.state.committedYeaLegislators,
       lastUpdated: '3 days ago',
       confidencePercentage: '90%',
+      mapType: (this.props.primaryType === 'Senate') ? 'state' : 'district',
     };
     let committedNaySectionData: CollapsibleMapSectionDataProps = {
       title: 'Committed to Vote Nay', icon: 'smile', startExpanded: true,
       legislators: this.state.committedNayLegislators,
       lastUpdated: '3 days ago',
       confidencePercentage: '90%',
+      mapType: (this.props.primaryType === 'Senate') ? 'state' : 'district',
     };
     return (
       <div className="IssueViewTabContent">

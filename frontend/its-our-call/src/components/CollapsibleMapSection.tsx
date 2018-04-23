@@ -10,22 +10,19 @@ import InfoButton from './InfoButton';
 
 import './CollapsibleMapSection.css';
 
-const stateAbbrevs = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
-    'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN',
-    'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK',
-    'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'];
-
 interface CollapsibleMapSectionWrappedProps extends ResourceRowProps {
   data: CollapsibleMapSectionDataProps;
 }
 
 type IconType = 'smile' | 'frown';
+type MapType = 'state' | 'district';
 
 export interface CollapsibleMapSectionDataProps {
   title: string;
   legislators: LegislatorData[];
   lastUpdated: string;
   confidencePercentage: string;
+  mapType?: MapType;
   icon?: IconType;
   startExpanded?: boolean;
   showInfoButton?: boolean;
@@ -37,8 +34,9 @@ interface CollapsibleMapSectionState {
   // party breakdown
   numRepubs: number;
   numDems: number;
-  // state-by-state breakdown
-  highlightedStates: string[];
+  // zone-by-zone breakdown (states or districts)
+  mapType: MapType;
+  highlightedMapZones: string[];
   lastUpdated: string;
   confidencePercentage: string;
   zoom: number;
@@ -46,8 +44,19 @@ interface CollapsibleMapSectionState {
   legislatorRowProps: LegislatorRowDataProps[];
 }
 
+// TODO: remove these when we're done with the demos
+import stateData from '../data/usa-states-dimensions';
+let stateDataKeys = Object.keys(stateData); // ['MA', 'CA', 'MT', ...]
 let randomStates = (): string[] => {
-  return stateAbbrevs.filter(() => {
+  return stateDataKeys.filter(() => {
+    return Math.random() < .2;
+  });
+};
+
+import districtData from '../data/usa-districts-dimensions';
+let districtDataKeys = Object.keys(districtData); // ['MA_1', 'MA_10', 'CA_40', 'MT_At-Large', ...]
+let randomDistricts = (): string[] => {
+  return districtDataKeys.filter(() => {
     return Math.random() < .2;
   });
 };
@@ -59,11 +68,12 @@ class CollapsibleMapSection extends React.Component<CollapsibleMapSectionWrapped
     this.state = {
       numRepubs: (Math.floor(Math.random() * 4 + 2)),
       numDems: (Math.floor(Math.random() * 4 + 2)),
-      highlightedStates: randomStates(),
+      highlightedMapZones: (props.data.mapType === 'district') ? randomDistricts() : randomStates(),
       lastUpdated: '3 hours ago',
       confidencePercentage: '95%',
       zoom: 1.0,
       hasMore: true,
+      mapType: props.data.mapType === 'district' ? 'district' : 'state',
       expanded: (props.data.startExpanded !== undefined ? props.data.startExpanded : true),
       legislatorRowProps: props.data.legislators.map((l: LegislatorData) => {
         return {
@@ -78,6 +88,13 @@ class CollapsibleMapSection extends React.Component<CollapsibleMapSectionWrapped
   }
   toggleMore() {
     this.setState({hasMore: !this.state.hasMore});
+  }
+
+  componentWillReceiveProps(props: CollapsibleMapSectionWrappedProps) {
+      this.setState({
+         mapType: props.data.mapType === 'district' ? 'district' : 'state',
+         highlightedMapZones: (props.data.mapType === 'district') ? randomDistricts() : randomStates(),
+      });
   }
 
   buildOverviewContent() {
@@ -146,7 +163,8 @@ class CollapsibleMapSection extends React.Component<CollapsibleMapSectionWrapped
             <MapSVG
               width={'95%'}
               height={'95%'}
-              customize={this.state.highlightedStates.reduce((previousValue, stateKey: string) => {
+              mapType={this.state.mapType}
+              customize={this.state.highlightedMapZones.reduce((previousValue, stateKey: string) => {
                 previousValue[stateKey] = {fill: '#FFFFFF', stroke: '#C9C9C9'};
                 return previousValue;
               }, {})}

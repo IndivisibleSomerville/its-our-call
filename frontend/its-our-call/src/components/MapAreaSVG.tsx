@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-interface USAStateSVGProps {
+interface MapAreaSVGProps {
   dimensions: string;
   fill: string;
   stroke: string;
@@ -9,11 +9,11 @@ interface USAStateSVGProps {
   onClickState: (state: string) => void;
 }
 
-interface USAStateSVGState {
+interface MapAreaSVGState {
 }
 
-export default class USAStateSVG extends React.Component<USAStateSVGProps, USAStateSVGState> {
-  constructor(props: USAStateSVGProps) {
+export default class MapAreaSVG extends React.Component<MapAreaSVGProps, MapAreaSVGState> {
+  constructor(props: MapAreaSVGProps) {
     super(props);
     this.onClickState = this.onClickState.bind(this);
   }
@@ -25,6 +25,7 @@ export default class USAStateSVG extends React.Component<USAStateSVGProps, USASt
   }
 
   render() {
+    // TODO: popover on click
     return (
       <path
         d={this.props.dimensions}
