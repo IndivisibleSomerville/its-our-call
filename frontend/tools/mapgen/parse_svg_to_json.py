@@ -5,7 +5,7 @@ import re
 import sys
 from xml.dom import minidom
 
-# valid formats are districts (CA_13, MO_AtLarge) or states (CA)
+# valid formats are districts (CA_13, MT_At-Large) or states (CA)
 idRegex = re.compile(r'[A-Z][A-Z]')
 
 if len(sys.argv) != 3:
