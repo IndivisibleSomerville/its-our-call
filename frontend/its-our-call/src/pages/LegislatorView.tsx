@@ -10,7 +10,8 @@ import Http from '../http/Http';
 import './Page.css';
 import './LegislatorView.css';
 
-import { Legislator as LegislatorData } from '../data/Legislator';
+import { Legislator as LegislatorData,
+  placeholderHouseReps } from '../data/Legislator';
 
 interface LegislatorViewProps { }
 
@@ -44,14 +45,7 @@ class LegislatorView extends React.Component<LegislatorViewProps, LegislatorView
 
   fetchData() {
     // TODO: set initial load issues to false & dispatch async load calls to endpoints
-    let legislatorData: LegislatorData = {
-      id: '1',
-      fullName: 'Catherine Cortez Masto',
-      partyAffiliation: 'dem',
-      legislatorType: 'Senator',
-      location: 'Nevada',
-      phoneAnswerPercentage: '50%',
-    };
+    let legislatorData = placeholderHouseReps[Math.random() * placeholderHouseReps.length];
     // convert the api data to the row data props
     let legislatorCurrentStanceData: LegislatorStanceCurrentRowDataProps[] = [
       {

@@ -11,7 +11,8 @@ import * as urls from './urls';
 
 import { ResourceListSection, Footer } from '../components';
 import { IssueRow, LegislatorRow } from '../components';
-import { LegislatorRowDataProps } from '../components/LegislatorRow';
+import { LegislatorRowDataProps, mapDataToLegislatorRowDataProps } from '../components/LegislatorRow';
+import { placeholderHouseReps } from '../data/Legislator';
 
 interface HomeProps { }
 
@@ -36,9 +37,7 @@ class Home extends React.Component<HomeProps, HomeState> {
       loadedIssues: true,
       issueData: ['issue'],
       loadedLegislators: true,
-      legislatorData: [
-        {isBookmarkRow: true},
-        {isBookmarkRow: true}, {isBookmarkRow: true}, {isBookmarkRow: true}],
+      legislatorData: placeholderHouseReps.slice(100, 105).map(mapDataToLegislatorRowDataProps),
     };
     this.fetchData = this.fetchData.bind(this);
     this.errorFetchingData = this.errorFetchingData.bind(this);

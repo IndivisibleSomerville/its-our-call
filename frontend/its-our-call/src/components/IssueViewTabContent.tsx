@@ -1,141 +1,123 @@
 import * as React from 'react';
 
-import IssueViewTopRow, { TimelineCheckpoint } from './IssueViewTopRow';
+import IssueViewTopRow from './IssueViewTopRow';
 import CollapsibleMapSection, { CollapsibleMapSectionDataProps } from './CollapsibleMapSection';
 import BowGraphRow, { StanceInfo } from './BowGraphRow';
-import { Legislator as LegislatorData } from '../data/Legislator';
+import { Legislator as LegislatorData, LegislatorStanceInfo } from '../data/Legislator';
+import { Issue as IssueData, TimelineCheckpoint } from '../data/Issue';
 
 import './IssueViewTabContent.css';
 
 export interface IssueViewTabContentProps {
   primaryType: string; // 'Senate' | 'House';
+  desiredOutcome: 'yea' | 'nay'; // 'yea' | 'nay';
+  issue: IssueData;
+  legislatorStances: LegislatorStanceInfo[];
   // TODO: get legislators and their stances from the API
 }
 
 interface IssueViewTabContentState {
   isVoteInfoSectionExpanded: boolean;
   headerTitle: string;
-  desiredOutcome: 'yea' | 'nay';
   timelineCheckpoints: TimelineCheckpoint[];
   stances: StanceInfo[];
+  mapType: string;
   uncommittedLegislators: LegislatorData[];
   committedYeaLegislators: LegislatorData[];
   committedNayLegislators: LegislatorData[];
 }
 
-interface PlaceholderScenarioOpts {
-  overwhelmingYea?: boolean;
-  overwhelmingNay?: boolean;
-}
-
-let placeholderStances = function (opts: PlaceholderScenarioOpts): StanceInfo[] {
-  // generates stance data to display a random close-call vote scenario
-  let toRet: StanceInfo[] = [];
-  let randomParty = (): 'R' | 'D' => { return Math.random() > .5 ? 'D' : 'R'; };
-  let totalVoters = 100;
-  let baseYeas = opts.overwhelmingYea ? 70 : (opts.overwhelmingNay ? 10 : 40);
-  let baseNays = opts.overwhelmingYea ? 10 : (opts.overwhelmingNay ? 70 : 40);
-  let yeas = Math.floor(Math.random() * 5) + baseYeas;
-  let nays = Math.floor(Math.random() * 5) + baseNays;
-  while (toRet.length < nays) {
-    toRet.push({type: 'nay', party: randomParty()});
-  }
-  while (toRet.length < (nays + yeas)) {
-    toRet.push({type: 'yea', party: randomParty()});
-  }
-  while (toRet.length < totalVoters) {
-    toRet.push({type: 'uncommitted', party: randomParty()});
-  }
-  return toRet;
-};
-
-let placeholderLegislators = function (numFakeLegislators: number): LegislatorData[] {
-  let toRet: LegislatorData[] = [];
-  while (toRet.length < numFakeLegislators) {
-    toRet.push({
-      id: '1',
-      fullName: 'Catherine Cortez Masto',
-      partyAffiliation: 'dem',
-      legislatorType: 'Senator',
-      location: 'Nevada',
-      phoneAnswerPercentage: '50%',
-    });
-  }
-  return toRet;
+let partyLetter = (l: LegislatorData) => {
+  return l.partyAffiliation === 'dem' ? 'D' : 'R';
 };
 
 class IssueViewTabContent extends React.Component<IssueViewTabContentProps, IssueViewTabContentState> {
   constructor(props: IssueViewTabContentProps) {
     super(props);
-    let randomDesiredOutcome = (): 'yea' | 'nay' => { return Math.random() > .5 ? 'yea' : 'nay'; };
-    let fakeStances = placeholderStances({overwhelmingNay: true});
-    let countFakeStanceType = (type: 'yea' | 'nay' | 'uncommitted') => {
-      return (reduced: number, stance: StanceInfo) => {
-        if (type === stance.type) {
-          reduced = reduced + 1;
-        }
-        return reduced;
-      };
-    };
+    this.filterLegislatorStances = this.filterLegislatorStances.bind(this);
+    this.reduceLegislators = this.reduceLegislators.bind(this);
+    this.buildMapType = this.buildMapType.bind(this);
+    this.buildStancesFromArray = this.buildStancesFromArray.bind(this);
+    this.buildTimelineCheckpointsFromProps = this.buildTimelineCheckpointsFromProps.bind(this);
+    let ls = this.filterLegislatorStances(props.legislatorStances, props.primaryType);
     this.state = {
-      desiredOutcome: randomDesiredOutcome(),
       isVoteInfoSectionExpanded: false,
       headerTitle: (props.primaryType + ' vote'),
-      stances: fakeStances,
-      timelineCheckpoints: [
-        {
-          title: 'Senate',
-          statusColor: 'inProgress',
-          active: true,
-          timeline: [
-            {title: 'Introduced', detail: '5/25/2017'},
-            {title: 'Committee', detail: 'Passed', subdetail: 'Senate Committee on Feather Affairs'},
-            {title: 'Debate', detail: 'in 2 days'},
-            {title: 'Vote', detail: 'date TBD'},
-          ]
-        }, {
-          title: 'House',
-          statusColor: 'disabled',
-          active: false,
-          timeline: [],
-        }, {
-          title: 'Not Enacted',
-          statusColor: 'disabled',
-          active: false,
-          timeline: [],
-        }],
-        uncommittedLegislators: placeholderLegislators(fakeStances.reduce(countFakeStanceType('uncommitted'), 0)),
-        committedYeaLegislators: placeholderLegislators(fakeStances.reduce(countFakeStanceType('yea'), 0)),
-        committedNayLegislators: placeholderLegislators(fakeStances.reduce(countFakeStanceType('nay'), 0)),
+      stances: this.buildStancesFromArray(ls),
+      timelineCheckpoints: this.buildTimelineCheckpointsFromProps(props),
+      uncommittedLegislators: this.reduceLegislators(ls, 'uncommitted'),
+      committedYeaLegislators: this.reduceLegislators(ls, 'yea'),
+      committedNayLegislators: this.reduceLegislators(ls, 'nay'),
+      mapType: this.buildMapType(props),
     };
+  }
+
+  filterLegislatorStances(legislatorStances: LegislatorStanceInfo[], focusedType: string) {
+      return legislatorStances.filter((l: LegislatorStanceInfo) => {
+        return l.legislator.legislatorType === focusedType;
+      });
+  }
+
+  reduceLegislators(legislatorStances: LegislatorStanceInfo[],
+                    stance: 'yea' | 'nay' | 'uncommitted'): LegislatorData[] {
+    return legislatorStances.reduce((reduce: LegislatorData[], l: LegislatorStanceInfo) => {
+      if (l.stance === stance) {
+        reduce.push(l.legislator);
+      }
+      return reduce;
+    }, []);
+  }
+
+  buildMapType(props: IssueViewTabContentProps) {
+    return (props.primaryType === 'Senate') ? 'state' : 'district';
+  }
+
+  buildStancesFromArray(legislatorStances: LegislatorStanceInfo[]): StanceInfo[] {
+    return legislatorStances.map((l: LegislatorStanceInfo) => {
+      return {type: l.stance, party: partyLetter(l.legislator) } as StanceInfo;
+    });
+  }
+
+  buildTimelineCheckpointsFromProps (props: IssueViewTabContentProps) {
+    // TODO: implement this from the API
+    return [
+      {
+        title: 'Senate',
+        statusColor: 'inProgress',
+        active: true,
+        timeline: [
+          {title: 'Introduced', detail: '5/25/2017'},
+          {title: 'Committee', detail: 'Passed', subdetail: 'Senate Committee on Feather Affairs'},
+          {title: 'Debate', detail: 'in 2 days'},
+          {title: 'Vote', detail: 'date TBD'},
+        ]
+      }, {
+        title: 'House',
+        statusColor: 'disabled',
+        active: false,
+        timeline: [],
+      }, {
+        title: 'Not Enacted',
+        statusColor: 'disabled',
+        active: false,
+        timeline: [],
+      }
+    ];
   }
 
   componentWillReceiveProps(props: IssueViewTabContentProps) {
-    this.setState({headerTitle: (props.primaryType + ' vote')});
+    let ls = this.filterLegislatorStances(props.legislatorStances, props.primaryType);
+    this.setState({
+      headerTitle: (props.primaryType + ' vote'),
+      stances: this.buildStancesFromArray(ls),
+      uncommittedLegislators: this.reduceLegislators(ls, 'uncommitted'),
+      committedYeaLegislators: this.reduceLegislators(ls, 'yea'),
+      committedNayLegislators: this.reduceLegislators(ls, 'nay'),
+      mapType: this.buildMapType(props),
+    });
   }
 
   render() {
-    let uncommittedSectionData: CollapsibleMapSectionDataProps = {
-      title: 'Uncommitted', showInfoButton: true, startExpanded: true,
-      legislators: this.state.uncommittedLegislators,
-      lastUpdated: '3 days ago',
-      confidencePercentage: '90%',
-      mapType: (this.props.primaryType === 'Senate') ? 'state' : 'district',
-    };
-    let committedYeaSectionData: CollapsibleMapSectionDataProps = {
-      title: 'Committed to Vote Yea', icon: 'frown', startExpanded: true,
-      legislators: this.state.committedYeaLegislators,
-      lastUpdated: '3 days ago',
-      confidencePercentage: '90%',
-      mapType: (this.props.primaryType === 'Senate') ? 'state' : 'district',
-    };
-    let committedNaySectionData: CollapsibleMapSectionDataProps = {
-      title: 'Committed to Vote Nay', icon: 'smile', startExpanded: true,
-      legislators: this.state.committedNayLegislators,
-      lastUpdated: '3 days ago',
-      confidencePercentage: '90%',
-      mapType: (this.props.primaryType === 'Senate') ? 'state' : 'district',
-    };
     return (
       <div className="IssueViewTabContent">
         <div className="content">
@@ -145,23 +127,51 @@ class IssueViewTabContent extends React.Component<IssueViewTabContentProps, Issu
             headerDetail="in 11 days"
             voteTitle="S.123 The Pidgeon Recognition Act of 2017"
             timelineCheckpoints={this.state.timelineCheckpoints}
-            sponsors={[
-              {text: 'Jack Sparrow', url: 'http://google.com'}
-            ]}
-            moreInformation={[
-              {text: 'govtrack', url: 'http://govtrack.com'},
-              {text: 'congress.gov', url: 'http://congress.gov'}
-            ]}
+            sponsors={this.props.issue.sponsors}
+            moreInformation={this.props.issue.moreInformation}
           />
           <BowGraphRow
             stances={this.state.stances}
-            desiredOutcome={this.state.desiredOutcome}
+            desiredOutcome={this.props.desiredOutcome}
             lastUpdated={'3 days ago'}
             confidencePercentage={'90%'}
           />
-          <CollapsibleMapSection key={0} data={uncommittedSectionData} />
-          <CollapsibleMapSection key={1} data={committedYeaSectionData}/>
-          <CollapsibleMapSection key={2} data={committedNaySectionData}/>
+          <CollapsibleMapSection
+            key={0}
+            data={{
+              title: 'Uncommitted',
+              showInfoButton: true,
+              startExpanded: true,
+              legislators: this.state.uncommittedLegislators,
+              lastUpdated: '3 days ago',
+              confidencePercentage: '90%',
+              mapType: this.state.mapType,
+            } as CollapsibleMapSectionDataProps}
+          />
+          <CollapsibleMapSection
+            key={1}
+            data={{
+              title: 'Committed to Vote Yea',
+              icon: ((this.props.desiredOutcome === 'yea') ? 'smile' : 'frown'),
+              startExpanded: true,
+              legislators: this.state.committedYeaLegislators,
+              lastUpdated: '3 days ago',
+              confidencePercentage: '90%',
+              mapType: this.state.mapType,
+            } as CollapsibleMapSectionDataProps}
+          />
+          <CollapsibleMapSection
+            key={2}
+            data={{
+              title: 'Committed to Vote Nay',
+              icon: ((this.props.desiredOutcome === 'nay') ? 'smile' : 'frown'),
+              startExpanded: true,
+              legislators: this.state.committedNayLegislators,
+              lastUpdated: '3 days ago',
+              confidencePercentage: '90%',
+              mapType: this.state.mapType,
+            } as CollapsibleMapSectionDataProps}
+          />
         </div>
       </div>
     );

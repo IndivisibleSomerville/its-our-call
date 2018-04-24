@@ -7,30 +7,59 @@ import './IssueView.css';
 
 import { Footer } from '../components';
 import IssueViewTabContent from '../components/IssueViewTabContent';
+import { LegislatorStanceInfo, Legislator,
+  placeholderHouseReps, placeholderSenatorReps } from '../data/Legislator';
+import { Issue as IssueData } from '../data/Issue';
 
 interface IssueViewProps { }
-
-interface IssueData {
-  title: string;
-  imgSrc: string;
-  overview: string;
-}
 
 interface IssueViewState {
   loadedIssue: boolean;
   issue?: IssueData;
   expandedOverview: boolean;
   selectedTabIndex: number;
+  legislatorStances: LegislatorStanceInfo[];
 }
+
+interface PlaceholderLegislatorOpts {
+  percentYea: number;
+  percentNay: number;
+  percentUncommitted: number;
+}
+
+let buildLegislatorStances = function (opts: PlaceholderLegislatorOpts): LegislatorStanceInfo[] {
+  // generates stance data to display a random close-call vote scenario
+  if (opts.percentYea + opts.percentNay + opts.percentUncommitted !== 100) {
+    throw Error('invalid options: percents must add up to one hundred');
+  }
+  let distributeStances = (array: Legislator[]): LegislatorStanceInfo[] => {
+    let yeas = Math.round(array.length * opts.percentYea / 100);
+    let nays = Math.round(array.length * opts.percentNay / 100);
+    let uncommitted = array.length - nays - yeas;
+    let stances: LegislatorStanceInfo[] = [];
+    for (var ai = 0; ai < array.length; ai++) {
+      let l: Legislator = array[ai];
+      if (stances.length < nays) {
+        stances.push({stance: 'nay', legislator: l});
+      } else if (stances.length < (nays + yeas)) {
+        stances.push({stance: 'yea', legislator: l});
+      } else if (stances.length < uncommitted + nays + yeas) {
+        stances.push({stance: 'uncommitted', legislator: l});
+      }
+    }
+    return stances;
+  };
+  let toRet: LegislatorStanceInfo[] = [];
+  return toRet.concat(distributeStances(placeholderHouseReps), distributeStances(placeholderSenatorReps));
+};
 
 class IssueView extends React.Component<IssueViewProps, IssueViewState> {
   http = new Http();
   constructor(props: IssueViewProps) {
     super(props);
     // TODO: set initial load issues to false & dispatch async load calls to endpoints
-    this.state = { loadedIssue: false, expandedOverview: false, selectedTabIndex: 0 };
+    this.state = { loadedIssue: false, expandedOverview: false, selectedTabIndex: 0, legislatorStances: []};
     this.fetchData = this.fetchData.bind(this);
-    this.errorFetchingData = this.errorFetchingData.bind(this);
     this.toggleOverview = this.toggleOverview.bind(this);
     this.selectedTabHeader = this.selectedTabHeader.bind(this);
   }
@@ -40,6 +69,11 @@ class IssueView extends React.Component<IssueViewProps, IssueViewState> {
   }
 
   fetchData() {
+    // 'fetch' the data
+    let desiredOutcome: 'yea' | 'nay' = 'yea';
+    let percentYea = 10;
+    let percentNay = 40;
+    let percentUncommitted = 50;
     this.setState({
       loadedIssue: true, expandedOverview: false,
       issue: {
@@ -50,12 +84,21 @@ class IssueView extends React.Component<IssueViewProps, IssueViewState> {
         ea, te nec dicat summo. Debitis repudiare sea cu. Eos dolor consequat id, sed id \
         eius summo ubique, vero euripidis mei ex. Deserunt omittantur cum ad, eam ex tempor \
         vocent sanctus.',
-      }
+        desiredOutcome,
+        sponsors: [
+          {text: 'Jack Sparrow', url: 'http://google.com'}
+        ],
+        moreInformation: [
+          {text: 'govtrack', url: 'http://govtrack.com'},
+          {text: 'congress.gov', url: 'http://congress.gov'}
+        ],
+      },
+      legislatorStances: buildLegislatorStances({
+        percentYea,
+        percentNay,
+        percentUncommitted
+      }),
     });
-  }
-  // tslint:disable-next-line:no-any
-  errorFetchingData(respError: any) {
-    console.warn(respError);
   }
 
   toggleOverview() {
@@ -112,7 +155,12 @@ class IssueView extends React.Component<IssueViewProps, IssueViewState> {
               </div>
               <div className={'tab-list-content-scrollable'}>
                 <div className={'scrollable-content ' + optionClasses[this.state.selectedTabIndex]}>
-                  <IssueViewTabContent primaryType={sectionList[this.state.selectedTabIndex]} />
+                  <IssueViewTabContent
+                    primaryType={sectionList[this.state.selectedTabIndex]}
+                    issue={this.state.issue}
+                    desiredOutcome={this.state.issue.desiredOutcome}
+                    legislatorStances={this.state.legislatorStances}
+                  />
                 </div>
               </div>
           </div>

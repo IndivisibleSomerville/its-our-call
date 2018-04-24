@@ -88,7 +88,7 @@
 }
 
 .CollapsibleMapSection.expanded > .content {
-  max-height: 100rem;
+  max-height: 1000rem;
 }
 
 .CollapsibleMapSection > .content .map {

@@ -7,7 +7,8 @@ import './LegislatorList.css';
 
 import { ResourceListSection, Footer } from '../components';
 import { LegislatorRow } from '../components';
-import { LegislatorRowDataProps } from '../components/LegislatorRow';
+import { LegislatorRowDataProps, mapDataToLegislatorRowDataProps } from '../components/LegislatorRow';
+import { placeholderHouseReps, placeholderSenatorReps } from '../data/Legislator';
 
 interface LegislatorListProps { }
 
@@ -28,15 +29,17 @@ class LegislatorList extends React.Component<LegislatorListProps, LegislatorList
   constructor(props: LegislatorListProps) {
     super(props);
     // TODO: set initial load issues to false & dispatch async load calls to endpoints
+    let bookmarkedRep = placeholderHouseReps[50];
+    let recentlyViewedReps = [placeholderHouseReps[57], placeholderHouseReps[53]] ;
     this.state = {
       loadedBookmarkedLegislators: true,
-      bookmarkedLegislatorData: [{ isBookmarkRow: true }], // TODO: real data
+      bookmarkedLegislatorData: [mapDataToLegislatorRowDataProps(bookmarkedRep)], // TODO: real data
       loadedRecentlyViewedLegislators: true,
-      recentlyViewedLegislatorData: [{ isBookmarkRow: false }, { isBookmarkRow: false }], // TODO: real data
+      recentlyViewedLegislatorData: recentlyViewedReps.map(mapDataToLegislatorRowDataProps), // TODO: real data
       loadedSenateLegislators: true,
-      senateLegislatorData: [{ isBookmarkRow: false }, { isBookmarkRow: false }], // TODO: real data
+      senateLegislatorData: placeholderSenatorReps.map(mapDataToLegislatorRowDataProps), // TODO: real data
       loadedHouseLegislators: true,
-      houseLegislatorData: [{ isBookmarkRow: false }, { isBookmarkRow: false }, { isBookmarkRow: false }],
+      houseLegislatorData: placeholderHouseReps.map(mapDataToLegislatorRowDataProps),
       // TODO: real data, real logic
       hasBookmarks: (Math.random() < .5),
     };

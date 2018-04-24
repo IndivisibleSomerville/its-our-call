@@ -9,7 +9,7 @@ export interface StanceInfo {
   type: StanceType;
   party: PartyType;
 }
-type OutcomeType = 'yea' | 'nay';
+export type OutcomeType = 'yea' | 'nay';
 type StanceType = OutcomeType | 'uncommitted';
 type PartyType = 'R' | 'D';
 
@@ -127,16 +127,18 @@ class BowGraphRow extends React.Component<BowGraphRowProps, BowGraphRowState> {
       desiredPartyBreakdown = (<PartyBreakDown r={this.state.nayRCount} d={this.state.nayDCount}/>);
     }
 
-    let centerLabel = (<div className="center-label">{this.remainingDesired()}</div>);
-    let centerDetails = (
+    let optionalWill: JSX.Element | null = (null);
+    let voteNumLabel = (<div className="center-label">{this.remainingDesired()}</div>);
+    let voteGoalDetails = (
       <div className="center-details">more {this.props.desiredOutcome} votes
         <br/>needed to {this.props.desiredOutcome === 'yea' ? 'pass' : 'defeat'}
       </div>
     );
 
     if (this.remainingDesired() < 0) {
-      centerLabel = (<div className="center-label">{-this.remainingDesired()}</div>);
-      centerDetails = (
+      optionalWill = (<div className="top">will</div>);
+      voteNumLabel = (<div className="center-label">{-this.remainingDesired()}</div>);
+      voteGoalDetails = (
         <div className="center-details">more than needed
           <br/>issue likely to {this.props.desiredOutcome === 'yea' ? 'pass' : 'defeat'}
         </div>
@@ -193,8 +195,9 @@ class BowGraphRow extends React.Component<BowGraphRowProps, BowGraphRowState> {
               goalpost={goalPost}
               goalpostOuterWidth={goalPost === 50 ? 30 : 20}
             />
-            {centerLabel}
-            {centerDetails}
+            {optionalWill}
+            {voteNumLabel}
+            {voteGoalDetails}
           </div>
         </div>
       </div>
