@@ -21,11 +21,12 @@ class LegislatorBadge extends React.Component<LegislatorBadgeProps> {
     } else if (this.props.type === 'repub') {
       undefinedPartyColor = 'red';
     }
+    let stateAbbreviation = this.props.state.substr(0, 2);
     return (
       // tslint:disable:jsx-self-close
       <div className={'LegislatorBadge ' + undefinedPartyColor}>
-        <svg className={'state-icon state-icon-' + this.props.state}>
-          <use xlinkHref={'#icon-state-' + this.props.state}></use>
+        <svg className={'state-icon state-icon-' + stateAbbreviation}>
+          <use xlinkHref={'#icon-state-' + stateAbbreviation}></use>
         </svg>
       </div>
     );
