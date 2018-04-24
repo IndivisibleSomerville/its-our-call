@@ -1,3 +1,7 @@
+body {
+  font-family: 'Montserrat', sans-serif;
+}
+
 .App {
   text-align: center;
   font-family: 'Montserrat', sans-serif;
@@ -8,10 +12,22 @@ a:-webkit-any-link {
   text-decoration: none;
 }
 
-.placeholder-link {
-  font-weight: bold;
+.call-btn {
+  float: right;
+  clear:both;
+  padding: .5rem .75rem;
+  border: solid #ddd 1px;
+  border-radius: .1rem;
+  background: white;
+  color: #714D70;
 }
 
-body {
-  font-family: 'Montserrat', sans-serif;
+.call-btn:hover {
+  color: white;
+  background: darkgray;
+}
+
+.call-btn .text {
+  float: left;
+  font-weight: bold;
 }

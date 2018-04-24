@@ -1,0 +1,29 @@
+Every time a district is redrawn (usually following every census) the data our svg maps use will need to be updated.
+
+The best way to update this data is from the census.gov mapserver, but more info is needed in order to scrape that data into a good format.
+
+For now, we can parse wikipedia svgs into addressable data
+
+Usage
+parse_svg_to_json svg_file.svg destination_file.json
+
+(destination files should replace the json data in /frontend/its-our-call/src/data/usa-states-dimensions/
+
+Sources
+US_Congressional_districts.svg https://upload.wikimedia.org/wikipedia/commons/2/24/US_Congressional_districts.svg
+US_States.svg https://upload.wikimedia.org/wikipedia/commons/1/1a/Blank_US_Map_%28states_only%29.svg
+
+
+Leads for better data sources on state legislature districts
+https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer
+https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer/export?bbox=-9034078.623561636,4899821.116643544,-7816007.8965441575,5767118.311513584
+
+https://catalog.data.gov/dataset/series-information-file-for-the-2017-tiger-line-shapefile-current-state-legislative-district-sl685be
+https://www.census.gov/geo/maps-data/data/tiger-line.html
+https://www.census.gov/cgi-bin/geo/shapefiles/index.php
+ftp://ftp2.census.gov/geo/tiger/TIGER2017/
+ftp://ftp2.census.gov/geo/tiger/TIGER2017/SLDL/
+ftp://ftp2.census.gov/geo/tiger/TIGER2017/SLDU/
+
+https://www.census.gov/geo/maps-data/data/cbf/cbf_cds.html
+http://resources.arcgis.com/en/help/main/10.2/index.html#//00s30000002z000000

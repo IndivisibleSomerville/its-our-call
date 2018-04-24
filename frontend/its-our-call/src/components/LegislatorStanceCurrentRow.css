@@ -5,23 +5,3 @@
 .LegislatorStanceCurrentRow .content.faded {
   color: #9F9F9F;
 }
-
-.LegislatorStanceCurrentRow .call-btn {
-  float: right;
-  clear:both;
-  padding: .5rem .75rem;
-  border: solid #ddd 1px;
-  border-radius: .1rem;
-  background: white;
-  color: #714D70;
-}
-
-.LegislatorStanceCurrentRow .call-btn:hover {
-  color: white;
-  background: darkgray;
-}
-
-.LegislatorStanceCurrentRow .call-btn .text {
-  float: left;
-  font-weight: bold;
-}

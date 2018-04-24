@@ -1,0 +1,176 @@
+.BowGraphRow {
+  width: 100%;
+  margin-top: 1rem;
+  height: 30rem;
+  float: left;
+}
+
+.BowGraphRow .header {
+  width: 100%;
+  float: left;
+  background: #eee;
+  height: 2rem;
+  padding: 2rem 0rem 1rem 0rem;
+}
+
+.BowGraphRow .header .middle {
+  width:60%;
+  float: left;
+  margin-left: 20%;
+}
+
+.BowGraphRow .header .middle .text {
+  padding-right:.5rem;
+}
+.BowGraphRow .header .middle .num {
+  padding-right:.25rem;
+}
+.BowGraphRow .header .middle .PartyBreakDown{
+  padding-top:.1rem;
+  font-size: .9rem;
+}
+.BowGraphRow .header .middle .PartyBreakDown .R {
+  padding-right:.2rem;
+}
+
+.BowGraphRow .header .middle * {
+  float: left;
+}
+
+.BowGraphRow .header .InfoButton {
+  float: right;
+  margin-right: 1.5rem;
+}
+
+.BowGraphRow .bar-sample {
+  width: 1.5rem;
+  height: .4rem;
+  margin-right: 1rem;
+  background: white;
+  transform: translateY(75%);
+}
+
+.BowGraphRow .bar-sample.uncommitted {
+  border: 1px solid #ccc;
+  background: white;
+}
+
+.BowGraphRow .bar-sample.orange {
+  background: #F7C8A7;
+}
+.BowGraphRow .bar-sample.green {
+  background: #3F8014;
+}
+
+.BowGraphRow .content {
+  position: relative;
+  float: left;
+  width: 100%;
+  height: 24rem;
+}
+.BowGraphRow .content .left {
+  position: absolute;
+  width: 50%;
+  bottom: 0;
+  left: 0;
+  top: 0;
+  background: #eee;
+}
+.BowGraphRow .content .right {
+  position: absolute;
+  background: rgba(171, 198, 150, 0.4);
+  width: 50%;
+  bottom: 0;
+  right: 0;
+  top: 0;
+}
+
+.BowGraphRow .content .bottom-details {
+  position: absolute;
+  float:left;
+  color: #bbb;
+  height: 3rem;
+  bottom: 0;
+  left: 0;
+  padding-left: 1rem;
+}
+
+.BowGraphRow .content .bottom-details .confidence {
+  font-size: .75rem;
+  padding-right: .5rem;
+}
+.BowGraphRow .content .bottom-details .last-update {
+  font-size: .75rem;
+}
+
+.BowGraphRow .content .bottom-details div {
+  float: left;
+}
+
+.BowGraphRow .content .top-details {
+  float: left;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1rem;
+  padding-left: .75rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.BowGraphRow .content .top-details div {
+  float: left;
+}
+
+.BowGraphRow .content .top-details .icon {
+}
+.BowGraphRow .content .top-details .text {
+  padding-left: .4rem;
+  text-transform: capitalize;
+}
+.BowGraphRow .content .top-details .num {
+  padding-left: .4rem;
+  padding-right: .4rem;
+}
+
+.BowGraphRow .content .top-details .PartyBreakDown {
+  font-size: .8rem;
+  padding-top: .15rem;
+}
+.BowGraphRow .content .top-details .R {
+  padding-right: .25rem;
+}
+
+/* TODO: move these color classes to a more global location */
+.BowGraphRow .content .top-details .orange {
+  color: #F47B2F;
+}
+
+.BowGraphRow .content .top-details .green {
+  color: #3F8014;
+}
+
+.BowGraphRow .content .graph {
+  position: absolute;
+  top: 37.5%;
+  left: 50%;
+  width: 95%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.BowGraphRow .content .graph .center-label {
+  position: absolute;
+  bottom: 18%;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  text-align: center;
+  font-size: 4rem;
+}
+
+.BowGraphRow .content .graph .center-details {
+  position: absolute;
+  bottom: 2%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  text-align: center;
+}

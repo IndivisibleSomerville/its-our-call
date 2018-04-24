@@ -1,0 +1,194 @@
+.CollapsibleMapSection {
+  width: 100%;
+  float: left;
+  text-align: left;
+  margin-top: .5rem;
+}
+
+
+.CollapsibleMapSection > .header {
+  width: 100%;
+  height: 3rem;
+  background: #eee;
+  float: left;
+}
+
+.CollapsibleMapSection > .header .PlusMinusButton {
+  float: left;
+  margin-top: .5rem;
+  margin-left: 1rem;
+  margin-right: .5rem;
+}
+
+.CollapsibleMapSection > .header .middle {
+  float: left;
+  height: 3rem;
+  padding-top: .65rem;
+}
+.CollapsibleMapSection > .header .icon {
+  float: left;
+  font-size: 1.35rem;
+  padding-left: .15rem;
+  padding-right: .5rem;
+}
+.CollapsibleMapSection > .header .icon.frown {
+  color:#F7C8A7;
+}
+
+.CollapsibleMapSection > .header .icon.smile {
+  color:#ABC596;
+}
+
+.CollapsibleMapSection > .header .title {
+  float: left;
+  font-size: 1.15rem;
+  font-weight: bold;
+  color: #5C2F5A;
+  padding-right: .75rem;
+  padding-top: .15rem;
+}
+
+.CollapsibleMapSection > .header .InfoButton {
+  margin-top: .3rem;
+}
+
+.CollapsibleMapSection > .header .right {
+  float: right;
+  padding-left: .5rem;
+  padding-right: .5rem;
+  padding-top: .95rem;
+}
+.CollapsibleMapSection > .header .right div {
+  float: left;
+  padding-right: .15rem;
+}
+.CollapsibleMapSection > .header .right .total {
+  font-size: 1.2rem;
+  margin-top: -.25rem;
+  padding-right: .5rem;
+}
+
+.CollapsibleMapSection > .content {
+  background-color: #F8F8F8;
+  transition: max-height 1s ease-in-out;
+  max-height: 0rem;
+  float: left;
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.CollapsibleMapSection > .content .topShadow {
+  position: absolute;
+  top: -6px;
+  height: 8px;
+  width: 100%;
+  background: #ddd;
+  box-shadow: #e2e1e1 0px 4px 6px;
+}
+
+.CollapsibleMapSection.expanded > .content {
+  max-height: 100rem;
+}
+
+.CollapsibleMapSection > .content .map {
+  padding-top: 1.5rem;
+  width: 100%;
+  text-align: center;
+}
+
+.CollapsibleMapSection > .content .map-details {
+  float: left;
+  width: 100%;
+  clear: both;
+  padding-top: 1.5rem;
+  padding-left: 1rem;
+  padding-bottom: 1rem;
+}
+
+.CollapsibleMapSection > .content .map-details .left {
+  float: left;
+  width: 50%;
+}
+.CollapsibleMapSection > .content .map-details .right {
+  float: right;
+  width: 50%;
+  clear: both;
+}
+
+.CollapsibleMapSection > .content .map-details .confidence {
+  font-size: .75rem;
+  padding-right: .5rem;
+  clear: both;
+  color: #bbb;
+}
+.CollapsibleMapSection > .content .map-details .last-update {
+  font-size: .75rem;
+  clear: both;
+  color: #bbb;
+}
+
+.CollapsibleMapSection > .content .map-details div {
+  float: left;
+}
+
+
+.CollapsibleMapSection > .content > .overview-wrapper {
+  transition: .5s;
+  overflow: hidden;
+  height: auto;
+  position: relative;
+  text-align: left;
+  margin-bottom: 0rem;
+  clear: both;
+  padding-bottom: 1.5rem;
+  float: left;
+  width: 100%;
+}
+
+.CollapsibleMapSection > .content > .overview-wrapper.expanded {
+  /* maximum supported list height (69px is the height of a single legislator row */
+  max-height: calc(300 * 69px);
+}
+
+.CollapsibleMapSection > .content > .overview-wrapper.collapsed {
+  max-height: 14.75rem;
+}
+
+
+.CollapsibleMapSection > .content > .overview-wrapper .overview {
+  line-height: 1rem;
+  font-size: 1rem;
+  padding-bottom:1.5rem;
+  border-top: 1px solid #bbb;
+}
+
+.CollapsibleMapSection > .content > .overview-wrapper .overview.empty {
+  color: #aaa;
+  padding: 2rem;
+  font-size: .9rem;
+  text-align: center;
+  border-top-style: none;
+}
+
+.CollapsibleMapSection > .content > .overview-wrapper .bottomShadow {
+  position: absolute;
+  bottom: -.5rem;
+  left: 0;
+  right: 0;
+  height:1.5rem;
+  background-color: white;
+  box-shadow: white 0px -10px 7px;
+}
+
+.CollapsibleMapSection > .content > .overview-wrapper .toggleButton {
+  position: absolute;
+  text-align: center;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  color: #ccc;
+  font-size: .9rem;
+  text-transform:uppercase;
+  font-weight: 400;
+}

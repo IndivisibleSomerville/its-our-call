@@ -1,0 +1,12 @@
+.PlusMinusButton {
+  border: 2px #ddd solid;
+  border-radius: 50%;
+  background: white;
+  width: 1.8rem;
+  height: 1.8rem;
+  cursor: pointer;
+}
+
+.PlusMinusButton svg {
+  transform: translateX(35%) translateY(25%);
+}

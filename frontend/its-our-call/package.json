@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@types/react-redux": "^5.0.15",
+    "d3": "^5.1.0",
     "isomorphic-fetch": "^2.2.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
@@ -22,6 +23,7 @@
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
+    "@types/d3": "^5.0.0",
     "@types/enzyme": "^3.1.9",
     "@types/isomorphic-fetch": "0.0.34",
     "@types/jest": "^22.2.0",
