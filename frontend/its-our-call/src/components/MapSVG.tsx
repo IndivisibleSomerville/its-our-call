@@ -8,7 +8,7 @@ interface MapSVGProps {
   width: number | string;
   height: number | string;
   mapType: 'state' | 'district';
-  customize?: { [key: string]: { fill?: string, stroke?: string, clickHandler?: (state: string) => void }};
+  customize: { [key: string]: { fill?: string, stroke?: string, clickHandler?: (state: string) => void }};
   defaultFill?: string;
   defaultStroke?: string;
   onStateClick?: (state: string) => void;
@@ -19,14 +19,20 @@ interface MapSVGState {
   defaultStroke: string;
   outerStroke: string;
   viewBox: string;
+  doneBuildingPaths: boolean;
+  paths: JSX.Element[];
+  currentQueue: number;
 }
 
 const DIMENSIONS_KEY = 'dimensions';
 const VIEWBOX_KEY = 'viewBox';
+
+const stateZoneKeys = Object.keys(stateData).filter((key: string) => { return key !== VIEWBOX_KEY; });
+const districtZoneKeys = Object.keys(districtData).filter((key: string) => { return key !== VIEWBOX_KEY; });
+
 export default class MapSVG extends React.Component<MapSVGProps, MapSVGState> {
   constructor(props: MapSVGProps) {
     super(props);
-    this.buildPaths = this.buildPaths.bind(this);
     this.zoneFillColor = this.zoneFillColor.bind(this);
     this.zoneStrokeColor = this.zoneStrokeColor.bind(this);
     this.stateClickHandler = this.stateClickHandler.bind(this);
@@ -38,30 +44,30 @@ export default class MapSVG extends React.Component<MapSVGProps, MapSVGState> {
       defaultStroke: props.defaultStroke ? props.defaultStroke : 'rgba(0,0,0,0)',
       outerStroke: '#C9C9C9',
       viewBox: this.buildViewBox(this.props.mapType === 'state'),
+      doneBuildingPaths: false,
+      paths: [],
+      currentQueue: 0,
     };
   }
 
-  buildPaths(outline?: boolean, strokeWidth?: number) {
-    let zoneData = this.props.mapType === 'state' ? stateData : districtData;
-    let zoneKeys = Object.keys(zoneData).filter((key: string) => { return key !== VIEWBOX_KEY; });
-    return zoneKeys.map(
-      (zoneKey: string) => {
-      return (
-        <MapAreaSVG
-          key={outline ? ('outline_' + zoneKey) : zoneKey}
-          dimensions={zoneData[zoneKey][DIMENSIONS_KEY]}
-          state={zoneKey}
-          strokeWidth={strokeWidth ? strokeWidth : 2}
-          stroke={outline ? '#FFFFFF' : this.zoneStrokeColor(zoneKey)}
-          fill={outline ? '#FFFFFF' : this.zoneFillColor(zoneKey)}
-          onClickState={outline ? (s: string) => { /* no-op */ } : this.stateClickHandler}
-        />
-      );
+  componentDidMount() {
+    let currentQueue = this.state.currentQueue + 1;
+    this.setState({
+      viewBox: this.buildViewBox(this.props.mapType === 'state'),
+      paths: [],
+      currentQueue,
+      doneBuildingPaths: false
     });
   }
 
   componentWillReceiveProps(props: MapSVGProps) {
-    this.setState({viewBox: this.buildViewBox(props.mapType === 'state')});
+    let currentQueue = this.state.currentQueue + 1;
+    this.setState({
+      viewBox: this.buildViewBox(props.mapType === 'state'),
+      paths: [],
+      currentQueue,
+      doneBuildingPaths: false,
+    });
   }
 
   buildViewBox(isStateMap: boolean): string {
@@ -74,18 +80,18 @@ export default class MapSVG extends React.Component<MapSVGProps, MapSVGState> {
     return districtData[VIEWBOX_KEY];
   }
 
-  zoneFillColor(state: string): string {
-    if (this.props.customize && this.props.customize[state]) {
-      let safeFill: string | undefined = this.props.customize[state].fill;
+  zoneFillColor(zoneKey: string): string {
+    if (this.props.customize[zoneKey]) {
+      let safeFill: string | undefined = this.props.customize[zoneKey].fill;
       if (safeFill) {
         return safeFill;
       }
     }
     return this.state.defaultFill;
   }
-  zoneStrokeColor(state: string): string {
-    if (this.props.customize && this.props.customize[state] && this.props.customize[state].stroke) {
-      let safeStroke: string | undefined = this.props.customize[state].stroke;
+  zoneStrokeColor(zoneKey: string): string {
+    if (this.props.customize[zoneKey]) {
+      let safeStroke: string | undefined = this.props.customize[zoneKey].stroke;
       if (safeStroke) {
         return safeStroke;
       }
@@ -148,7 +154,9 @@ export default class MapSVG extends React.Component<MapSVGProps, MapSVGState> {
   }
 
   render() {
-    // "0 0 1100 593"
+    let zoneData = this.props.mapType === 'state' ? stateZoneKeys : districtZoneKeys;
+    let dimensionData = this.props.mapType === 'state' ? stateData : districtData;
+
     return (
       <svg
         className="us-map"
@@ -157,18 +165,23 @@ export default class MapSVG extends React.Component<MapSVGProps, MapSVGState> {
         height={this.props.height}
         viewBox={this.state.viewBox}
       >
-        <defs>
-          <mask id="mask2">
-            {this.buildPaths(true, 6)}
-          </mask>
-          <mask id="mask1">
-            {this.buildPaths(true, 3)}
-          </mask>
-        </defs>
-        <rect width="100%" height="100%" fill={this.state.outerStroke} mask="url(#mask2)" />
-        <rect width="100%" height="100%" fill={'#F2F2F2'} mask="url(#mask1)" />
+        <g className="bg" fill="#F2F2F2" stroke={this.state.outerStroke} strokeWidth="4">
+          <use xlinkHref={this.props.mapType === 'state' ? '#state-map-outline' : '#district-map-outline'} />
+        </g>
         <g className="outlines">
-          {this.buildPaths()}
+          {zoneData.map((zoneKey: string) => {
+            return (
+              <MapAreaSVG
+                key={zoneKey}
+                dimensions={dimensionData[zoneKey][DIMENSIONS_KEY]}
+                state={zoneKey}
+                strokeWidth={2}
+                stroke={this.zoneStrokeColor(zoneKey)}
+                fill={this.zoneFillColor(zoneKey)}
+                onClickState={this.stateClickHandler}
+              />
+            );
+          })}
           <g className="DC state">
             <path
               className="DC1"

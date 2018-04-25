@@ -6,7 +6,7 @@ interface MapAreaSVGProps {
   stroke: string;
   strokeWidth: number;
   state: string;
-  onClickState: (state: string) => void;
+  onClickState?: (state: string) => void;
 }
 
 interface MapAreaSVGState {
@@ -26,6 +26,19 @@ export default class MapAreaSVG extends React.Component<MapAreaSVGProps, MapArea
 
   render() {
     // TODO: popover on click
+    if (this.props.onClickState) {
+      return (
+        <path
+          d={this.props.dimensions}
+          fill={this.props.fill}
+          stroke={this.props.stroke}
+          strokeWidth={this.props.strokeWidth}
+          data-name={this.props.state}
+          className={`${this.props.state} state`}
+          onClick={this.onClickState}
+        />
+      );
+    }
     return (
       <path
         d={this.props.dimensions}
@@ -34,7 +47,6 @@ export default class MapAreaSVG extends React.Component<MapAreaSVGProps, MapArea
         strokeWidth={this.props.strokeWidth}
         data-name={this.props.state}
         className={`${this.props.state} state`}
-        onClick={this.onClickState}
       />
     );
   }

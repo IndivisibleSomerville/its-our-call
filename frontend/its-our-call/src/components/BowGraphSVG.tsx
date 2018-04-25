@@ -8,12 +8,11 @@ export interface BowGraphSVGProps {
   numWhite: number;
   numGreen: number;
   goalpost: number; // disabled if negative or greater than total
-  goalpostOuterWidth?: number; // 20 if not defined (uses svg viewport units)
+  goalpostOuterWidth: number; // (uses svg viewport units)
 }
 
 interface BowGraphSVGState {
   numTotal: number;
-  goalpostOuterWidth: number;
   height: number;
 }
 
@@ -24,8 +23,7 @@ class BowGraphSVG extends React.Component<BowGraphSVGProps, BowGraphSVGState> {
     super(props);
     this.state = {
       numTotal: (props.numOrange + props.numWhite + props.numGreen),
-      goalpostOuterWidth: props.goalpostOuterWidth ? props.goalpostOuterWidth : 20,
-      height: 125,
+      height: 150,
     };
   }
 
@@ -81,7 +79,7 @@ class BowGraphSVG extends React.Component<BowGraphSVGProps, BowGraphSVGState> {
       let arcPercent = this.props.goalpost / this.state.numTotal;
       let xRatio = Math.sin(Math.PI * (arcPercent - .5));
       let yRatio = Math.cos(Math.PI * (-arcPercent - .5));
-      let outerBound = outerRadius + this.state.goalpostOuterWidth;
+      let outerBound = outerRadius + this.props.goalpostOuterWidth;
       let innerBound = outerRadius - 20;
       d3.select((this.ref as Element)).append('line')
         .attr('x1', 100 + xRatio * innerBound).attr('y1', yRatio * innerBound)

@@ -2,7 +2,7 @@ Every time a district is redrawn (usually following every census) the data our s
 
 The best way to update this data is from the census.gov mapserver, but more info is needed in order to scrape that data into a good format.
 
-For now, we can parse wikipedia svgs into addressable data
+For now, we can parse wikipedia svgs into addressable data and make other adjustments manually.
 
 Usage
 parse_svg_to_json svg_file.svg destination_file.json
@@ -13,6 +13,7 @@ Sources
 US_Congressional_districts.svg https://upload.wikimedia.org/wikipedia/commons/2/24/US_Congressional_districts.svg
 US_States.svg https://upload.wikimedia.org/wikipedia/commons/1/1a/Blank_US_Map_%28states_only%29.svg
 
+The _outline.svg files were merged in illustrator and pasted into index.html for faster rendering.
 
 Leads for better data sources on state legislature districts
 https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer

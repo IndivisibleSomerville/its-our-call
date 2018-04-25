@@ -4,78 +4,52 @@ import IssueViewTopRow from './IssueViewTopRow';
 import CollapsibleMapSection, { CollapsibleMapSectionDataProps } from './CollapsibleMapSection';
 import BowGraphRow, { StanceInfo } from './BowGraphRow';
 import { Legislator as LegislatorData, LegislatorStanceInfo } from '../data/Legislator';
+import { LegislatorRowDataProps } from './LegislatorRow';
 import { Issue as IssueData, TimelineCheckpoint } from '../data/Issue';
 
 import './IssueViewTabContent.css';
 
 export interface IssueViewTabContentProps {
-  primaryType: string; // 'Senate' | 'House';
+  primaryType: 'Senate' | 'House';
   desiredOutcome: 'yea' | 'nay'; // 'yea' | 'nay';
   issue: IssueData;
   legislatorStances: LegislatorStanceInfo[];
   // TODO: get legislators and their stances from the API
+  stanceInfoArray: StanceInfo[];
+  uncommittedLegislators: LegislatorData[];
+  committedYeaLegislators: LegislatorData[];
+  committedNayLegislators: LegislatorData[];
+  uncommittedLegislatorProps: LegislatorRowDataProps[];
+  committedYeaLegislatorProps: LegislatorRowDataProps[];
+  committedNayLegislatorProps: LegislatorRowDataProps[];
 }
 
 interface IssueViewTabContentState {
   isVoteInfoSectionExpanded: boolean;
   headerTitle: string;
   timelineCheckpoints: TimelineCheckpoint[];
-  stances: StanceInfo[];
   mapType: string;
-  uncommittedLegislators: LegislatorData[];
-  committedYeaLegislators: LegislatorData[];
-  committedNayLegislators: LegislatorData[];
+  isParsedLegislatorData: boolean;
 }
-
-let partyLetter = (l: LegislatorData) => {
-  return l.partyAffiliation === 'dem' ? 'D' : 'R';
-};
 
 class IssueViewTabContent extends React.Component<IssueViewTabContentProps, IssueViewTabContentState> {
   constructor(props: IssueViewTabContentProps) {
     super(props);
-    this.filterLegislatorStances = this.filterLegislatorStances.bind(this);
-    this.reduceLegislators = this.reduceLegislators.bind(this);
     this.buildMapType = this.buildMapType.bind(this);
-    this.buildStancesFromArray = this.buildStancesFromArray.bind(this);
     this.buildTimelineCheckpointsFromProps = this.buildTimelineCheckpointsFromProps.bind(this);
-    let ls = this.filterLegislatorStances(props.legislatorStances, props.primaryType);
+    this.setStateFromProps = this.setStateFromProps.bind(this);
+    // tslint:disable:no-console
     this.state = {
       isVoteInfoSectionExpanded: false,
       headerTitle: (props.primaryType + ' vote'),
-      stances: this.buildStancesFromArray(ls),
       timelineCheckpoints: this.buildTimelineCheckpointsFromProps(props),
-      uncommittedLegislators: this.reduceLegislators(ls, 'uncommitted'),
-      committedYeaLegislators: this.reduceLegislators(ls, 'yea'),
-      committedNayLegislators: this.reduceLegislators(ls, 'nay'),
       mapType: this.buildMapType(props),
+      isParsedLegislatorData: false,
     };
-  }
-
-  filterLegislatorStances(legislatorStances: LegislatorStanceInfo[], focusedType: string) {
-      return legislatorStances.filter((l: LegislatorStanceInfo) => {
-        return l.legislator.legislatorType === focusedType;
-      });
-  }
-
-  reduceLegislators(legislatorStances: LegislatorStanceInfo[],
-                    stance: 'yea' | 'nay' | 'uncommitted'): LegislatorData[] {
-    return legislatorStances.reduce((reduce: LegislatorData[], l: LegislatorStanceInfo) => {
-      if (l.stance === stance) {
-        reduce.push(l.legislator);
-      }
-      return reduce;
-    }, []);
   }
 
   buildMapType(props: IssueViewTabContentProps) {
     return (props.primaryType === 'Senate') ? 'state' : 'district';
-  }
-
-  buildStancesFromArray(legislatorStances: LegislatorStanceInfo[]): StanceInfo[] {
-    return legislatorStances.map((l: LegislatorStanceInfo) => {
-      return {type: l.stance, party: partyLetter(l.legislator) } as StanceInfo;
-    });
   }
 
   buildTimelineCheckpointsFromProps (props: IssueViewTabContentProps) {
@@ -105,16 +79,24 @@ class IssueViewTabContent extends React.Component<IssueViewTabContentProps, Issu
     ];
   }
 
+  setStateFromProps(props: IssueViewTabContentProps) {
+    this.setState({
+      isParsedLegislatorData: true,
+    });
+  }
+
+  componentDidMount() {
+    this.setStateFromProps(this.props);
+  }
+
   componentWillReceiveProps(props: IssueViewTabContentProps) {
-    let ls = this.filterLegislatorStances(props.legislatorStances, props.primaryType);
+    // tslint:disable:no-console
     this.setState({
       headerTitle: (props.primaryType + ' vote'),
-      stances: this.buildStancesFromArray(ls),
-      uncommittedLegislators: this.reduceLegislators(ls, 'uncommitted'),
-      committedYeaLegislators: this.reduceLegislators(ls, 'yea'),
-      committedNayLegislators: this.reduceLegislators(ls, 'nay'),
       mapType: this.buildMapType(props),
+      isParsedLegislatorData: false,
     });
+    this.setStateFromProps(props);
   }
 
   render() {
@@ -131,10 +113,13 @@ class IssueViewTabContent extends React.Component<IssueViewTabContentProps, Issu
             moreInformation={this.props.issue.moreInformation}
           />
           <BowGraphRow
-            stances={this.state.stances}
+            stances={this.props.stanceInfoArray}
             desiredOutcome={this.props.desiredOutcome}
+            requiresCloture={this.props.issue.requiresCloture}
             lastUpdated={'3 days ago'}
             confidencePercentage={'90%'}
+            adjustForTiebreaker={true}
+            isLoading={!this.state.isParsedLegislatorData}
           />
           <CollapsibleMapSection
             key={0}
@@ -142,7 +127,8 @@ class IssueViewTabContent extends React.Component<IssueViewTabContentProps, Issu
               title: 'Uncommitted',
               showInfoButton: true,
               startExpanded: true,
-              legislators: this.state.uncommittedLegislators,
+              legislators: this.props.uncommittedLegislators,
+              legislatorRowProps: this.props.uncommittedLegislatorProps,
               lastUpdated: '3 days ago',
               confidencePercentage: '90%',
               mapType: this.state.mapType,
@@ -154,7 +140,8 @@ class IssueViewTabContent extends React.Component<IssueViewTabContentProps, Issu
               title: 'Committed to Vote Yea',
               icon: ((this.props.desiredOutcome === 'yea') ? 'smile' : 'frown'),
               startExpanded: true,
-              legislators: this.state.committedYeaLegislators,
+              legislators: this.props.committedYeaLegislators,
+              legislatorRowProps: this.props.committedYeaLegislatorProps,
               lastUpdated: '3 days ago',
               confidencePercentage: '90%',
               mapType: this.state.mapType,
@@ -166,7 +153,8 @@ class IssueViewTabContent extends React.Component<IssueViewTabContentProps, Issu
               title: 'Committed to Vote Nay',
               icon: ((this.props.desiredOutcome === 'nay') ? 'smile' : 'frown'),
               startExpanded: true,
-              legislators: this.state.committedNayLegislators,
+              legislators: this.props.committedNayLegislators,
+              legislatorRowProps: this.props.committedNayLegislatorProps,
               lastUpdated: '3 days ago',
               confidencePercentage: '90%',
               mapType: this.state.mapType,

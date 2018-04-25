@@ -6,7 +6,7 @@ export class Legislator {
   partyAffiliation: 'dem' | 'repub';
   legislatorType: 'Senator' | 'House';
   location: string; // Nevada
-  districtCode?: string; // NV or NV_At-Large
+  districtCode: string; // NV or NV_At-Large
   phoneAnswerPercentage: string; // 50%
 }
 
@@ -24,7 +24,7 @@ function generatePlaceholderLegislators(rawData: string[][]): Legislator[] {
       partyAffiliation: s[1] === 'D' ? 'dem' : 'repub',
       districtCode: s[2],
       location: s[3],
-      legislatorType: s[4],
+      legislatorType: s[4] === 'Senate' ? 'Senator' : 'House',
       phoneAnswerPercentage: '50%',
     } as Legislator);
     return l;
