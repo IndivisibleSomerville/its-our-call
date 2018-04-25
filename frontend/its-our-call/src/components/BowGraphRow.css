@@ -14,9 +14,9 @@
 }
 
 .BowGraphRow .header .middle {
-  width:60%;
+  width:70%;
   float: left;
-  margin-left: 20%;
+  margin-left: 15%;
 }
 
 .BowGraphRow .header .middle .text {
@@ -65,10 +65,14 @@
 .BowGraphRow .content {
   position: relative;
   float: left;
+  padding: 0 0;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  overflow: hidden;
   width: 100%;
   height: 24rem;
 }
-.BowGraphRow .content .left {
+.BowGraphRow .content > .left {
   position: absolute;
   width: 50%;
   bottom: 0;
@@ -76,7 +80,7 @@
   top: 0;
   background: #eee;
 }
-.BowGraphRow .content .right {
+.BowGraphRow .content > .right {
   position: absolute;
   background: rgba(171, 198, 150, 0.4);
   width: 50%;
@@ -158,19 +162,77 @@
   transform: translateX(-50%) translateY(-50%);
 }
 
-.BowGraphRow .content .graph .center-label {
+.BowGraphRow .content .graph .inconclusive {
   position: absolute;
-  bottom: 18%;
+  bottom: 15%;
   left: 50%;
   transform: translateX(-50%) translateY(0);
   text-align: center;
+  width: 8rem;
+}
+
+.BowGraphRow .content .graph .inconclusive .number {
   font-size: 4rem;
 }
 
-.BowGraphRow .content .graph .center-details {
+.BowGraphRow .content .graph .inconclusive .number-details {
+  font-size: 1rem;
   position: absolute;
-  bottom: 2%;
+  bottom: -3rem;
   left: 50%;
+  width: 8rem;
+  transform: translateX(-50%) translateY(-50%);
+  text-align: center;
+}
+
+.BowGraphRow .content .graph .pass-defeat {
+  position: absolute;
+  bottom: 9%;
+}
+
+.BowGraphRow .content .graph .pass-defeat.left {
+  left: 28%;
+}
+.BowGraphRow .content .graph .pass-defeat.right {
+  left: 72%;
+}
+
+.BowGraphRow .content .graph .pass-defeat > .left {
+  left: 28%;
+}
+.BowGraphRow .content .graph .pass-defeat > .right {
+  left: 72%;
+}
+
+.BowGraphRow .content .graph .pass-defeat .top-will {
+  bottom: 5.5rem;
+  font-size: 1rem;
+  width: 10rem;
+  position: absolute;
+  transform: translateX(-50%) translateY(-50%);
+  text-align: center;
+}
+.BowGraphRow .content .graph .pass-defeat .verb {
+  position: absolute;
+  bottom: 2.75rem;
+  transform: translateX(-50%) translateY(0);
+  text-align: center;
+  width: 10rem;
+  font-size: 3rem;
+}
+.BowGraphRow .content .graph .pass-defeat .verb.left {
+  color: #F47B2F;
+}
+.BowGraphRow .content .graph .pass-defeat .verb.right {
+  color: #3F8014;
+}
+
+
+.BowGraphRow .content .graph .pass-defeat .lower-details {
+  bottom: 1rem;
+  font-size: 1rem;
+  width: 10rem;
+  position: absolute;
   transform: translateX(-50%) translateY(-50%);
   text-align: center;
 }
