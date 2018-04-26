@@ -9,6 +9,8 @@ export interface BowGraphSVGProps {
   numGreen: number;
   goalpost: number; // disabled if negative or greater than total
   goalpostOuterWidth: number; // (uses svg viewport units)
+  goalpostRightToLeft: boolean;
+  requiresCloture: boolean;
 }
 
 interface BowGraphSVGState {
@@ -64,7 +66,8 @@ class BowGraphSVG extends React.Component<BowGraphSVGProps, BowGraphSVGState> {
       .attr('fill', '#3F8014');
     d3.select((this.ref as Element)).append('path')
       .attr('d', letWhiteArc)
-      .attr('fill', '#fff').attr('stroke', '#ccc').attr('stroke-width', .5)
+      .attr('fill', '#fff').attr('stroke-width', .5)
+      .attr('stroke', (this.props.numWhite !== 0) ? '#ccc' : 'rgba(0,0,0,0)')
       .attr('transform', 'translate(100,' + height + ')');
     // feet are always rendered
     d3.select((this.ref as Element)).append('line')
@@ -77,6 +80,9 @@ class BowGraphSVG extends React.Component<BowGraphSVGProps, BowGraphSVGState> {
       .attr('stroke', '#ccc').attr('stroke-width', 2.5);
     if (this.props.goalpost > 0 && this.props.goalpost < this.state.numTotal) {
       let arcPercent = this.props.goalpost / this.state.numTotal;
+      if (this.props.goalpostRightToLeft) {
+        arcPercent = 1 - arcPercent;
+      }
       let xRatio = Math.sin(Math.PI * (arcPercent - .5));
       let yRatio = Math.cos(Math.PI * (-arcPercent - .5));
       let outerBound = outerRadius + this.props.goalpostOuterWidth;
@@ -87,7 +93,9 @@ class BowGraphSVG extends React.Component<BowGraphSVGProps, BowGraphSVGState> {
         .attr('stroke', '#A1A1A1').attr('stroke-width', 1)
         .attr('transform', 'translate(0,' + height + ')');
       d3.select((this.ref as Element)).append('text')
-        .attr('x', 100 + xRatio * innerBound).attr('y', yRatio * innerBound + 12)
+        .attr('x',
+          100 + xRatio * innerBound + (this.props.requiresCloture ? -7 : 0)
+        ).attr('y', yRatio * innerBound + 12 + (this.props.requiresCloture ? -1 : 0))
         .attr('text-anchor', 'middle').attr('font-size', '.6rem').attr('font-weight', 400)
         .text(this.props.goalpost)
         .attr('transform', 'translate(0,' + height + ')');
@@ -96,6 +104,7 @@ class BowGraphSVG extends React.Component<BowGraphSVGProps, BowGraphSVGState> {
 
   render() {
     return (
+      // tslint:disable:jsx-self-close
       <svg
         className="BowGraphSVG"
         ref={(ref: SVGSVGElement) => this.ref = ref}
@@ -103,7 +112,6 @@ class BowGraphSVG extends React.Component<BowGraphSVGProps, BowGraphSVGState> {
         height={'100%'}
         viewBox={'0 0 200 ' + this.state.height}
       >
-        &nbsp;
       </svg>
     );
   }

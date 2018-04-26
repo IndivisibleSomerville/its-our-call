@@ -13,6 +13,7 @@ export interface IssueViewTabContentProps {
   primaryType: 'Senate' | 'House';
   desiredOutcome: 'yea' | 'nay'; // 'yea' | 'nay';
   issue: IssueData;
+  adjustForTiebreaker: boolean;
   legislatorStances: LegislatorStanceInfo[];
   // TODO: get legislators and their stances from the API
   stanceInfoArray: StanceInfo[];
@@ -118,7 +119,7 @@ class IssueViewTabContent extends React.Component<IssueViewTabContentProps, Issu
             requiresCloture={this.props.issue.requiresCloture}
             lastUpdated={'3 days ago'}
             confidencePercentage={'90%'}
-            adjustForTiebreaker={true}
+            adjustForTiebreaker={this.props.adjustForTiebreaker}
             isLoading={!this.state.isParsedLegislatorData}
           />
           <CollapsibleMapSection

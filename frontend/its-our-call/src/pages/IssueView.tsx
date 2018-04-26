@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as queryString from 'query-string';
 
 import Http from '../http/Http';
 
@@ -17,6 +18,7 @@ interface IssueViewProps { }
 
 interface IssueViewState {
   isLoadingIssue: boolean;
+  adjustForTiebreaker: boolean;
   issue?: IssueData;
   expandedOverview: boolean;
   selectedTabIndex: number;
@@ -103,6 +105,7 @@ class IssueView extends React.Component<IssueViewProps, IssueViewState> {
     this.state = {
       isLoadingIssue: true,
       expandedOverview: false,
+      adjustForTiebreaker: true,
       selectedTabIndex: 0,
       senatorMeta: {stances: [], stanceInfoArray: [],
         uncommittedLegislators, committedYeaLegislators, committedNayLegislators,
@@ -122,14 +125,19 @@ class IssueView extends React.Component<IssueViewProps, IssueViewState> {
   }
 
   fetchData() {
-    // TODO: actually fetch the data, not using the
-    let desiredOutcome: 'yea' | 'nay' = 'nay';
-    let requiresCloture = false; // simple or three-fifths majority
-    let percentYea = 55;
-    let percentNay = 40;
-    let percentUncommitted = 5;
+    // TODO: actually fetch the data, not using this hacky workaround for query params
+    // tslint:disable:no-console
+    let hashed = queryString.parse(location.search);
+    let desiredOutcome: 'yea' | 'nay' = hashed.desiredOutcome ? hashed.desiredOutcome : 'nay';
+    let requiresCloture = hashed.requiresThreeFifth ? hashed.requiresThreeFifth === 'true' : false;
+    let adjustForTiebreaker = hashed.adjustForTiebreaker ? hashed.adjustForTiebreaker === 'true' : true;
+    // ^ simple or three-fifths majority
+    let percentYea = hashed.percentYea ? Number.parseInt(hashed.percentYea) : 55;
+    let percentNay = hashed.percentNay ? Number.parseInt(hashed.percentNay) : 40;
+    let percentUncommitted = hashed.percentUncommitted ? Number.parseInt(hashed.percentUncommitted) : 5;
     this.setState({
       isLoadingIssue: false, expandedOverview: false,
+      adjustForTiebreaker,
       issue: {
         title: 'Support the Pidgeon Recognition Act',
         imgSrc: 'https://i.imgur.com/54u7pkA.jpg',
@@ -224,6 +232,7 @@ class IssueView extends React.Component<IssueViewProps, IssueViewState> {
                   <IssueViewTabContent
                     primaryType={sectionList[this.state.selectedTabIndex]}
                     issue={this.state.issue}
+                    adjustForTiebreaker={this.state.adjustForTiebreaker}
                     desiredOutcome={this.state.issue.desiredOutcome}
                     legislatorStances={legislatorMeta.stances}
                     stanceInfoArray={legislatorMeta.stanceInfoArray}

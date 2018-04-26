@@ -53,6 +53,7 @@ class BowGraphRow extends React.Component<BowGraphRowProps, BowGraphRowState> {
     this.yeas = this.yeas.bind(this);
     this.nays = this.nays.bind(this);
     this.uncommitted = this.uncommitted.bind(this);
+    this.total = this.total.bind(this);
     this.desired = this.desired.bind(this);
     this.undesired = this.undesired.bind(this);
     this.remainingDesired = this.remainingDesired.bind(this);
@@ -60,6 +61,7 @@ class BowGraphRow extends React.Component<BowGraphRowProps, BowGraphRowState> {
     this.isConclusive = this.isConclusive.bind(this);
     this.recalculateFromProps = this.recalculateFromProps.bind(this);
   }
+
   yeas() {
     return this.state.yeaDCount + this.state.yeaRCount;
   }
@@ -71,6 +73,11 @@ class BowGraphRow extends React.Component<BowGraphRowProps, BowGraphRowState> {
   uncommitted() {
     return this.state.uncommittedDCount + this.state.uncommittedRCount;
   }
+
+  total() {
+    return this.yeas() + this.nays() + this.uncommitted();
+  }
+
   desired() {
     if (this.props.desiredOutcome === 'yea') {
       return this.yeas();
@@ -84,14 +91,31 @@ class BowGraphRow extends React.Component<BowGraphRowProps, BowGraphRowState> {
     return this.yeas();
   }
   targetVotes(): number {
-    return this.props.adjustForTiebreaker ? (this.state.goalPost + 1) : this.state.goalPost;
+    let target = this.state.goalPost;
+    let adjust = this.props.desiredOutcome === 'nay' ? -1 : 1;
+    target = this.props.adjustForTiebreaker ? (target + adjust) : target;
+    return target;
   }
   remainingDesired(): number {
+    // tslint:disable
+    console.log(this.targetVotes())
+    if (this.props.requiresCloture && this.props.desiredOutcome === 'nay') {
+      let totally = this.nays() + this.yeas() + this.uncommitted();
+      return totally - this.targetVotes() - this.desired();
+    }
     return this.targetVotes() - this.desired();
   }
   isConclusive(): boolean {
-    let target = this.targetVotes();
-    return target < this.nays() || target < this.yeas();
+    let target = this.state.goalPost;
+    let adjust = this.props.desiredOutcome === 'nay' ? -1 : 1;
+    target = this.props.adjustForTiebreaker ? (target + adjust) : target;
+    if (this.props.desiredOutcome === 'nay') {
+      return target <= this.nays() || target > (this.total() - this.yeas());
+    }
+    if (this.props.desiredOutcome === 'yea') {
+      return target <= this.yeas() || target > (this.total() - this.nays());
+    }
+    return this.uncommitted() === 0;
   }
 
   recalculateFromProps(props: BowGraphRowProps) {
@@ -174,8 +198,9 @@ class BowGraphRow extends React.Component<BowGraphRowProps, BowGraphRowState> {
       </div>
     );
 
-    if (this.isConclusive()) {
-      let willSucceed: boolean = this.targetVotes() <= this.desired();
+    if (this.remainingDesired() <= 0 || this.isConclusive()) {
+      let willPass: boolean = this.targetVotes() <= this.yeas();
+      let willSucceed = (this.props.desiredOutcome === 'yea' ? willPass : !willPass);
       let outcome = willSucceed ? this.props.desiredOutcome : (this.props.desiredOutcome === 'yea' ? 'nay' : 'yea');
       let dominantVotes = (outcome === 'yea' ? this.yeas() : this.nays());
       voteNumLabel = (
@@ -191,6 +216,12 @@ class BowGraphRow extends React.Component<BowGraphRowProps, BowGraphRowState> {
           </div>
         </div>
       );
+    }
+
+    let rightToLeftGoalPost = (this.props.desiredOutcome === 'yea')
+    let clotureInfoPopover = (null);
+    if (this.props.requiresCloture) {
+      clotureInfoPopover = (<InfoButton additionalClassName={rightToLeftGoalPost ? 'r' : 'l'} />);
     }
 
     return (
@@ -240,11 +271,14 @@ class BowGraphRow extends React.Component<BowGraphRowProps, BowGraphRowState> {
               numOrange={this.undesired()}
               numWhite={this.uncommitted()}
               numGreen={this.desired()}
+              requiresCloture={this.props.requiresCloture === true}
+              goalpostRightToLeft={rightToLeftGoalPost}
               goalpost={this.state.goalPost}
-              goalpostOuterWidth={this.props.requiresCloture ? 20 : 60}
+              goalpostOuterWidth={this.props.requiresCloture ? 5 : 60}
             />
             {optionalWill}
             {voteNumLabel}
+            {clotureInfoPopover}
           </div>
         </div>
       </div>
