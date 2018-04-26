@@ -92,28 +92,22 @@ class BowGraphRow extends React.Component<BowGraphRowProps, BowGraphRowState> {
   }
   targetVotes(): number {
     let target = this.state.goalPost;
-    let adjust = this.props.desiredOutcome === 'nay' ? -1 : 1;
-    target = this.props.adjustForTiebreaker ? (target + adjust) : target;
+    if (this.props.desiredOutcome === 'nay') { // defeat
+      target = this.total() - this.state.goalPost;
+    }
+    target = this.props.adjustForTiebreaker ? (target + 1) : target;
     return target;
   }
   remainingDesired(): number {
-    // tslint:disable
-    console.log(this.targetVotes())
-    if (this.props.requiresCloture && this.props.desiredOutcome === 'nay') {
-      let totally = this.nays() + this.yeas() + this.uncommitted();
-      return totally - this.targetVotes() - this.desired();
-    }
     return this.targetVotes() - this.desired();
   }
   isConclusive(): boolean {
-    let target = this.state.goalPost;
-    let adjust = this.props.desiredOutcome === 'nay' ? -1 : 1;
-    target = this.props.adjustForTiebreaker ? (target + adjust) : target;
+    let target = this.targetVotes();
     if (this.props.desiredOutcome === 'nay') {
-      return target <= this.nays() || target > (this.total() - this.yeas());
+      return target <= this.nays() || (this.total() - target) <= (this.yeas());
     }
     if (this.props.desiredOutcome === 'yea') {
-      return target <= this.yeas() || target > (this.total() - this.nays());
+      return target <= this.yeas() || (this.total() - target) <= (this.nays());
     }
     return this.uncommitted() === 0;
   }
@@ -198,27 +192,26 @@ class BowGraphRow extends React.Component<BowGraphRowProps, BowGraphRowState> {
       </div>
     );
 
-    if (this.remainingDesired() <= 0 || this.isConclusive()) {
-      let willPass: boolean = this.targetVotes() <= this.yeas();
-      let willSucceed = (this.props.desiredOutcome === 'yea' ? willPass : !willPass);
-      let outcome = willSucceed ? this.props.desiredOutcome : (this.props.desiredOutcome === 'yea' ? 'nay' : 'yea');
-      let dominantVotes = (outcome === 'yea' ? this.yeas() : this.nays());
+    if (this.isConclusive()) {
+      let willPass: boolean = this.state.goalPost <= this.yeas();
+      let isDesiredOutcome = (this.props.desiredOutcome === 'yea' ? willPass : !willPass);
+      let dominantVotes = (willPass ? this.yeas() : this.nays());
       voteNumLabel = (
-        <div className={'pass-defeat ' + (willSucceed ? 'right' : 'left')}>
-          <div className={'top-will ' + (willSucceed ? 'right' : 'left')}>
+        <div className={'pass-defeat ' + (isDesiredOutcome ? 'right' : 'left')}>
+          <div className={'top-will ' + (isDesiredOutcome ? 'right' : 'left')}>
             will
           </div>
-          <div className={'verb ' + (willSucceed ? 'right' : 'left')}>
-            {outcome === 'yea' ? 'pass' : 'defeat'}
+          <div className={'verb ' + (isDesiredOutcome ? 'right' : 'left')}>
+            {willPass ? 'pass' : 'defeat'}
           </div>
-          <div className={'lower-details ' + (willSucceed ? 'right' : 'left')}>
-            with {dominantVotes} {outcome} votes
+          <div className={'lower-details ' + (isDesiredOutcome ? 'right' : 'left')}>
+            with {dominantVotes} {willPass ? 'yea' : 'nay'} votes
           </div>
         </div>
       );
     }
 
-    let rightToLeftGoalPost = (this.props.desiredOutcome === 'yea')
+    let rightToLeftGoalPost = (this.props.desiredOutcome === 'yea');
     let clotureInfoPopover = (null);
     if (this.props.requiresCloture) {
       clotureInfoPopover = (<InfoButton additionalClassName={rightToLeftGoalPost ? 'r' : 'l'} />);
