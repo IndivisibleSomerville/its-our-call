@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { asResourceRow, ResourceRowProps } from './ResourceRow';
 import { Legislator as LegislatorData } from '../data/Legislator';
 import PlusMinusButton from './PlusMinusButton';
 import PartyBreakDown from './PartyBreakDown';
@@ -10,7 +9,7 @@ import InfoButton from './InfoButton';
 
 import './CollapsibleMapSection.css';
 
-interface CollapsibleMapSectionWrappedProps extends ResourceRowProps {
+interface CollapsibleMapSectionWrappedProps {
   data: CollapsibleMapSectionDataProps;
 }
 
@@ -20,9 +19,10 @@ type MapType = 'state' | 'district';
 export interface CollapsibleMapSectionDataProps {
   title: string;
   legislators: LegislatorData[];
+  legislatorRowProps: LegislatorRowDataProps[];
   lastUpdated: string;
   confidencePercentage: string;
-  mapType?: MapType;
+  mapType: MapType;
   icon?: IconType;
   startExpanded?: boolean;
   showInfoButton?: boolean;
@@ -35,95 +35,77 @@ interface CollapsibleMapSectionState {
   numRepubs: number;
   numDems: number;
   // zone-by-zone breakdown (states or districts)
-  mapType: MapType;
-  highlightedMapZones: string[];
+  customizedMapZones: { [key: string]: { fill?: string, stroke?: string, clickHandler?: (state: string) => void }};
   lastUpdated: string;
   confidencePercentage: string;
   zoom: number;
-  hasMore: boolean;
-  legislatorRowProps: LegislatorRowDataProps[];
+  isExpanded: boolean;
+  isLoaded: boolean;
 }
-
-// TODO: remove these when we're done with the demos
-import stateData from '../data/usa-states-dimensions';
-let stateDataKeys = Object.keys(stateData); // ['MA', 'CA', 'MT', ...]
-let randomStates = (): string[] => {
-  return stateDataKeys.filter(() => {
-    return Math.random() < .2;
-  });
-};
-
-import districtData from '../data/usa-districts-dimensions';
-let districtDataKeys = Object.keys(districtData); // ['MA_1', 'MA_10', 'CA_40', 'MT_At-Large', ...]
-let randomDistricts = (): string[] => {
-  return districtDataKeys.filter(() => {
-    return Math.random() < .2;
-  });
-};
 
 class CollapsibleMapSection extends React.Component<CollapsibleMapSectionWrappedProps, CollapsibleMapSectionState> {
   constructor(props: CollapsibleMapSectionWrappedProps) {
     super(props);
+    this.updateStateFromProps = this.updateStateFromProps.bind(this);
+    this.truncatedLegislatorRowProps = this.truncatedLegislatorRowProps.bind(this);
     // TODO: calculate from real data
     this.state = {
-      numRepubs: (Math.floor(Math.random() * 4 + 2)),
-      numDems: (Math.floor(Math.random() * 4 + 2)),
-      highlightedMapZones: (props.data.mapType === 'district') ? randomDistricts() : randomStates(),
+      numRepubs: 0,
+      numDems: 0,
+      customizedMapZones: {},
+      isLoaded: false,
       lastUpdated: '3 hours ago',
       confidencePercentage: '95%',
       zoom: 1.0,
-      hasMore: true,
-      mapType: props.data.mapType === 'district' ? 'district' : 'state',
-      expanded: (props.data.startExpanded !== undefined ? props.data.startExpanded : true),
-      legislatorRowProps: props.data.legislators.map((l: LegislatorData) => {
-        return {
-          // TODO: more data mapping to props (or just let the Legislator Data handle all data)
-          callLink: '#phoneNumber',
-          isBookmarkRow: true,
-        };
-      })
+      isExpanded: false,
+      expanded: (props.data.startExpanded === true),
     };
     this.toggleMore = this.toggleMore.bind(this);
-    this.buildOverviewContent = this.buildOverviewContent.bind(this);
   }
   toggleMore() {
-    this.setState({hasMore: !this.state.hasMore});
+    this.setState({isExpanded: !this.state.isExpanded});
   }
-
+  updateStateFromProps(props: CollapsibleMapSectionWrappedProps) {
+    let numRepubs = 0;
+    let numDems = 0;
+    let customizedMapZones = {};
+    props.data.legislators.forEach((l: LegislatorData) => {
+      numRepubs = numRepubs + (l.partyAffiliation === 'repub' ? 1 : 0);
+      numDems = numDems + (l.partyAffiliation === 'dem' ? 1 : 0);
+      customizedMapZones[l.districtCode] = {fill: '#FFFFFF', stroke: '#C9C9C9'};
+    });
+    this.setState({
+      numRepubs,
+      numDems,
+      customizedMapZones,
+      isLoaded: true,
+    });
+  }
+  componentDidMount() {
+    this.setState({ isExpanded: false, isLoaded: false });
+    this.updateStateFromProps(this.props);
+  }
   componentWillReceiveProps(props: CollapsibleMapSectionWrappedProps) {
-      this.setState({
-         mapType: props.data.mapType === 'district' ? 'district' : 'state',
-         highlightedMapZones: (props.data.mapType === 'district') ? randomDistricts() : randomStates(),
-      });
+    this.setState({ isExpanded: false, isLoaded: false });
+    this.updateStateFromProps(props);
   }
 
-  buildOverviewContent() {
-    let overviewWrapperClasses = 'overview-wrapper ' + (this.state.hasMore ? 'collapsed' : 'expanded');
-    if (this.state.legislatorRowProps.length === 0) {
-      return (
-        <div className={overviewWrapperClasses}>
-          <div className="overview empty">[no legislators have this stance]</div>
-        </div>
-      );
+  truncatedLegislatorRowProps() {
+    if (this.state.isExpanded) {
+      return this.props.data.legislatorRowProps;
     }
-    return (
-      <div className={overviewWrapperClasses}>
-        <div className="overview">
-          {
-            this.state.legislatorRowProps.map((l: LegislatorRowDataProps, indx: number) => {
-              return (<LegislatorRow key={indx} data={l}/>);
-            })
-          }
-        </div>
-        <div className="bottomShadow">&nbsp;</div>
-        <div className="toggleButton" onClick={() => {this.toggleMore(); }}>
-          {this.state.hasMore ? 'more +' : 'hide'}
-        </div>
-      </div>
-    );
+    return this.props.data.legislatorRowProps.slice(0, 5);
   }
 
   render() {
+    if (!this.state.isLoaded) {
+      return (
+        <div className={'CollapsibleMapSection loaded'}>
+          Loading...
+        </div>
+      );
+    }
+
     let optionalIcon = (null);
     switch (this.props.data.icon) {
       case 'smile':
@@ -137,6 +119,23 @@ class CollapsibleMapSection extends React.Component<CollapsibleMapSectionWrapped
     let optionalInfoButton = (null);
     if (this.props.data.showInfoButton) {
       optionalInfoButton = (<InfoButton />);
+    }
+
+    let overviewWrapper = (<div className="overview empty">[no legislators have this stance]</div>);
+    if (this.truncatedLegislatorRowProps().length > 0) {
+      overviewWrapper = (
+        <div className={'overview-wrapper ' + (this.state.isExpanded ? 'expanded' : 'collapsed')}>
+          <div className="overview">
+            {this.truncatedLegislatorRowProps().map((l: LegislatorRowDataProps, indx: number) => {
+                return (<LegislatorRow key={indx} data={l}/>);
+            })}
+          </div>
+          <div className="bottomShadow">&nbsp;</div>
+          <div className="toggleButton" onClick={() => {this.toggleMore(); }}>
+            {this.state.isExpanded ? 'hide' : 'more +'}
+          </div>
+        </div>
+      );
     }
     return (
       <div className={'CollapsibleMapSection ' + (this.state.expanded ? 'expanded' : 'collapsed')}>
@@ -163,11 +162,8 @@ class CollapsibleMapSection extends React.Component<CollapsibleMapSectionWrapped
             <MapSVG
               width={'95%'}
               height={'95%'}
-              mapType={this.state.mapType}
-              customize={this.state.highlightedMapZones.reduce((previousValue, stateKey: string) => {
-                previousValue[stateKey] = {fill: '#FFFFFF', stroke: '#C9C9C9'};
-                return previousValue;
-              }, {})}
+              mapType={this.props.data.mapType}
+              customize={this.state.customizedMapZones}
             />
           </div>
           <div className="map-details">
@@ -181,11 +177,11 @@ class CollapsibleMapSection extends React.Component<CollapsibleMapSectionWrapped
               </div>
             </div>
           </div>
-          {this.buildOverviewContent()}
+          {overviewWrapper}
         </div>
       </div>
     );
   }
 }
 
-export default asResourceRow(CollapsibleMapSection);
+export default CollapsibleMapSection;

@@ -7,6 +7,8 @@ import { asResourceRow, ResourceRowProps } from './ResourceRow';
 import BookmarkStar from './BookmarkStar';
 import LegislatorBadge from './LegislatorBadge';
 
+import { Legislator as LegislatorData } from '../data/Legislator';
+
 import './LegislatorRow.css';
 
 interface LegislatorRowWrappedProps extends ResourceRowProps {
@@ -14,8 +16,25 @@ interface LegislatorRowWrappedProps extends ResourceRowProps {
 }
 
 export interface LegislatorRowDataProps {
+  fullName: string;
+  partyAffiliation: string;
+  legislatorType: string;
+  location: string;
+  districtCode: string;
   isBookmarkRow: boolean;
   callLink?: string;
+}
+
+export function mapDataToLegislatorRowDataProps(l: LegislatorData): LegislatorRowDataProps {
+  return {
+    fullName: l.fullName,
+    partyAffiliation: l.partyAffiliation,
+    legislatorType: l.legislatorType,
+    location: l.location,
+    districtCode: l.districtCode ? l.districtCode : '',
+    isBookmarkRow: true,
+    callLink: '#',
+  };
 }
 
 interface LegislatorRowState {
@@ -46,15 +65,18 @@ class LegislatorRow extends React.Component<LegislatorRowWrappedProps, Legislato
       <div className="LegislatorRow">
         <div className="content">
           <div className="left">
-            <LegislatorBadge type={'dem'} state={'VT'}/>
+            <LegislatorBadge
+              type={this.props.data.partyAffiliation}
+              state={this.props.data.districtCode}
+            />
           </div>
           <div className="middle">
             <div className="name">
               <Link to={urlFmtLegislatorView(this.state.legislatorId)}>
-              Jack Sparrow
+              {this.props.data.fullName}
               </Link>
             </div>
-            <div className="desc">Senator, Vermont </div>
+            <div className="desc">{this.props.data.legislatorType}, {this.props.data.location}</div>
           </div>
           <div className="right">
             <BookmarkStar isHidden={!this.props.data.isBookmarkRow}/>

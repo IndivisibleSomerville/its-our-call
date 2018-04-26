@@ -1,5 +1,7 @@
 .LegislatorBadge {
   float: left;
+  font-size: 1rem;
+  line-height: 1rem;
   width: 1.2rem;
   height: 1.2rem;
   border-radius: 50%;
@@ -17,51 +19,62 @@
   fill: white;
   width: 80%;
   height: 80%;
-  transform: translateX(-5%) translateY(25%);
+  transform: translateX(5%) translateY(25%);
 }
 
 /*
 Each state icons has a class .state-icon-MA, .state-icon-NY, etc.
 use these for pixel-futzing
 */
-
+.LegislatorBadge .state-icon.state-icon-AL {
+  transform: translateX(15%) translateY(15%);
+}
 .LegislatorBadge .state-icon.state-icon-AR {
-  transform: translateX(5%) translateY(20%);
+  transform: translateX(15%) translateY(20%);
 }
 .LegislatorBadge .state-icon.state-icon-CO {
   width: 60%;
   height: 60%;
-  transform: translateX(-5%) translateY(5%);
+  transform: translateX(25%) translateY(30%);
 }
 .LegislatorBadge .state-icon.state-icon-CT {
-  width: 60%;
-  height: 60%;
-  transform: translateX(-5%) translateY(10%);
+  width: 70%;
+  height: 70%;
+  transform: translateX(20%) translateY(20%);
+}
+.LegislatorBadge .state-icon.state-icon-DE {
+  transform: translateX(10%) translateY(25%);
 }
 .LegislatorBadge .state-icon.state-icon-GA {
-  transform: translateX(6%) translateY(15%);
+  transform: translateX(10%) translateY(25%);
+}
+.LegislatorBadge .state-icon.state-icon-ID {
+  transform: translateX(10%) translateY(25%);
 }
 .LegislatorBadge .state-icon.state-icon-IA {
-  transform: translateX(0%) translateY(20%);
+  transform: translateX(10%) translateY(20%);
 }
 .LegislatorBadge .state-icon.state-icon-KS {
   width: 60%;
   height: 60%;
-  transform: translateX(-5%) translateY(10%);
+  transform: translateX(25%) translateY(10%);
+}
+.LegislatorBadge .state-icon.state-icon-KY {
+  transform: translateX(10%) translateY(20%);
 }
 .LegislatorBadge .state-icon.state-icon-LA {
   width: 70%;
   height: 70%;
-  transform: translateX(5%) translateY(15%);
+  transform: translateX(30%) translateY(20%);
 }
 .LegislatorBadge .state-icon.state-icon-ME {
-  transform: translateX(5%) translateY(15%);
+  transform: translateX(15%) translateY(20%);
 }
 .LegislatorBadge .state-icon.state-icon-MN {
-  transform: translateX(5%) translateY(20%);
+  transform: translateX(15%) translateY(20%);
 }
 .LegislatorBadge .state-icon.state-icon-MO {
-  transform: translateX(5%) translateY(20%);
+  transform: translateX(12%) translateY(20%);
 }
 .LegislatorBadge .state-icon.state-icon-NC {
   transform: translateX(5%) translateY(20%);
@@ -69,28 +82,39 @@ use these for pixel-futzing
 .LegislatorBadge .state-icon.state-icon-ND {
   width: 70%;
   height: 70%;
-  transform: translateX(5%) translateY(15%);
+  transform: translateX(20%) translateY(25%);
 }
 .LegislatorBadge .state-icon.state-icon-NE {
-  transform: translateX(0%) translateY(15%);
+  transform: translateX(10%) translateY(18%);
 }
 .LegislatorBadge .state-icon.state-icon-NM {
-  transform: translateX(0%) translateY(20%);
+  transform: translateX(10%) translateY(20%);
 }
 .LegislatorBadge .state-icon.state-icon-NY {
-  transform: translateX(0%) translateY(20%);
+  transform: translateX(10%) translateY(20%);
 }
 .LegislatorBadge .state-icon.state-icon-OH {
-  transform: translateX(0%) translateY(25%);
+  transform: translateX(10%) translateY(25%);
 }
 .LegislatorBadge .state-icon.state-icon-PA {
-  transform: translateX(0%) translateY(15%);
+  transform: translateX(10%) translateY(15%);
 }
 .LegislatorBadge .state-icon.state-icon-RI {
-  transform: translateX(0%) translateY(25%);
+  width: 95%;
+  height: 95%;
+  transform: translateX(5%) translateY(15%);
+}
+.LegislatorBadge .state-icon.state-icon-SC {
+  transform: translateX(12%) translateY(25%);
+}
+.LegislatorBadge .state-icon.state-icon-SD {
+  transform: translateX(12%) translateY(25%);
+}
+.LegislatorBadge .state-icon.state-icon-TN {
+  transform: translateX(17%) translateY(25%);
 }
 .LegislatorBadge .state-icon.state-icon-UT {
-  transform: translateX(0%) translateY(15%);
+  transform: translateX(10%) translateY(20%);
 }
 .LegislatorBadge .state-icon.state-icon-VA {
   transform: translateX(0%) translateY(15%);
@@ -99,18 +123,18 @@ use these for pixel-futzing
   transform: translateX(10%) translateY(25%);
 }
 .LegislatorBadge .state-icon.state-icon-WA {
-  transform: translateX(-5%) translateY(15%);
+  transform: translateX(10%) translateY(15%);
 }
 .LegislatorBadge .state-icon.state-icon-WI {
-  transform: translateX(0%) translateY(15%);
+  transform: translateX(10%) translateY(25%);
 }
 .LegislatorBadge .state-icon.state-icon-WV {
   width: 70%;
   height: 70%;
-  transform: translateX(0%) translateY(15%);
+  transform: translateX(20%) translateY(15%);
 }
 .LegislatorBadge .state-icon.state-icon-WY {
   width: 65%;
   height: 65%;
-  transform: translateX(0%) translateY(9%);
+  transform: translateX(25%) translateY(25%);
 }

@@ -1,28 +1,11 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { FaCircle as CircleIcon } from 'react-icons/lib/fa/';
-
 import PlusMinusButton from './PlusMinusButton';
 
+import { TimelineCheckpoint, TimelineInfo, IssueLinkInfo as LinkInfo } from '../data/Issue';
+
 import './IssueViewTopRow.css';
-
-export interface TimelineCheckpoint {
-  title: string;  // Senate, House, Not Enacted
-  statusColor: string; // gray, orange, ...?
-  active: boolean; // determines if text is grayed out
-  timeline: TimelineInfo[]; // {'Introduced', '5/25/2017'}, {'Committee','Passed'}
-}
-
-export interface TimelineInfo {
-  title: string;
-  detail: string;
-  subdetail?: string;
-}
-
-export interface LinkInfo {
-  text: string;
-  url?: string;
-}
 
 export interface IssueViewTopRowProps {
   startExpanded?: boolean;

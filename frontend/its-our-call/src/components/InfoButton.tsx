@@ -5,17 +5,21 @@ import ReactPopover, { ArrowContainer } from 'react-tiny-popover';
 import './InfoButton.css';
 
 interface InfoButtonProps {
-
+  additionalClassName?: string;
 }
 
 interface InfoButtonState {
   isShowingPopover: boolean;
+  additionalClassName: string;
 }
 
 class InfoButton extends React.Component<InfoButtonProps, InfoButtonState> {
   constructor(props: InfoButtonProps) {
     super(props);
-    this.state = { isShowingPopover: false };
+    this.state = {
+      isShowingPopover: false,
+      additionalClassName: (props.additionalClassName ? props.additionalClassName : '')
+    };
     this.toggleInfo = this.toggleInfo.bind(this);
   }
   toggleInfo() {
@@ -48,7 +52,11 @@ class InfoButton extends React.Component<InfoButtonProps, InfoButtonState> {
               </div>
             </ArrowContainer>)}
       >
-        <div className="InfoButton" onClick={this.toggleInfo}>﹖</div>
+        <div
+          className={'InfoButton ' + this.state.additionalClassName}
+          onClick={this.toggleInfo}
+        >﹖
+        </div>
       </ReactPopover>
     );
   }

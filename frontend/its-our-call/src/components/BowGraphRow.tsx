@@ -9,16 +9,20 @@ export interface StanceInfo {
   type: StanceType;
   party: PartyType;
 }
-type OutcomeType = 'yea' | 'nay';
+export type OutcomeType = 'yea' | 'nay';
 type StanceType = OutcomeType | 'uncommitted';
 type PartyType = 'R' | 'D';
 
 export interface BowGraphRowProps {
   stances: StanceInfo[];
+  isLoading: boolean;
   confidencePercentage: string;
   lastUpdated: string;
   desiredOutcome: OutcomeType;
-  totalVotesNeeded?: number; // 50 by default
+  requiresCloture?: boolean; // 50% majority by default
+  adjustForTiebreaker?: boolean;
+  // since the VP can break ties, we need majority + 1 in some cases
+  // this is different from our goalpost number
 }
 
 interface BowGraphRowState {
@@ -34,14 +38,89 @@ interface BowGraphRowState {
 class BowGraphRow extends React.Component<BowGraphRowProps, BowGraphRowState> {
   constructor(props: BowGraphRowProps) {
     super(props);
-    let goalPost = props.totalVotesNeeded ? props.totalVotesNeeded : 50;
+    let goalPost = props.requiresCloture ? 60 : 50;
     let uncommittedDCount = 0;
     let uncommittedRCount = 0;
     let yeaRCount = 0;
     let yeaDCount = 0;
     let nayRCount = 0;
     let nayDCount = 0;
-    // TODO: update with real data
+    this.state = {
+      uncommittedDCount, uncommittedRCount,
+      yeaRCount, yeaDCount, nayRCount, nayDCount,
+      goalPost,
+    };
+    this.yeas = this.yeas.bind(this);
+    this.nays = this.nays.bind(this);
+    this.uncommitted = this.uncommitted.bind(this);
+    this.total = this.total.bind(this);
+    this.desired = this.desired.bind(this);
+    this.undesired = this.undesired.bind(this);
+    this.remainingDesired = this.remainingDesired.bind(this);
+    this.targetVotes = this.targetVotes.bind(this);
+    this.isConclusive = this.isConclusive.bind(this);
+    this.recalculateFromProps = this.recalculateFromProps.bind(this);
+  }
+
+  yeas() {
+    return this.state.yeaDCount + this.state.yeaRCount;
+  }
+
+  nays() {
+    return this.state.nayDCount + this.state.nayRCount;
+  }
+
+  uncommitted() {
+    return this.state.uncommittedDCount + this.state.uncommittedRCount;
+  }
+
+  total() {
+    return this.yeas() + this.nays() + this.uncommitted();
+  }
+
+  desired() {
+    if (this.props.desiredOutcome === 'yea') {
+      return this.yeas();
+    }
+    return this.nays();
+  }
+  undesired() {
+    if (this.props.desiredOutcome === 'yea') {
+      return this.nays();
+    }
+    return this.yeas();
+  }
+  targetVotes(): number {
+    let target = this.state.goalPost;
+    if (this.props.desiredOutcome === 'nay') { // defeat
+      target = this.total() - this.state.goalPost;
+    }
+    target = this.props.adjustForTiebreaker ? (target + 1) : target;
+    return target;
+  }
+  remainingDesired(): number {
+    return this.targetVotes() - this.desired();
+  }
+  isConclusive(): boolean {
+    let target = this.targetVotes();
+    if (this.props.desiredOutcome === 'nay') {
+      return target <= this.nays() || (this.total() - target) <= (this.yeas());
+    }
+    if (this.props.desiredOutcome === 'yea') {
+      return target <= this.yeas() || (this.total() - target) <= (this.nays());
+    }
+    return this.uncommitted() === 0;
+  }
+
+  recalculateFromProps(props: BowGraphRowProps) {
+    let goalPost = props.requiresCloture
+      ? Math.ceil(props.stances.length * 3 / 5) : Math.ceil(props.stances.length / 2);
+    let uncommittedDCount = 0;
+    let uncommittedRCount = 0;
+    let yeaRCount = 0;
+    let yeaDCount = 0;
+    let nayRCount = 0;
+    let nayDCount = 0;
     for (var s of props.stances) {
       if (s.party === 'R') {
         switch (s.type) {
@@ -72,54 +151,28 @@ class BowGraphRow extends React.Component<BowGraphRowProps, BowGraphRowState> {
 
       }
     }
-
-    this.state = {
+    this.setState({
       uncommittedDCount, uncommittedRCount,
       yeaRCount, yeaDCount, nayRCount, nayDCount,
       goalPost,
-    };
-    this.yeas = this.yeas.bind(this);
-    this.nays = this.nays.bind(this);
-    this.uncommitted = this.uncommitted.bind(this);
-    this.desired = this.desired.bind(this);
-    this.undesired = this.undesired.bind(this);
-    this.remainingDesired = this.remainingDesired.bind(this);
+    });
   }
-
-  yeas() {
-    return this.state.yeaDCount + this.state.yeaRCount;
+  componentDidMount() {
+    this.recalculateFromProps(this.props);
   }
-
-  nays() {
-    return this.state.nayDCount + this.state.nayRCount;
-  }
-
-  uncommitted() {
-    return this.state.uncommittedDCount + this.state.uncommittedRCount;
-  }
-
-  desired() {
-    if (this.props.desiredOutcome === 'yea') {
-      return this.yeas();
-    }
-    return this.nays();
-  }
-  undesired() {
-    if (this.props.desiredOutcome === 'yea') {
-      return this.nays();
-    }
-    return this.yeas();
-  }
-  remainingDesired () {
-      if (this.state.goalPost > 0) {
-        return this.state.goalPost - this.desired();
-      }
-      return 0;
+  componentWillReceiveProps(props: BowGraphRowProps) {
+    this.recalculateFromProps(props);
   }
 
   render() {
-    let goalPost = 50;
-    //     this.props.desiredOutcome === 'yea'
+    if (this.props.isLoading) {
+      return (
+        <div className={'BowGraphRow loading'}>
+          loading...
+        </div>
+      );
+    }
+
     let undesiredPartyBreakdown = (<PartyBreakDown r={this.state.nayRCount} d={this.state.nayDCount}/>);
     let desiredPartyBreakdown = (<PartyBreakDown r={this.state.yeaRCount} d={this.state.yeaDCount}/>);
     if (this.props.desiredOutcome !== 'yea') {
@@ -127,20 +180,41 @@ class BowGraphRow extends React.Component<BowGraphRowProps, BowGraphRowState> {
       desiredPartyBreakdown = (<PartyBreakDown r={this.state.nayRCount} d={this.state.nayDCount}/>);
     }
 
-    let centerLabel = (<div className="center-label">{this.remainingDesired()}</div>);
-    let centerDetails = (
-      <div className="center-details">more {this.props.desiredOutcome} votes
-        <br/>needed to {this.props.desiredOutcome === 'yea' ? 'pass' : 'defeat'}
+    let optionalWill: JSX.Element | null = (null);
+    let voteNumLabel = (
+      <div className="inconclusive">
+        <div className="number">{this.remainingDesired()}</div>
+        <div className="number-details">
+          more {this.props.desiredOutcome} vote{this.remainingDesired() === 1 ? '' : 's'}
+          <br/>
+          needed to {this.props.desiredOutcome === 'yea' ? 'pass' : 'defeat'}
+        </div>
       </div>
     );
 
-    if (this.remainingDesired() < 0) {
-      centerLabel = (<div className="center-label">{-this.remainingDesired()}</div>);
-      centerDetails = (
-        <div className="center-details">more than needed
-          <br/>issue likely to {this.props.desiredOutcome === 'yea' ? 'pass' : 'defeat'}
+    if (this.isConclusive()) {
+      let willPass: boolean = this.state.goalPost <= this.yeas();
+      let isDesiredOutcome = (this.props.desiredOutcome === 'yea' ? willPass : !willPass);
+      let dominantVotes = (willPass ? this.yeas() : this.nays());
+      voteNumLabel = (
+        <div className={'pass-defeat ' + (isDesiredOutcome ? 'right' : 'left')}>
+          <div className={'top-will ' + (isDesiredOutcome ? 'right' : 'left')}>
+            will
+          </div>
+          <div className={'verb ' + (isDesiredOutcome ? 'right' : 'left')}>
+            {willPass ? 'pass' : 'defeat'}
+          </div>
+          <div className={'lower-details ' + (isDesiredOutcome ? 'right' : 'left')}>
+            with {dominantVotes} {willPass ? 'yea' : 'nay'} votes
+          </div>
         </div>
       );
+    }
+
+    let rightToLeftGoalPost = (this.props.desiredOutcome === 'yea');
+    let clotureInfoPopover = (null);
+    if (this.props.requiresCloture) {
+      clotureInfoPopover = (<InfoButton additionalClassName={rightToLeftGoalPost ? 'r' : 'l'} />);
     }
 
     return (
@@ -190,11 +264,14 @@ class BowGraphRow extends React.Component<BowGraphRowProps, BowGraphRowState> {
               numOrange={this.undesired()}
               numWhite={this.uncommitted()}
               numGreen={this.desired()}
-              goalpost={goalPost}
-              goalpostOuterWidth={goalPost === 50 ? 30 : 20}
+              requiresCloture={this.props.requiresCloture === true}
+              goalpostRightToLeft={rightToLeftGoalPost}
+              goalpost={this.state.goalPost}
+              goalpostOuterWidth={this.props.requiresCloture ? 5 : 60}
             />
-            {centerLabel}
-            {centerDetails}
+            {optionalWill}
+            {voteNumLabel}
+            {clotureInfoPopover}
           </div>
         </div>
       </div>
