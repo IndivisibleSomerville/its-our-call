@@ -34,6 +34,7 @@
   position: absolute;
   transform: translateX(-50%);
   font-weight: 600;
+  text-align: center;
 }
 
 .Footer .buttons .btn:hover {
