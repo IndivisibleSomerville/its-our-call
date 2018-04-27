@@ -1,0 +1,84 @@
+.Footer {
+  width: 100%;
+  border-top: solid 3px #bbb;
+  background: #eee;
+  box-sizing: border-box;
+  float: left;
+  clear: both;
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+}
+
+.Footer > * {
+  float: left;
+  clear: both;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+  margin-top: 1rem;
+}
+
+.Footer .buttons {
+  position: relative;
+  margin-left: 0rem;
+  width: 100%;
+  min-height: 4rem;
+}
+
+.Footer .buttons .btn {
+  background: white;
+  color:rgb(92, 47, 90);
+  padding: 1.2rem 2rem;
+  min-width: 6.1rem;
+  border: 1px solid #bbb;
+  border-radius: .2rem;
+  position: absolute;
+  transform: translateX(-50%);
+  font-weight: 600;
+  text-align: center;
+}
+
+.Footer .buttons .btn:hover {
+  color:rgb(92, 47, 90);
+  background:rgba(92, 47, 90, .1);
+}
+
+.Footer .buttons .btn:active {
+  color: white;
+  background:rgb(92, 47, 90);
+}
+
+
+.Footer .buttons .donate {
+  left: 27%;
+}
+.Footer .buttons .feedback {
+  left: 73%;
+}
+
+.Footer .description {
+  text-align: left;
+}
+
+.Footer .description a {
+  text-decoration: underline;
+}
+
+.Footer .photo-credit a {
+  text-decoration: underline;
+}
+
+.Footer .parent-org-link {
+    /*  TODO: Montserrat ExtraLight */
+    color: #f9f6e6;
+    background-color: #ff3838;
+    padding: 0.2rem 0.45rem;
+    text-transform: uppercase;
+    font-weight: lighter;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+
+.Footer .parent-org-link strong {
+  font-weight:600;
+}
