@@ -45,7 +45,7 @@ class LegislatorView extends React.Component<LegislatorViewProps, LegislatorView
 
   fetchData() {
     // TODO: set initial load issues to false & dispatch async load calls to endpoints
-    let legislatorData = placeholderHouseReps[Math.random() * placeholderHouseReps.length];
+    let legislatorData = placeholderHouseReps[0];
     // convert the api data to the row data props
     let legislatorCurrentStanceData: LegislatorStanceCurrentRowDataProps[] = [
       {
