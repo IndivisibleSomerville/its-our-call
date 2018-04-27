@@ -54,10 +54,10 @@ class LegislatorList extends React.Component<LegislatorListProps, LegislatorList
   fetchData() {
     // TODO: fetch each type of legislator & check local bookmarks
     // tslint:disable-next-line:no-any
-    this.http.get('/api/legislator').resp.then((legislatorListResp: any) => {
-      // console.warn(legislatorListResp);
-      // this.setState({legislatorData: [legislatorListResp]});
-    }).catch(this.errorFetchingData);
+    // this.http.get('/api/legislator').resp.then((legislatorListResp: any) => {
+    //   // console.warn(legislatorListResp);
+    //   // this.setState({legislatorData: [legislatorListResp]});
+    // }).catch(this.errorFetchingData);
     // TODO: if no bookmarks, show recently viewed instead
   }
   // tslint:disable-next-line:no-any
@@ -81,6 +81,7 @@ class LegislatorList extends React.Component<LegislatorListProps, LegislatorList
         rowClass={LegislatorRow}
         loaded={topResourceListSectionLoaded}
         data={topResourceListSectionData}
+        collapsible={true}
       />
     );
     if (topResourceListSectionData.length === 0) {
@@ -99,12 +100,14 @@ class LegislatorList extends React.Component<LegislatorListProps, LegislatorList
             rowClass={LegislatorRow}
             loaded={this.state.loadedSenateLegislators}
             data={this.state.senateLegislatorData}
+            collapsible={true}
           />
           <ResourceListSection
             headerTitle="HOUSE"
             rowClass={LegislatorRow}
             loaded={this.state.loadedHouseLegislators}
             data={this.state.houseLegislatorData}
+            collapsible={true}
           />
           <Footer />
         </div>
