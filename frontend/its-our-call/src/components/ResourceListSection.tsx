@@ -6,6 +6,8 @@ import { ResourceRowProps } from './ResourceRow';
 type RowComponentType = React.ComponentType<ResourceRowProps>;
 
 interface ResourceListSectionProps {
+  collapsible?: boolean;
+  sticky?: boolean;
   // defaults to ResourceRow if not overridden
   rowClass: RowComponentType;
   loaded: boolean;
