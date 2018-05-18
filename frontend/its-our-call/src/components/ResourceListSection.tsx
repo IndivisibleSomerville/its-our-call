@@ -19,25 +19,44 @@ interface ResourceListSectionProps {
   headerTitle?: string;
   headerLink?: string;
   headerLinkLabel?: string;
+  headerTopStickyOffset?: number;
+  headerBottomStickyOffset?: number;
 }
 
 interface ResourceListSectionState {
   headerLinkLabel: string;
   collapsed: boolean;
+  totalRowsHeight: number;
 }
 
 class ResourceListSection extends React.Component<ResourceListSectionProps, ResourceListSectionState> {
+  rowsRef: Element;
   constructor(props: ResourceListSectionProps) {
      super(props);
      this.collapsedClicked = this.collapsedClicked.bind(this);
      this.state = {
        headerLinkLabel: this.props.headerLinkLabel ? this.props.headerLinkLabel : 'see all',
        collapsed: false,
+       totalRowsHeight: 100,
      };
   }
   componentWillReceiveProps(props: ResourceListSectionProps) {
     if (this.props.collapsible !== props.collapsible) {
       this.setState({collapsed: false});
+    }
+  }
+  componentDidMount() {
+    if (this.props.collapsible) {
+      let rows = Array.from(this.rowsRef.children);
+      this.setState({totalRowsHeight: rows.reduce((height: number, r: Element) => {
+        return height + r.scrollHeight;
+      }, 0)});
+    }
+    if (this.props.sticky) {
+      // this.props.headerTopStickyOffset;
+      // this.props.headerBottomStickyOffset;
+
+      // header positions
     }
   }
 
@@ -48,6 +67,15 @@ class ResourceListSection extends React.Component<ResourceListSectionProps, Reso
   }
 
   render() {
+    // let currentHeight = this.state.totalRowsHeight;
+    // maxHeight: this.state.collapsed ? 0 : currentHeight
+    let sectionHeightStyle: React.CSSProperties = {};
+    // IDEA shortcut the height to silently skip the numerous rows hidden by the scroll
+    // (will need to compensate for sticky scrolling as well)
+    // if (this.state.collapsed) {
+    //   sectionHeightStyle.height = Math.min(this.state.totalRowsHeight, window.innerHeight);
+    // }
+    //
     let sectionBody = (<div className="loading">Loading...</div>);
     if (this.props.loaded) {
       sectionBody = (<div className="no-data">Nothing found.</div>);
@@ -57,12 +85,13 @@ class ResourceListSection extends React.Component<ResourceListSectionProps, Reso
           return (<this.props.rowClass key={index} data={datum} />);
         });
         sectionBody = (
-          <div className="rows">
+          <div className="rows" ref={(ref: HTMLDivElement) => this.rowsRef = ref}>
             {rows}
           </div>
         );
       }
     }
+    //
     return (
       <div
         className={
@@ -79,9 +108,14 @@ class ResourceListSection extends React.Component<ResourceListSectionProps, Reso
           collapsed={this.state.collapsed}
           collapsedClicked={this.collapsedClicked}
         />
-        <div className="header-shadow">&nbsp;</div>
-        {sectionBody}
-        <div className="bottom-shadow">&nbsp;</div>
+        <div
+          className="section-content"
+          style={sectionHeightStyle}
+        >
+          <div className="header-shadow">&nbsp;</div>
+          {sectionBody}
+          <div className="bottom-shadow">&nbsp;</div>
+        </div>
       </div>
     );
   }

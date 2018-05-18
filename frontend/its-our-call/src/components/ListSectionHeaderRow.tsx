@@ -13,15 +13,23 @@ interface ListSectionHeaderRowProps {
   collapsible?: boolean;
   collapsed?: boolean;
   collapsedClicked?: (oldCollapsedVal: boolean) => void;
+  isSticky?: boolean;
+  scrollPos?: number;
+  scrollHeight?: number;
+  scrollTopPadding?: number;
+  scrollBottomPadding?: number;
 }
 
 interface ListSectionHeaderRowState {
   linkTo: string;
   isHidingLink: boolean;
   expanded: boolean;
+  stuckToTop?: boolean;
+  stuckToBottom?: boolean;
 }
 
 class ListSectionHeaderRow extends React.Component<ListSectionHeaderRowProps, ListSectionHeaderRowState> {
+  selfRef: Element;
   constructor(props: ListSectionHeaderRowProps) {
     super(props);
     this.collapsedClicked = this.collapsedClicked.bind(this);
@@ -33,6 +41,22 @@ class ListSectionHeaderRow extends React.Component<ListSectionHeaderRowProps, Li
   }
 
   componentWillReceiveProps(props: ListSectionHeaderRowProps) {
+    if (props.isSticky) {
+      if (this.props.scrollPos !== props.scrollPos ||
+          this.props.scrollHeight !== props.scrollHeight) {
+        let scrollTopPadding = this.props.scrollTopPadding ? this.props.scrollTopPadding : 0;
+        let scrollBottomPadding = this.props.scrollBottomPadding ? this.props.scrollBottomPadding : 0;
+        let rect = this.selfRef.getBoundingClientRect();
+        let stuckToTop = false;
+        let stuckToBottom = false;
+        if (rect.top <= scrollTopPadding) {
+          stuckToTop = true;
+        } else if (rect.bottom >= scrollBottomPadding) {
+          stuckToBottom = true;
+        }
+        this.setState({stuckToTop, stuckToBottom});
+      }
+    }
     this.setState({
       linkTo: props.linkTo ? props.linkTo : '#',
       isHidingLink: props.linkTo === undefined,
@@ -64,7 +88,15 @@ class ListSectionHeaderRow extends React.Component<ListSectionHeaderRowProps, Li
 
     let optionalLinkClasses = 'link' + (this.state.isHidingLink ? ' hidden' : '');
     return (
-      <div className={'ListSectionHeaderRow ' + (this.props.collapsible ? 'collapsible' : '')}>
+      <div
+        ref={(ref: HTMLDivElement) => {this.selfRef = ref; }}
+        className={
+          'ListSectionHeaderRow'
+          + (this.props.collapsible ? ' collapsible' : '')
+          + (this.state.stuckToTop ? ' sticky-header' : '')
+          + (this.state.stuckToBottom ? ' sticky-bottom' : '')
+        }
+      >
         {expandButton}
         <div className="title">{this.props.title}</div>
         <Link className={optionalLinkClasses} to={this.state.linkTo}>{this.props.linkLabel}</Link>

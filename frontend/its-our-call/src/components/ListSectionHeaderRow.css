@@ -5,7 +5,6 @@
   color: #454545;
   border-bottom: 2px solid #CACACA;
   /* main text color #454545 */
-  margin-top: .75rem;
 }
 
 .ListSectionHeaderRow .PlusMinusButton {
@@ -17,7 +16,7 @@
 
 .ListSectionHeaderRow .PlusMinusButton svg {
   margin: 0;
-  transform: translateX(5%) translateY(25%);
+  transform: translateX(0%) translateY(25%);
 }
 
 .ListSectionHeaderRow .title {

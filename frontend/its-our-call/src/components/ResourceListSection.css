@@ -1,14 +1,17 @@
 .ResourceListSection {
   position: relative;
+  margin-bottom: 1rem;
 }
 
 .ResourceListSection .header-shadow {
   position:absolute;
   height:2px;
   width:100%;
-  top: 3.3rem;
+  top: -4px;
   box-shadow: 0px 4px 3px #ddd;
-  z-index: 1000;
+  z-index: 1;
+  transition-property: box-shadow;
+  transition-duration: .5s;
 }
 
 .ResourceListSection .bottom-shadow {
@@ -17,5 +20,31 @@
   width:100%;
   bottom: -1rem;
   box-shadow: 0px -5px 3px #fff;
-  z-index: 1000;
+  z-index: 1;
+  transition-property: box-shadow;
+  transition-duration: .1s;
+}
+
+.ResourceListSection.collapsed .bottom-shadow {
+  box-shadow: 0px 0px 0px #fff;
+}
+.ResourceListSection.collapsed .header-shadow {
+  box-shadow: 0px 0px 0px #ddd;
+}
+
+.ResourceListSection > .section-content {
+  float: left;
+  position: relative;
+  width: 100%;
+  height: auto;
+  max-height: 20000rem;
+  transition-property: max-height;
+  transition-duration: .5s;
+  overflow-y: hidden;
+}
+/* 100  or 435 rows by default...
+ bookmark all legislators make 535 maximum rows?! */
+
+.ResourceListSection.collapsed > .section-content {
+  max-height: 0;
 }
