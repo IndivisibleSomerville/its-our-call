@@ -36,10 +36,6 @@
   float: left;
   position: relative;
   width: 100%;
-  height: auto;
-  max-height: 20000rem;
-  transition-property: max-height;
-  transition-duration: .5s;
   overflow-y: hidden;
 }
 /* 100  or 435 rows by default...

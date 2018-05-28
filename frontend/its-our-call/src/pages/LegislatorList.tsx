@@ -157,7 +157,7 @@ class LegislatorList extends React.Component<LegislatorListProps, LegislatorList
         rowClass={LegislatorRow}
         loaded={topResourceListSectionLoaded}
         data={topResourceListSectionData}
-        collapsible={true}
+        isCollapsible={true}
       />
     );
     if (topResourceListSectionData.length === 0) {
@@ -176,14 +176,14 @@ class LegislatorList extends React.Component<LegislatorListProps, LegislatorList
             rowClass={LegislatorRow}
             loaded={this.state.loadedSenateLegislators}
             data={this.state.senateLegislatorData}
-            collapsible={true}
+            isCollapsible={true}
           />
           <ResourceListSection
             headerTitle="HOUSE"
             rowClass={LegislatorRow}
             loaded={this.state.loadedHouseLegislators}
             data={this.state.houseLegislatorData}
-            collapsible={true}
+            isCollapsible={true}
           />
           {/* <Footer /> */}
         </div>

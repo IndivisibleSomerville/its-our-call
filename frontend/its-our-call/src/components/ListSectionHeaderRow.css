@@ -35,6 +35,18 @@
   margin-right: 1.5rem;
 }
 
+
+.hidden-cache {
+  overflow: scroll;
+  width: 0;
+  max-height: 0 !important;
+}
+
+.rows {
+  height: auto;
+}
+
+
 /* TODO: make this a global class */
 .hidden {
   display: none;
