@@ -69,13 +69,13 @@ class IssueList extends React.Component<IssueListProps, IssueListState> {
           <ResourceListSection
             headerTitle="CURRENT"
             rowClass={IssueRow}
-            loaded={this.state.loadedCurrentIssues}
+            dataLoaded={this.state.loadedCurrentIssues}
             data={this.state.currentIssueData}
           />
           <ResourceListSection
             headerTitle="ARCHIVE"
             rowClass={IssueRow}
-            loaded={this.state.loadedArchivedIssues}
+            dataLoaded={this.state.loadedArchivedIssues}
             data={this.state.archivedIssueData}
           />
           <Footer />

@@ -121,13 +121,13 @@ class LegislatorView extends React.Component<LegislatorViewProps, LegislatorView
           <ResourceListSection
             headerTitle="Current"
             rowClass={LegislatorStanceCurrentRow}
-            loaded={true}
+            dataLoaded={true}
             data={this.state.legislatorCurrentStanceData}
           />
           <ResourceListSection
             headerTitle="Archive"
             rowClass={LegislatorStanceArchiveRow}
-            loaded={true}
+            dataLoaded={true}
             data={this.state.legislatorArchiveStanceData}
           />
           <Footer />

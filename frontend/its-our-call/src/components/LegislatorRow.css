@@ -24,10 +24,15 @@
   float: left;
 }
 
-.LegislatorRow .left {
+.LegislatorRow > .content > .left {
   margin-top: 1.1rem;
 }
-.LegislatorRow .middle {
+
+.LegislatorRow > .content > .left .LegislatorBadge {
+  margin-top: .34rem;
+}
+
+.LegislatorRow > .content > .middle {
   margin-top: 1rem;
   margin-left: .5rem;
   margin-right: .5rem;

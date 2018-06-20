@@ -25,7 +25,7 @@ class Header extends React.Component<HeaderProps, HeaderState> {
     }
 
     return (
-      <div className={'Header' + otherClasses}>
+      <div id="AppHeader" className={'Header' + otherClasses}>
         <div className="title">
           <Link to="/">It's Our Call</Link>
         </div>

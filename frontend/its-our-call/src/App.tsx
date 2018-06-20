@@ -46,7 +46,7 @@ class App extends React.Component<AppProps, AppState> {
   render() {
     return (
       <BrowserRouter>
-        <div className="App">
+        <div id="App" className="App">
           <Header
             handleSearchClick={this.handleSearchClick}
             handleMenuClick={this.handleMenuClick}
