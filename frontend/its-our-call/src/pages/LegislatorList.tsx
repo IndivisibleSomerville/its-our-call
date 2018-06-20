@@ -42,7 +42,7 @@ class LegislatorList extends React.Component<LegislatorListProps, LegislatorList
     // TODO: set initial load issues to false & dispatch async load calls to endpoints
     let bookmarkedRep = placeholderHouseReps[50];
     let recentlyViewedReps = [placeholderHouseReps[57], placeholderHouseReps[53]] ;
-    this.appHeaderRef = document.getElementById('AppHeader');
+    this.getAppHeaderHeight = this.getAppHeaderHeight.bind(this);
     this.currentResourceListSectionRefs = [];
     this.state = {
       loadedBookmarkedLegislators: true,
@@ -66,7 +66,6 @@ class LegislatorList extends React.Component<LegislatorListProps, LegislatorList
   componentDidMount() {
     this.fetchData();
     this.recalcResourceListSection();
-    console.log(`componentDidMount`);
     document.addEventListener('scroll', this.recalcResourceListSection);
     window.addEventListener('resize', this.recalcResourceListSection);
   }
@@ -75,6 +74,15 @@ class LegislatorList extends React.Component<LegislatorListProps, LegislatorList
     this.currentResourceListSectionRefs = [];
     document.removeEventListener('scroll', this.recalcResourceListSection);
     window.removeEventListener('resize', this.recalcResourceListSection);
+  }
+
+  getAppHeaderHeight(): number {
+    let appHeaderRef = document.getElementById('AppHeader');
+    if (appHeaderRef) {
+      return appHeaderRef.getBoundingClientRect().height;
+    }
+    console.warn('could not find #AppHeader, something major was changed in the dom');
+    return 0;
   }
 
   fetchData() {
@@ -104,13 +112,11 @@ class LegislatorList extends React.Component<LegislatorListProps, LegislatorList
   }
 
   recalcResourceListSection() {
-    console.log(`recalcResourceListSection`);
-
     if (this.state) {
       let { headerStickyOffsets } = this.state;
       if (this.pageRef) {
         headerStickyOffsets = new Array<HeaderStickyOffset>(this.currentResourceListSectionRefs.length);
-        let top: number = 0;
+        let top: number = this.getAppHeaderHeight();        
         // calc initial bottom offset value
         let bottom: number = this.currentResourceListSectionRefs.reduce(
           (total: number, b: ResourceListSection, index: number) => {

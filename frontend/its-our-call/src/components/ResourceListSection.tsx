@@ -117,6 +117,7 @@ class ResourceListSection extends React.Component<ResourceListSectionProps, Reso
       let { isCollapsed } = this.state;
       let wasCollapsed = isCollapsed;
       isCollapsed = !isCollapsed; // toggle when we click
+      // TODO: find something other than this timeout nudge that works with updating the sticky headers
       this.setState({isCollapsed, wasCollapsed}, () => { setTimeout(function() { window.scrollBy(0, 1); }, 500); });
     }
   }
@@ -137,12 +138,9 @@ class ResourceListSection extends React.Component<ResourceListSectionProps, Reso
         // we're collapsing.
         // if the current bounds are off on the top or bottom of the screen then
         if (isTopOutOfBounds || (window.innerHeight < bottomOfSectionCurrent)) {
-          console.log(sectionContentRef.classList);
           sectionContentRef.classList.add('notransition');
-          console.log(sectionContentRef.classList);
           sectionContentRef.style.height = this.visibleHeight + 'px'; // trim down the target height to visibleHeight
           sectionContentRef.classList.remove('notransition');
-          console.log(sectionContentRef.classList);
           // the return value should then collapse it the rest of the way
         }
       }
