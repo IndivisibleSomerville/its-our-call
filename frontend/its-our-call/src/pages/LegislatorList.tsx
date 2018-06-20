@@ -58,8 +58,6 @@ class LegislatorList extends React.Component<LegislatorListProps, LegislatorList
       windowRef: window,
       headerStickyOffsets: [],
     };
-    this.onScroll = this.onScroll.bind(this);
-    this.onResize = this.onResize.bind(this);
     this.fetchData = this.fetchData.bind(this);
     this.errorFetchingData = this.errorFetchingData.bind(this);
     this.getListSectionRef = this.getListSectionRef.bind(this);
@@ -67,23 +65,16 @@ class LegislatorList extends React.Component<LegislatorListProps, LegislatorList
 
   componentDidMount() {
     this.fetchData();
-    // build header elements for sticky behavior
-    this.state.scrollingElem.addEventListener('scroll', this.onScroll, false);
-    this.state.windowRef.addEventListener('onresize', this.onResize, false);
     this.recalcResourceListSection();
+    console.log(`componentDidMount`);
+    document.addEventListener('scroll', this.recalcResourceListSection);
+    window.addEventListener('resize', this.recalcResourceListSection);
   }
-
+    
   componentWillUnmount() {
-    this.state.scrollingElem.removeEventListener('scroll', this.onScroll, false);
-    this.state.windowRef.removeEventListener('onresize', this.onResize, false);
     this.currentResourceListSectionRefs = [];
-  }
-
-  onScroll() {
-// 
-  }
-  onResize() {
-// 
+    document.removeEventListener('scroll', this.recalcResourceListSection);
+    window.removeEventListener('resize', this.recalcResourceListSection);
   }
 
   fetchData() {
@@ -113,33 +104,35 @@ class LegislatorList extends React.Component<LegislatorListProps, LegislatorList
   }
 
   recalcResourceListSection() {
-    let { headerStickyOffsets } = this.state; 
-    if (this.pageRef) {
-      headerStickyOffsets = new Array<HeaderStickyOffset>(this.currentResourceListSectionRefs.length);
-      let top: number = 0;
-      // calc initial bottom offset value
-      let bottom: number = this.currentResourceListSectionRefs.reduce(
-        (total: number, b: ResourceListSection, index: number) => {
-          let headerHeight = b.currentHeaderHeight();
-          if (index !== 0 && headerHeight) { total = total + headerHeight; }
-          return total; 
-        }, 0);
-      // iterate through each resource
-      headerStickyOffsets = this.currentResourceListSectionRefs.map((elem: ResourceListSection, index: number) => {
-        let currentOffset: HeaderStickyOffset = {top, bottom};
-        console.log(`index:${index} {top:${top}, bottom:${bottom}}`);
-        
-        // move the vars for the next element in the index
-        let heightCurrentHeader = elem.currentHeaderHeight(); 
-        if (heightCurrentHeader) {
-          top = top + heightCurrentHeader;
-          bottom = bottom - heightCurrentHeader;
-        }
-        return currentOffset;
-      });
+    console.log(`recalcResourceListSection`);
+
+    if (this.state) {
+      let { headerStickyOffsets } = this.state;
+      if (this.pageRef) {
+        headerStickyOffsets = new Array<HeaderStickyOffset>(this.currentResourceListSectionRefs.length);
+        let top: number = 0;
+        // calc initial bottom offset value
+        let bottom: number = this.currentResourceListSectionRefs.reduce(
+          (total: number, b: ResourceListSection, index: number) => {
+            let headerHeight = b.currentHeaderHeight();
+            if (index !== 0 && headerHeight) { total = total + headerHeight; }
+            return total;
+          }, 0);
+        // iterate through each resource
+        headerStickyOffsets = this.currentResourceListSectionRefs.map((elem: ResourceListSection, index: number) => {
+          let currentOffset: HeaderStickyOffset = { top, bottom };
+          // move the vars for the next element in the index
+          let heightCurrentHeader = elem.currentHeaderHeight();
+          if (heightCurrentHeader) {
+            top = top + heightCurrentHeader;
+            bottom = bottom - heightCurrentHeader;
+          }
+          return currentOffset;
+        });
+      }
+      this.setState({ headerStickyOffsets });
     }
-    this.setState({headerStickyOffsets});
-  }
+}
 
   render() {
     let hasOptionalSection: boolean = (this.state.hasBookmarks // TODO: actual bookmarks should load

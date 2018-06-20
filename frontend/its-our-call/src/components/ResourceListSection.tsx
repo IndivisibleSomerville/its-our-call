@@ -50,6 +50,7 @@ class ResourceListSection extends React.Component<ResourceListSectionProps, Reso
      this.collapsedClicked = this.collapsedClicked.bind(this);
      this.buildStyleForSectionContent = this.buildStyleForSectionContent.bind(this);
      this.listSectionScrolled = this.listSectionScrolled.bind(this);
+     this.listSectionWindowResize = this.listSectionWindowResize.bind(this);
      this.recalculateVisibleHeight = this.recalculateVisibleHeight.bind(this);
      this.currentHeaderHeight = this.currentHeaderHeight.bind(this); 
      this.visibleHeight = 0;
@@ -76,7 +77,12 @@ class ResourceListSection extends React.Component<ResourceListSectionProps, Reso
     }
     this.recalculateVisibleHeight();
     document.addEventListener('scroll', this.listSectionScrolled);
+    window.addEventListener('resize', this.listSectionWindowResize);
     this.setState({isMounted: true, totalRowsHeightPx});
+  }
+  componentWillUnmount() {
+    document.removeEventListener('scroll', this.listSectionScrolled);
+    window.removeEventListener('resize', this.listSectionWindowResize);
   }
   currentHeaderHeight(): number | undefined {
     if (this.headerRef) {
@@ -86,6 +92,9 @@ class ResourceListSection extends React.Component<ResourceListSectionProps, Reso
   }
   listSectionScrolled() {
     this.recalculateVisibleHeight();
+  }
+  listSectionWindowResize() {
+    this.recalculateVisibleHeight();    
   }
   recalculateVisibleHeight() {
     if (this.ref) {
@@ -108,7 +117,7 @@ class ResourceListSection extends React.Component<ResourceListSectionProps, Reso
       let { isCollapsed } = this.state;
       let wasCollapsed = isCollapsed;
       isCollapsed = !isCollapsed; // toggle when we click
-      this.setState({isCollapsed, wasCollapsed});
+      this.setState({isCollapsed, wasCollapsed}, () => { setTimeout(function() { window.scrollBy(0, 1); }, 500); });
     }
   }
   buildStyleForSectionContent() {
@@ -149,7 +158,6 @@ class ResourceListSection extends React.Component<ResourceListSectionProps, Reso
               sectionContentRef.style.height = totalRowsHeightPx + 'px'; // jump to the full height with no more anim
               sectionContentRef.classList.remove('notransition');
             }
-            console.log('expanded '); 
           }, DurationOfCollapseAnimationMillis);  
         }
       }

@@ -44,12 +44,15 @@ class ListSectionHeaderRow extends React.Component<ListSectionHeaderRowProps, Li
   }
 
   componentDidMount() {
-    document.addEventListener('scroll', this.updateStickyScrollState);
     this.updateCurrentHeightPxFromRef();
+    this.updateStickyScrollState();
+    document.addEventListener('scroll', this.updateStickyScrollState);
+    window.addEventListener('resize', this.updateStickyScrollState);
   }
 
-  componentWillUnMount() {
+  componentWillUnmount() {
     document.removeEventListener('scroll', this.updateStickyScrollState);
+    window.removeEventListener('resize', this.updateStickyScrollState);
   }
 
   componentWillReceiveProps(props: ListSectionHeaderRowProps) {
@@ -70,29 +73,25 @@ class ListSectionHeaderRow extends React.Component<ListSectionHeaderRowProps, Li
     }
   }
 
-  collapsedClicked() {
-    if (this.props.collapsedClicked) {
-      this.props.collapsedClicked(!this.state.expanded);
-    }
-    this.setState({expanded: !this.state.expanded});
-  }
-
   updateStickyScrollState() {
     let { stuckToTop, stuckToBottom } = this.state;
     if (this.selfRef) {
-      // tslint:disable:no-console
       let domRect = this.selfRef.getBoundingClientRect(); // this.ref.getBoundingClientRect();
-      console.debug('with selfRef: ' + this.props.isSticky + ' ' + 
-      domRect.top + ' ' + this.props.targetStickyScrollPositionFromTopPx);
       if (this.props.isSticky && this.props.targetStickyScrollPositionFromTopPx !== undefined) {
         stuckToTop = (this.props.targetStickyScrollPositionFromTopPx >= domRect.top);
       }
       if (this.props.isSticky && this.props.targetStickyScrollPositionFromBottomPx !== undefined) {
         stuckToBottom = ((window.innerHeight - domRect.bottom) <= this.props.targetStickyScrollPositionFromBottomPx);
       }
-      console.debug(`stuckToTop ${stuckToTop} stuckToBottom ${stuckToBottom}`);
       this.setState({stuckToTop, stuckToBottom});
     }
+  }
+
+  collapsedClicked() {
+    if (this.props.collapsedClicked) {
+      this.props.collapsedClicked(!this.state.expanded);
+    }
+    this.setState({expanded: !this.state.expanded});
   }
 
   buildStyleForStickyPosition() {
@@ -110,8 +109,6 @@ class ListSectionHeaderRow extends React.Component<ListSectionHeaderRowProps, Li
         };
       }
     }
-    console.debug('buildStyleForStickyPosition');
-    console.debug(styleToRet);
     return styleToRet;
   }
 
