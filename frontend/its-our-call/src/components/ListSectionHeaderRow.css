@@ -1,25 +1,32 @@
 .ListSectionHeaderRow {
-  width: 100%;
+  width: var(--default-row-width-px);
+  height: 43px;
+  z-index: 1000;
+  /* main text color #454545 */
+}
+
+.ListSectionHeaderRow .content {
+  width: inherit;
   height: 43px;
   background-color: #F2F2F2;
   color: #454545;
   border-bottom: 2px solid #CACACA;
-  /* main text color #454545 */
+  z-index: 1000;
 }
 
-.ListSectionHeaderRow .PlusMinusButton {
+.ListSectionHeaderRow  .content .PlusMinusButton {
   float: left;
   margin-top: .25rem;
   margin-left: .6rem;
   border-width: 3px;
 }
 
-.ListSectionHeaderRow .PlusMinusButton svg {
+.ListSectionHeaderRow  .content .PlusMinusButton svg {
   margin: 0;
   transform: translateX(0%) translateY(25%);
 }
 
-.ListSectionHeaderRow .title {
+.ListSectionHeaderRow  .content .title {
     padding-top: 0.2rem;
     transform: translateY(50%);
     float: left;
@@ -28,24 +35,12 @@
     color: #5E355C;
 }
 
-.ListSectionHeaderRow .link {
+.ListSectionHeaderRow  .content .link {
   padding-top: 0.2rem;
   transform: translateY(50%);
   float: right;
   margin-right: 1.5rem;
 }
-
-
-.hidden-cache {
-  overflow: scroll;
-  width: 0;
-  max-height: 0 !important;
-}
-
-.rows {
-  height: auto;
-}
-
 
 /* TODO: make this a global class */
 .hidden {

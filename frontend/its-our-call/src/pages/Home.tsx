@@ -77,14 +77,14 @@ class Home extends React.Component<HomeProps, HomeState> {
             headerTitle="ISSUE"
             headerLink={urls.urlIssuesList()}
             rowClass={IssueRow}
-            loaded={this.state.loadedIssues}
+            dataLoaded={this.state.loadedIssues}
             data={this.state.issueData}
           />
           <ResourceListSection
             headerTitle="LEGISLATORS"
             headerLink={urls.urlLegislatorsList()}
             rowClass={LegislatorRow}
-            loaded={this.state.loadedLegislators}
+            dataLoaded={this.state.loadedLegislators}
             data={this.state.legislatorData}
           />
           <Footer />

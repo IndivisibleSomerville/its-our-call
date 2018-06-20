@@ -37,10 +37,32 @@
   position: relative;
   width: 100%;
   overflow-y: hidden;
+  transition: height 300ms ease-in-out, opacity 300ms ease-in-out;
+  opacity: 1;
+}
+.ResourceListSection > .section-content > .content-wrapper {
+  float: left;
+  width: 100%;
+}
+
+.ResourceListSection > .section-content > .content-wrapper > div {
+  width: 100%;
+  float: left;
 }
 /* 100  or 435 rows by default...
  bookmark all legislators make 535 maximum rows?! */
+/* .ResourceListSection > .section-content .content-wrapper {
+  float: left;
+  position: relative;
+  width: 100%;
+} */
 
-.ResourceListSection.collapsed > .section-content {
-  max-height: 0;
+
+/* make this a global class also? */
+.notransition {
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -o-transition: none !important;
+  -ms-transition: none !important;
+  transition: none !important;
 }

@@ -4,157 +4,224 @@ import ListSectionHeaderRow from './ListSectionHeaderRow';
 import { ResourceRowProps } from './ResourceRow';
 
 import './ResourceListSection.css';
+// import { log } from 'util';
+
+const DurationOfCollapseAnimationMillis = 300;
 
 type RowComponentType = React.ComponentType<ResourceRowProps>;
+// tslint:disable:no-console
 
 interface ResourceListSectionProps {
+  // the collection can expand or collapse from clicking the button in the header
   isCollapsible?: boolean;
-  sticky?: boolean;
+  // the header will never leave the screen, multiple headers with gather at the top or bottom
+  isSticky?: boolean;
+  // sibling components are not aware of each other, assume that all the headers are the same height 
+  // that way you only need to keep track of which index
+  sectionIndex?: number;
+  sectionHeaderOffsets?: {top?: number, bottom?: number};
   // defaults to ResourceRow if not overridden
   rowClass: RowComponentType;
-  loaded: boolean;
   // tslint:disable-next-line:no-any
   data: any[];
+  dataLoaded: boolean;
   // pass through the header properties
   headerTitle?: string;
   headerLink?: string;
   headerLinkLabel?: string;
-  headerTopStickyOffset?: number;
-  headerBottomStickyOffset?: number;
 }
 
 interface ResourceListSectionState {
-  cachedRows: JSX.Element;
   headerLinkLabel: string;
   isCollapsed: boolean;
-  currentHeight: number;
-  maxContentScrollHeight: number;
+  wasCollapsed: boolean;
+  totalRowsHeightPx: number;
+  isMounted: boolean;
 }
 
 class ResourceListSection extends React.Component<ResourceListSectionProps, ResourceListSectionState> {
-  cacheRef: Element;
-  collapseAnimationStartedAt: Date | undefined;
+  ref: HTMLDivElement | null; // this current component 
+  visibleHeight: number; // total height of this component, recalculated on scroll, mount, collapsedClicked
+  wrapperDivRef: HTMLDivElement | null; // this wrapper around the rows/content
+  sectionContentRef: HTMLDivElement | null; // this for snapping the height on janky transitions
+  headerRef: ListSectionHeaderRow | null;
   constructor(props: ResourceListSectionProps) {
      super(props);
      this.collapsedClicked = this.collapsedClicked.bind(this);
+     this.buildStyleForSectionContent = this.buildStyleForSectionContent.bind(this);
+     this.listSectionScrolled = this.listSectionScrolled.bind(this);
+     this.recalculateVisibleHeight = this.recalculateVisibleHeight.bind(this);
+     this.currentHeaderHeight = this.currentHeaderHeight.bind(this); 
+     this.visibleHeight = 0;
      this.state = {
-       cachedRows: this.buildCachedRows(props),
        headerLinkLabel: this.props.headerLinkLabel ? this.props.headerLinkLabel : 'see all',
        isCollapsed: false,
-       currentHeight: 0,
-       maxContentScrollHeight: 0,
+       wasCollapsed: false,
+       isMounted: false,
+       totalRowsHeightPx: -1,
      };
   }
-  buildCachedRows(props: ResourceListSectionProps): JSX.Element {
-    let toRet: JSX.Element = (<div className="no-data">Nothing found.</div>);
-    if (props.data.length > 0) {
-      // tslint:disable-next-line:no-any
-      let rows = props.data.map((datum: any, index: number) => {
-        return (<this.props.rowClass key={index} data={datum} />);
-      });
-      toRet = (
-        <div className="rows">
-          {rows}
-        </div>
-      );
-    }
-    return toRet;
-  }
   componentWillReceiveProps(props: ResourceListSectionProps) {
-    let {isCollapsed, cachedRows} = this.state;
+    let {isCollapsed } = this.state;
     if (this.props.isCollapsible !== props.isCollapsible) {
       isCollapsed = false;
     }
-    if (true) {
-      // TODO: update cached rows only when necessary
-      cachedRows = this.buildCachedRows(props);
-    }
-    this.setState({isCollapsed, cachedRows});
+    this.recalculateVisibleHeight();
+    this.setState({isCollapsed});
   }
   componentDidMount() {
-    let { maxContentScrollHeight, currentHeight } = this.state;
-    if (this.props.sticky) {
-      // this.props.headerTopStickyOffset;
-      // this.props.headerBottomStickyOffset;
-      // header positions
+    let { totalRowsHeightPx } = this.state;
+    if (this.wrapperDivRef) {
+      totalRowsHeightPx = this.wrapperDivRef.offsetHeight;
     }
-    if (this.props.isCollapsible) {
-      maxContentScrollHeight = this.cacheRef.scrollHeight;
-      if (this.state.isCollapsed) {
-        currentHeight = 0;
-      } else {
-        currentHeight = maxContentScrollHeight;
-      }
-    }
-    this.setState({maxContentScrollHeight, currentHeight});
+    this.recalculateVisibleHeight();
+    document.addEventListener('scroll', this.listSectionScrolled);
+    this.setState({isMounted: true, totalRowsHeightPx});
   }
-
-  componentDidUpdate(prevProps: ResourceListSectionProps, prevState: ResourceListSectionState) {
-    if (this.state.isCollapsed !== prevState.isCollapsed && this.state.maxContentScrollHeight > 0) {
-      // TODO: cleanup current direction if needed, trim height
-      // IDEA shortcut the height can silently skip the numerous rows hidden by the scroll
-      // (will need to compensate for sticky scrolling as well)
-      // if (this.state.isCollapsed) {
-      //   sectionHeightStyle.height = Math.min(this.state.totalRowsHeight, window.innerHeight);
-      // }
-      //
-      let isCollapsed = this.state.isCollapsed;
-      if (isCollapsed) {
-        // continue isCollapsed (if there's any area left)
-      } else {
-        // continue expanding (if there's any area left to expand to)
-      }
+  currentHeaderHeight(): number | undefined {
+    if (this.headerRef) {
+      return this.headerRef.currentHeightPx;
     }
+    return undefined;
   }
-
+  listSectionScrolled() {
+    this.recalculateVisibleHeight();
+  }
+  recalculateVisibleHeight() {
+    if (this.ref) {
+      let domRect = this.ref.getBoundingClientRect(); // this.ref.getBoundingClientRect();
+      let visibleHeight = 0; // window.innerHeight <= domRect.top 
+      if (window.innerHeight > domRect.top) {
+       if (domRect.top >= 0) {
+         // scrolling with top visible
+         visibleHeight = Math.min((window.innerHeight - domRect.top), domRect.height);
+       } else {
+         // top of the content is up past the top of the screen
+         visibleHeight = Math.min((domRect.bottom + domRect.top), window.innerHeight);
+       }
+      }
+      this.visibleHeight = visibleHeight;
+     }
+  }
   collapsedClicked() {
     if (this.props.isCollapsible) {
-      this.setState({isCollapsed: !this.state.isCollapsed});
+      let { isCollapsed } = this.state;
+      let wasCollapsed = isCollapsed;
+      isCollapsed = !isCollapsed; // toggle when we click
+      this.setState({isCollapsed, wasCollapsed});
     }
+  }
+  buildStyleForSectionContent() {
+    let styleToRet: React.CSSProperties = {};
+    let { totalRowsHeightPx, isCollapsed, isMounted } = this.state;
+    let overrideHeightValuePx: number | null = null;
+    // TODO: use the add/remove of the .notransition class
+    // to coerce the animating height into a more smooth UX
+    let sectionContentRef = this.sectionContentRef;
+    if (sectionContentRef && this.ref) {
+      this.recalculateVisibleHeight();
+      let sectionContentDOMRef = sectionContentRef.getBoundingClientRect();
+      let isTopOutOfBounds = this.ref.getBoundingClientRect().top < 0; // doesn't change (right now) so we can reuse
+      let bottomOfSectionCurrent = sectionContentDOMRef.top + sectionContentDOMRef.height;
+      let bottomOfSectionWhenExpanded = sectionContentDOMRef.top + this.state.totalRowsHeightPx;
+      if (isCollapsed) {
+        // we're collapsing.
+        // if the current bounds are off on the top or bottom of the screen then
+        if (isTopOutOfBounds || (window.innerHeight < bottomOfSectionCurrent)) {
+          console.log(sectionContentRef.classList);
+          sectionContentRef.classList.add('notransition');
+          console.log(sectionContentRef.classList);
+          sectionContentRef.style.height = this.visibleHeight + 'px'; // trim down the target height to visibleHeight
+          sectionContentRef.classList.remove('notransition');
+          console.log(sectionContentRef.classList);
+          // the return value should then collapse it the rest of the way
+        }
+      }
+      if (!isCollapsed) {
+        // we're expanding.
+        // if the fully expanded dimensions-to-be are out of bounds then:
+        if (isTopOutOfBounds || (window.innerHeight < bottomOfSectionWhenExpanded)) {
+          overrideHeightValuePx = this.visibleHeight; // trim down the target animation height to ~this.visibleHeight
+          setTimeout(() => { 
+            // after a small delay:
+            if (sectionContentRef) {
+              sectionContentRef.classList.add('notransition');
+              sectionContentRef.style.height = totalRowsHeightPx + 'px'; // jump to the full height with no more anim
+              sectionContentRef.classList.remove('notransition');
+            }
+            console.log('expanded '); 
+          }, DurationOfCollapseAnimationMillis);  
+        }
+      }
+    }
+    if (isCollapsed) {
+      styleToRet = {'height': '0px'};
+    } else if (isMounted && totalRowsHeightPx >= 0) {
+      let height: number = overrideHeightValuePx ? overrideHeightValuePx : totalRowsHeightPx;
+      styleToRet = {'height': (height + 'px')};
+    }
+    return styleToRet;
+  }
+  
+  calcOffsetFromProps(direction: 'top' | 'bottom'): number {
+   let { sectionHeaderOffsets } = this.props;
+   if (sectionHeaderOffsets) {
+      if (direction === 'top') {
+        return sectionHeaderOffsets.top ? sectionHeaderOffsets.top : 0;
+      }
+      if (direction === 'bottom') {
+        return sectionHeaderOffsets.bottom ? sectionHeaderOffsets.bottom : 0;
+      }
+    }
+   return 0;
+  }
+
+  buildClassNamesForResourceListSection() {
+    return 'ResourceListSection'
+      + (this.props.isCollapsible ? ' collapsible' : '')
+      + (this.state.isCollapsed ? ' collapsed' : ' expanded')
+      + (this.props.isSticky ? ' sticky' : '');
   }
 
   render() {
-    let sectionHeightStyle: React.CSSProperties = {};
-    if (this.props.isCollapsible) {
-      sectionHeightStyle = {height: this.state.currentHeight};
-    }
-    let sectionBody = (<div className="loading">Loading...</div>);
-    if (this.props.loaded) {
-      sectionBody = this.state.cachedRows;
-    }
-    //
+    let content: (JSX.Element | JSX.Element[]) = (<div className="loading">Loading...</div>);
+    if (this.props.dataLoaded) {
+      content = (<div className="no-data">Nothing found.</div>);
+      if (this.props.data.length > 0) {
+        // tslint:disable-next-line:no-any
+        content = this.props.data.map((datum: any, index: number) => {
+          return (<this.props.rowClass key={index} data={datum} />);
+        });
+      }
+    }    
     return (
-      <div
-        className={
-        'ResourceListSection'
-        + (this.props.isCollapsible ? ' collapsible' : '')
-        + (this.state.isCollapsed ? ' collapsed' : ' expanded')
-        }
-      >
-        <div className="debug">{this.state.currentHeight}</div>
-        <ListSectionHeaderRow
-          title={this.props.headerTitle}
-          linkLabel={this.state.headerLinkLabel}
-          linkTo={this.props.headerLink}
-          collapsible={this.props.isCollapsible}
-          collapsed={this.state.isCollapsed}
-          collapsedClicked={this.collapsedClicked}
-        />
-        <div
-          className="section-content"
-          style={sectionHeightStyle}
-        >
-          <div className="header-shadow">&nbsp;</div>
-          {sectionBody}
-          <div className="bottom-shadow">&nbsp;</div>
+        <div className={this.buildClassNamesForResourceListSection()} ref={(ref) => { if (ref) { this.ref = ref; }}}>
+          <ListSectionHeaderRow
+            ref={(ref) => { if (ref) { this.headerRef = ref; }}}
+            title={this.props.headerTitle}
+            linkLabel={this.state.headerLinkLabel}
+            linkTo={this.props.headerLink}
+            isSticky={this.props.isSticky}
+            targetStickyScrollPositionFromTopPx={this.calcOffsetFromProps('top')}
+            targetStickyScrollPositionFromBottomPx={this.calcOffsetFromProps('bottom')}
+            collapsible={this.props.isCollapsible}
+            collapsed={this.state.isCollapsed}
+            collapsedClicked={this.collapsedClicked}
+          />
+          <div 
+            className={'section-content ' + 'sectionIndex' + this.props.sectionIndex}
+            style={this.buildStyleForSectionContent()} 
+            ref={(ref) => { if (ref) { this.sectionContentRef = ref; }}}
+          >
+            <div className="header-shadow">&nbsp;</div>
+            <div className="content-wrapper" ref={(ref) => { if (ref) { this.wrapperDivRef = ref; }}}>
+              {content}
+            </div>
+            <div className="bottom-shadow">&nbsp;</div>
+          </div>
         </div>
-        <div className="hidden-cache section-content" ref={(ref: HTMLDivElement) => this.cacheRef = ref}>
-         {/* Render the cached rows a second time, hidden, for height calculation. */}
-         {this.state.cachedRows}
-        </div>
-      </div>
-    );
-  }
+      );
+    }
 }
 
 export default ResourceListSection;

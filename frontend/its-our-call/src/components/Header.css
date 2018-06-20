@@ -5,7 +5,7 @@
   right: 0px;
   width: 100%;
   min-width: 240px;
-  background-color: #FFFFFF;
+  background-color: #FFFFFF77;
   font-size: 1.4em;
   font-weight: bold;
   border-bottom: 2px solid #DDDDDD;
@@ -16,9 +16,7 @@
   transition: 0.4s ease;
 }
 
-.Header.searchOpen {
-  /* TODO */
-}
+
 
 .Header.menuOpen {
   right: 17rem;

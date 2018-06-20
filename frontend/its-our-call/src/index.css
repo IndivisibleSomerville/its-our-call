@@ -3,3 +3,10 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+/* Define variables as far up the cascade as possible */
+/* Keep all varaiable stuff here in case we need to support IE 11 https://stackoverflow.com/a/49203834/902730 */
+/* I'm not above using SCSS */
+:root {
+  --default-row-width-px: 480px;
+}

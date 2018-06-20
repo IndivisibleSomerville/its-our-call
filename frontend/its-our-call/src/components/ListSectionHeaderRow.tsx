@@ -14,10 +14,8 @@ interface ListSectionHeaderRowProps {
   collapsed?: boolean;
   collapsedClicked?: (oldCollapsedVal: boolean) => void;
   isSticky?: boolean;
-  scrollPos?: number;
-  scrollHeight?: number;
-  scrollTopPadding?: number;
-  scrollBottomPadding?: number;
+  targetStickyScrollPositionFromTopPx?: number;
+  targetStickyScrollPositionFromBottomPx?: number;
 }
 
 interface ListSectionHeaderRowState {
@@ -30,33 +28,31 @@ interface ListSectionHeaderRowState {
 
 class ListSectionHeaderRow extends React.Component<ListSectionHeaderRowProps, ListSectionHeaderRowState> {
   selfRef: Element;
+  currentHeightPx: number; // -1 if not set
   constructor(props: ListSectionHeaderRowProps) {
     super(props);
+    this.currentHeightPx = -1;
+    this.updateCurrentHeightPxFromRef = this.updateCurrentHeightPxFromRef.bind(this);
     this.collapsedClicked = this.collapsedClicked.bind(this);
     this.state = {
       linkTo: props.linkTo ? props.linkTo : '#',
       isHidingLink: props.linkTo === undefined,
       expanded: props.collapsed === undefined ? true : !props.collapsed,
     };
+    this.updateStickyScrollState = this.updateStickyScrollState.bind(this);
+    this.buildStyleForStickyPosition = this.buildStyleForStickyPosition.bind(this);
+  }
+
+  componentDidMount() {
+    document.addEventListener('scroll', this.updateStickyScrollState);
+    this.updateCurrentHeightPxFromRef();
+  }
+
+  componentWillUnMount() {
+    document.removeEventListener('scroll', this.updateStickyScrollState);
   }
 
   componentWillReceiveProps(props: ListSectionHeaderRowProps) {
-    if (props.isSticky) {
-      if (this.props.scrollPos !== props.scrollPos ||
-          this.props.scrollHeight !== props.scrollHeight) {
-        let scrollTopPadding = this.props.scrollTopPadding ? this.props.scrollTopPadding : 0;
-        let scrollBottomPadding = this.props.scrollBottomPadding ? this.props.scrollBottomPadding : 0;
-        let rect = this.selfRef.getBoundingClientRect();
-        let stuckToTop = false;
-        let stuckToBottom = false;
-        if (rect.top <= scrollTopPadding) {
-          stuckToTop = true;
-        } else if (rect.bottom >= scrollBottomPadding) {
-          stuckToBottom = true;
-        }
-        this.setState({stuckToTop, stuckToBottom});
-      }
-    }
     this.setState({
       linkTo: props.linkTo ? props.linkTo : '#',
       isHidingLink: props.linkTo === undefined,
@@ -64,11 +60,59 @@ class ListSectionHeaderRow extends React.Component<ListSectionHeaderRowProps, Li
     });
   }
 
+  componentDidUpdate() {
+    this.updateCurrentHeightPxFromRef();
+  }
+
+  updateCurrentHeightPxFromRef() {
+    if (this.selfRef) {
+      this.currentHeightPx = this.selfRef.getBoundingClientRect().height; 
+    }
+  }
+
   collapsedClicked() {
     if (this.props.collapsedClicked) {
       this.props.collapsedClicked(!this.state.expanded);
     }
     this.setState({expanded: !this.state.expanded});
+  }
+
+  updateStickyScrollState() {
+    let { stuckToTop, stuckToBottom } = this.state;
+    if (this.selfRef) {
+      // tslint:disable:no-console
+      let domRect = this.selfRef.getBoundingClientRect(); // this.ref.getBoundingClientRect();
+      console.debug('with selfRef: ' + this.props.isSticky + ' ' + 
+      domRect.top + ' ' + this.props.targetStickyScrollPositionFromTopPx);
+      if (this.props.isSticky && this.props.targetStickyScrollPositionFromTopPx !== undefined) {
+        stuckToTop = (this.props.targetStickyScrollPositionFromTopPx >= domRect.top);
+      }
+      if (this.props.isSticky && this.props.targetStickyScrollPositionFromBottomPx !== undefined) {
+        stuckToBottom = ((window.innerHeight - domRect.bottom) <= this.props.targetStickyScrollPositionFromBottomPx);
+      }
+      console.debug(`stuckToTop ${stuckToTop} stuckToBottom ${stuckToBottom}`);
+      this.setState({stuckToTop, stuckToBottom});
+    }
+  }
+
+  buildStyleForStickyPosition() {
+    let styleToRet: React.CSSProperties = {};
+    if (this.props.isSticky && (this.state.stuckToTop || this.state.stuckToBottom)) {
+      if (this.state.stuckToTop) {
+        styleToRet = {
+          'position': 'fixed',
+          'top': (this.props.targetStickyScrollPositionFromTopPx + 'px')
+        };
+      } else if (this.state.stuckToBottom) {
+        styleToRet = {
+          'position': 'fixed',
+          'bottom': (this.props.targetStickyScrollPositionFromBottomPx + 'px')
+        };
+      }
+    }
+    console.debug('buildStyleForStickyPosition');
+    console.debug(styleToRet);
+    return styleToRet;
   }
 
   render() {
@@ -85,7 +129,6 @@ class ListSectionHeaderRow extends React.Component<ListSectionHeaderRowProps, Li
         />
       );
     }
-
     let optionalLinkClasses = 'link' + (this.state.isHidingLink ? ' hidden' : '');
     return (
       <div
@@ -93,13 +136,14 @@ class ListSectionHeaderRow extends React.Component<ListSectionHeaderRowProps, Li
         className={
           'ListSectionHeaderRow'
           + (this.props.collapsible ? ' collapsible' : '')
-          + (this.state.stuckToTop ? ' sticky-header' : '')
-          + (this.state.stuckToBottom ? ' sticky-bottom' : '')
+          + (this.props.isSticky ? ' sticky' : '')
         }
       >
-        {expandButton}
-        <div className="title">{this.props.title}</div>
-        <Link className={optionalLinkClasses} to={this.state.linkTo}>{this.props.linkLabel}</Link>
+        <div className={'content'} style={this.buildStyleForStickyPosition()}>
+          {expandButton}
+          <div className="title">{this.props.title}</div>
+          <Link className={optionalLinkClasses} to={this.state.linkTo}>{this.props.linkLabel}</Link>
+        </div>
       </div>
     );
   }
