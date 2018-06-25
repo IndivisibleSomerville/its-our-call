@@ -6,3 +6,7 @@
 
 ## Documentation
 Can be found here: `api_documentation.md`
+
+
+## Runtime
+Python 3.6.5
