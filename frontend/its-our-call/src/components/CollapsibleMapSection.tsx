@@ -22,6 +22,7 @@ export interface CollapsibleMapSectionDataProps {
   legislatorRowProps: LegislatorRowDataProps[];
   lastUpdated: string;
   confidencePercentage: string;
+  doNotRenderMap?: boolean;
   mapType: MapType;
   icon?: IconType;
   startExpanded?: boolean;
@@ -48,6 +49,7 @@ class CollapsibleMapSection extends React.Component<CollapsibleMapSectionWrapped
     super(props);
     this.updateStateFromProps = this.updateStateFromProps.bind(this);
     this.truncatedLegislatorRowProps = this.truncatedLegislatorRowProps.bind(this);
+    this.buildMap = this.buildMap.bind(this);
     // TODO: calculate from real data
     this.state = {
       numRepubs: 0,
@@ -95,6 +97,36 @@ class CollapsibleMapSection extends React.Component<CollapsibleMapSectionWrapped
       return this.props.data.legislatorRowProps;
     }
     return this.props.data.legislatorRowProps.slice(0, 5);
+  }
+
+  buildMap(): JSX.Element | null {
+    if (this.props.data.doNotRenderMap) {
+      return (null);
+    }
+    return (
+      <div className='map-and-details'>
+        <div className="topShadow">&nbsp;</div>
+        <div className="map">
+          <MapSVG
+            width={'95%'}
+            height={'95%'}
+            mapType={this.props.data.mapType}
+            customize={this.state.customizedMapZones}
+          />
+        </div>
+        <div className="map-details">
+          <div className="left">
+            <div className="confidence">
+              our confidence: {this.props.data.confidencePercentage}
+            </div>
+            <InfoButton />
+            <div className="last-update">
+              last update: {this.props.data.lastUpdated}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   render() {
@@ -157,26 +189,7 @@ class CollapsibleMapSection extends React.Component<CollapsibleMapSectionWrapped
           </div>
         </div>
         <div className="content">
-          <div className="topShadow">&nbsp;</div>
-          <div className="map">
-            <MapSVG
-              width={'95%'}
-              height={'95%'}
-              mapType={this.props.data.mapType}
-              customize={this.state.customizedMapZones}
-            />
-          </div>
-          <div className="map-details">
-            <div className="left">
-              <div className="confidence">
-                our confidence: {this.props.data.confidencePercentage}
-              </div>
-               <InfoButton />
-              <div className="last-update">
-                last update: {this.props.data.lastUpdated}
-              </div>
-            </div>
-          </div>
+          {this.buildMap()}
           {overviewWrapper}
         </div>
       </div>
