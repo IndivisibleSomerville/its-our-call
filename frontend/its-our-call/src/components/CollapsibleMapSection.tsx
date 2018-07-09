@@ -22,8 +22,7 @@ export interface CollapsibleMapSectionDataProps {
   legislatorRowProps: LegislatorRowDataProps[];
   lastUpdated: string;
   confidencePercentage: string;
-  doNotRenderMap?: boolean;
-  mapType: MapType;
+  mapType?: MapType;
   icon?: IconType;
   startExpanded?: boolean;
   showInfoButton?: boolean;
@@ -48,8 +47,10 @@ class CollapsibleMapSection extends React.Component<CollapsibleMapSectionWrapped
   constructor(props: CollapsibleMapSectionWrappedProps) {
     super(props);
     this.updateStateFromProps = this.updateStateFromProps.bind(this);
-    this.truncatedLegislatorRowProps = this.truncatedLegislatorRowProps.bind(this);
+    this.toggleExpanded = this.toggleExpanded.bind(this);
     this.buildMap = this.buildMap.bind(this);
+    this.buildLegislatorRows = this.buildLegislatorRows.bind(this);
+    this.buildOptionalIcon = this.buildOptionalIcon.bind(this);
     // TODO: calculate from real data
     this.state = {
       numRepubs: 0,
@@ -62,10 +63,14 @@ class CollapsibleMapSection extends React.Component<CollapsibleMapSectionWrapped
       isExpanded: false,
       expanded: (props.data.startExpanded === true),
     };
-    this.toggleMore = this.toggleMore.bind(this);
   }
-  toggleMore() {
-    this.setState({isExpanded: !this.state.isExpanded});
+  componentDidMount() {
+    this.setState({ isExpanded: false, isLoaded: false });
+    this.updateStateFromProps(this.props);
+  }
+  componentWillReceiveProps(props: CollapsibleMapSectionWrappedProps) {
+    this.setState({ isExpanded: false, isLoaded: false });
+    this.updateStateFromProps(props);
   }
   updateStateFromProps(props: CollapsibleMapSectionWrappedProps) {
     let numRepubs = 0;
@@ -83,28 +88,31 @@ class CollapsibleMapSection extends React.Component<CollapsibleMapSectionWrapped
       isLoaded: true,
     });
   }
-  componentDidMount() {
-    this.setState({ isExpanded: false, isLoaded: false });
-    this.updateStateFromProps(this.props);
-  }
-  componentWillReceiveProps(props: CollapsibleMapSectionWrappedProps) {
-    this.setState({ isExpanded: false, isLoaded: false });
-    this.updateStateFromProps(props);
+
+  toggleExpanded() {
+    this.setState({isExpanded: !this.state.isExpanded});
   }
 
-  truncatedLegislatorRowProps() {
-    if (this.state.isExpanded) {
-      return this.props.data.legislatorRowProps;
+  buildOptionalIcon() {
+    let optionalIcon = (null);
+    switch (this.props.data.icon) {
+      case 'smile':
+        optionalIcon = (<div className="icon smile">☺</div>);
+        break;
+      case 'frown':
+        optionalIcon = (<div className="icon frown">☹</div>);
+        break;
+      default:
     }
-    return this.props.data.legislatorRowProps.slice(0, 5);
+    return optionalIcon;
   }
 
   buildMap(): JSX.Element | null {
-    if (this.props.data.doNotRenderMap) {
+    if (this.props.data.mapType === undefined) {
       return (null);
     }
     return (
-      <div className='map-and-details'>
+      <div className="map-and-details">
         <div className="topShadow">&nbsp;</div>
         <div className="map">
           <MapSVG
@@ -129,6 +137,33 @@ class CollapsibleMapSection extends React.Component<CollapsibleMapSectionWrapped
     );
   }
 
+  buildLegislatorRows(): JSX.Element {
+    let truncatedLegislatorRowProps = () => {
+      if (this.state.isExpanded) {
+        return this.props.data.legislatorRowProps;
+      }
+      return this.props.data.legislatorRowProps.slice(0, 5);
+    };
+  
+    let toRet = (<div className="overview empty">[no legislators have this stance]</div>);
+    if (truncatedLegislatorRowProps().length > 0) {
+      toRet = (
+        <div className={'overview-wrapper ' + (this.state.isExpanded ? 'expanded' : 'collapsed')}>
+          <div className="overview">
+            {truncatedLegislatorRowProps().map((l: LegislatorRowDataProps, indx: number) => {
+                return (<LegislatorRow key={indx} data={l}/>);
+            })}
+          </div>
+          <div className="bottomShadow">&nbsp;</div>
+          <div className="toggleButton" onClick={() => {this.toggleExpanded(); }}>
+            {this.state.isExpanded ? 'hide' : 'more +'}
+          </div>
+        </div>
+      );
+    }
+    return toRet;
+  }
+
   render() {
     if (!this.state.isLoaded) {
       return (
@@ -138,37 +173,6 @@ class CollapsibleMapSection extends React.Component<CollapsibleMapSectionWrapped
       );
     }
 
-    let optionalIcon = (null);
-    switch (this.props.data.icon) {
-      case 'smile':
-        optionalIcon = (<div className="icon smile">☺</div>);
-        break;
-      case 'frown':
-        optionalIcon = (<div className="icon frown">☹</div>);
-        break;
-      default:
-    }
-    let optionalInfoButton = (null);
-    if (this.props.data.showInfoButton) {
-      optionalInfoButton = (<InfoButton />);
-    }
-
-    let overviewWrapper = (<div className="overview empty">[no legislators have this stance]</div>);
-    if (this.truncatedLegislatorRowProps().length > 0) {
-      overviewWrapper = (
-        <div className={'overview-wrapper ' + (this.state.isExpanded ? 'expanded' : 'collapsed')}>
-          <div className="overview">
-            {this.truncatedLegislatorRowProps().map((l: LegislatorRowDataProps, indx: number) => {
-                return (<LegislatorRow key={indx} data={l}/>);
-            })}
-          </div>
-          <div className="bottomShadow">&nbsp;</div>
-          <div className="toggleButton" onClick={() => {this.toggleMore(); }}>
-            {this.state.isExpanded ? 'hide' : 'more +'}
-          </div>
-        </div>
-      );
-    }
     return (
       <div className={'CollapsibleMapSection ' + (this.state.expanded ? 'expanded' : 'collapsed')}>
         <div className="header">
@@ -177,11 +181,11 @@ class CollapsibleMapSection extends React.Component<CollapsibleMapSectionWrapped
             onClick={() => {this.setState({expanded: !this.state.expanded}); }}
           />
           <div className="middle">
-            {optionalIcon}
+            {this.buildOptionalIcon()}
             <div className="title">
               {this.props.data.title}
             </div>
-            {optionalInfoButton}
+            {this.props.data.showInfoButton ? <InfoButton /> : (null)}
           </div>
           <div className="right">
             <div className="total">{this.state.numRepubs + this.state.numDems}</div>
@@ -190,7 +194,7 @@ class CollapsibleMapSection extends React.Component<CollapsibleMapSectionWrapped
         </div>
         <div className="content">
           {this.buildMap()}
-          {overviewWrapper}
+          {this.buildLegislatorRows()}
         </div>
       </div>
     );
