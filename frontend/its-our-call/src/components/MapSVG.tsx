@@ -2,62 +2,6 @@ import * as React from 'react';
 import stateData from '../data/usa-states-dimensions';
 import districtData from '../data/usa-districts-dimensions';
 
-// subcomponent for each map area (state, district, etc).
-
-interface MapAreaSVGProps {
-  dimensions: string;
-  fill: string;
-  stroke: string;
-  strokeWidth: number;
-  state: string;
-  onClickState?: (state: string) => void;
-}
-
-interface MapAreaSVGState {
-}
-
-class MapAreaSVG extends React.Component<MapAreaSVGProps, MapAreaSVGState> {
-  constructor(props: MapAreaSVGProps) {
-    super(props);
-    this.onClickState = this.onClickState.bind(this);
-  }
-
-  onClickState() {
-    if (this.props.onClickState) {
-      this.props.onClickState(this.props.state);
-    }
-  }
-
-  render() {
-    // TODO: popover on click
-    if (this.props.onClickState) {
-      return (
-        <path
-          d={this.props.dimensions}
-          fill={this.props.fill}
-          stroke={this.props.stroke}
-          strokeWidth={this.props.strokeWidth}
-          data-name={this.props.state}
-          className={`${this.props.state} state`}
-          onClick={this.onClickState}
-        />
-      );
-    }
-    return (
-      <path
-        d={this.props.dimensions}
-        fill={this.props.fill}
-        stroke={this.props.stroke}
-        strokeWidth={this.props.strokeWidth}
-        data-name={this.props.state}
-        className={`${this.props.state} state`}
-      />
-    );
-  }
-}
-
-// end of subcomponent
-
 // tslint:disable:no-console
 interface MapSVGProps {
   width: number | string;
@@ -94,6 +38,7 @@ export default class MapSVG extends React.Component<MapSVGProps, MapSVGState> {
     this.clickHandler = this.clickHandler.bind(this);
     this.buildStateCircles = this.buildStateCircles.bind(this);
     this.buildViewBox = this.buildViewBox.bind(this);
+    this.buildZonePathFromZoneKey = this.buildZonePathFromZoneKey.bind(this);
     this.state = {
       defaultFill: props.defaultFill ? props.defaultFill : 'rgba(0,0,0,0)',
       defaultStroke: props.defaultStroke ? props.defaultStroke : 'rgba(0,0,0,0)',
@@ -208,10 +153,25 @@ export default class MapSVG extends React.Component<MapSVGProps, MapSVGState> {
     });
   }
 
+  buildZonePathFromZoneKey(zoneKey: string) {
+    let dimensionData = this.props.mapType === 'state' ? stateData : districtData;
+    let dimensions = dimensionData[zoneKey][DIMENSIONS_KEY];
+    return (
+      <path
+          key={zoneKey}
+          d={dimensions}
+          fill={this.zoneFillColor(zoneKey)}
+          stroke={this.zoneStrokeColor(zoneKey)}
+          strokeWidth={2}
+          data-name={zoneKey}
+          className={`${zoneKey} state`}
+          onClick={() => { this.stateClickHandler(zoneKey); }}
+      />
+    );
+  }
+
   render() {
     let zoneData = this.props.mapType === 'state' ? stateZoneKeys : districtZoneKeys;
-    let dimensionData = this.props.mapType === 'state' ? stateData : districtData;
-
     return (
       <svg
         className="us-map"
@@ -224,19 +184,7 @@ export default class MapSVG extends React.Component<MapSVGProps, MapSVGState> {
           <use xlinkHref={this.props.mapType === 'state' ? '#state-map-outline' : '#district-map-outline'} />
         </g>
         <g className="outlines">
-          {zoneData.map((zoneKey: string) => {
-            return (
-              <MapAreaSVG
-                key={zoneKey}
-                dimensions={dimensionData[zoneKey][DIMENSIONS_KEY]}
-                state={zoneKey}
-                strokeWidth={2}
-                stroke={this.zoneStrokeColor(zoneKey)}
-                fill={this.zoneFillColor(zoneKey)}
-                onClickState={this.stateClickHandler}
-              />
-            );
-          })}
+          {zoneData.map(this.buildZonePathFromZoneKey)}
           <g className="DC state">
             <path
               className="DC1"
