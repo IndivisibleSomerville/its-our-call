@@ -1,7 +1,62 @@
 import * as React from 'react';
-import MapAreaSVG from './MapAreaSVG';
 import stateData from '../data/usa-states-dimensions';
 import districtData from '../data/usa-districts-dimensions';
+
+// subcomponent for each map area (state, district, etc).
+
+interface MapAreaSVGProps {
+  dimensions: string;
+  fill: string;
+  stroke: string;
+  strokeWidth: number;
+  state: string;
+  onClickState?: (state: string) => void;
+}
+
+interface MapAreaSVGState {
+}
+
+class MapAreaSVG extends React.Component<MapAreaSVGProps, MapAreaSVGState> {
+  constructor(props: MapAreaSVGProps) {
+    super(props);
+    this.onClickState = this.onClickState.bind(this);
+  }
+
+  onClickState() {
+    if (this.props.onClickState) {
+      this.props.onClickState(this.props.state);
+    }
+  }
+
+  render() {
+    // TODO: popover on click
+    if (this.props.onClickState) {
+      return (
+        <path
+          d={this.props.dimensions}
+          fill={this.props.fill}
+          stroke={this.props.stroke}
+          strokeWidth={this.props.strokeWidth}
+          data-name={this.props.state}
+          className={`${this.props.state} state`}
+          onClick={this.onClickState}
+        />
+      );
+    }
+    return (
+      <path
+        d={this.props.dimensions}
+        fill={this.props.fill}
+        stroke={this.props.stroke}
+        strokeWidth={this.props.strokeWidth}
+        data-name={this.props.state}
+        className={`${this.props.state} state`}
+      />
+    );
+  }
+}
+
+// end of subcomponent
 
 // tslint:disable:no-console
 interface MapSVGProps {

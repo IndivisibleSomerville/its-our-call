@@ -1,5 +1,4 @@
 import * as React from 'react';
-import MapAreaSVG from './MapAreaSVG';
 import stateData from '../data/usa-states-dimensions';
 import districtData from '../data/usa-districts-dimensions';
 
@@ -24,11 +23,11 @@ interface MapD3State {
   currentQueue: number;
 }
 
-const DIMENSIONS_KEY = 'dimensions';
+// const DIMENSIONS_KEY = 'dimensions';
 const VIEWBOX_KEY = 'viewBox';
 
-const stateZoneKeys = Object.keys(stateData).filter((key: string) => { return key !== VIEWBOX_KEY; });
-const districtZoneKeys = Object.keys(districtData).filter((key: string) => { return key !== VIEWBOX_KEY; });
+// const stateZoneKeys = Object.keys(stateData).filter((key: string) => { return key !== VIEWBOX_KEY; });
+// const districtZoneKeys = Object.keys(districtData).filter((key: string) => { return key !== VIEWBOX_KEY; });
 
 export default class MapD3 extends React.Component<MapSVGProps, MapD3State> {
   constructor(props: MapSVGProps) {
@@ -154,9 +153,6 @@ export default class MapD3 extends React.Component<MapSVGProps, MapD3State> {
   }
 
   render() {
-    let zoneData = this.props.mapType === 'state' ? stateZoneKeys : districtZoneKeys;
-    let dimensionData = this.props.mapType === 'state' ? stateData : districtData;
-
     return (
       <svg
         className="us-map"
@@ -169,19 +165,6 @@ export default class MapD3 extends React.Component<MapSVGProps, MapD3State> {
           <use xlinkHref={this.props.mapType === 'state' ? '#state-map-outline' : '#district-map-outline'} />
         </g>
         <g className="outlines">
-          {zoneData.map((zoneKey: string) => {
-            return (
-              <MapAreaSVG
-                key={zoneKey}
-                dimensions={dimensionData[zoneKey][DIMENSIONS_KEY]}
-                state={zoneKey}
-                strokeWidth={2}
-                stroke={this.zoneStrokeColor(zoneKey)}
-                fill={this.zoneFillColor(zoneKey)}
-                onClickState={this.stateClickHandler}
-              />
-            );
-          })}
           <g className="DC state">
             <path
               className="DC1"
