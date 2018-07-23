@@ -1,0 +1,10 @@
+.MissingPage404 {
+
+}
+
+.MissingPage404 .copy {
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -4,3 +4,4 @@ export { default as IssueList } from './IssueList';
 export { default as IssueView } from './IssueView';
 export { default as LegislatorList } from './LegislatorList';
 export { default as LegislatorView } from './LegislatorView';
+export { default as MissingPage404 } from './MissingPage404';
