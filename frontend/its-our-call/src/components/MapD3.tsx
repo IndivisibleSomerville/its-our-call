@@ -1,6 +1,11 @@
 import * as React from 'react';
 import stateData from '../data/usa-states-dimensions';
 import districtData from '../data/usa-districts-dimensions';
+import * as d3 from 'd3';
+import * as d3Geo from 'd3-geo';
+import * as topojson from 'topojson';
+import usTopoJsonData from '../data/topojson-us';
+import { GeometryObject } from '../../node_modules/@types/topojson-specification';
 
 // tslint:disable:no-console
 interface MapSVGProps {
@@ -26,18 +31,25 @@ interface MapD3State {
 // const DIMENSIONS_KEY = 'dimensions';
 const VIEWBOX_KEY = 'viewBox';
 
+let lastMapId = 0;
+let newMapID = function() {
+  lastMapId++;
+  return `map${lastMapId}`;
+};
+
 // const stateZoneKeys = Object.keys(stateData).filter((key: string) => { return key !== VIEWBOX_KEY; });
 // const districtZoneKeys = Object.keys(districtData).filter((key: string) => { return key !== VIEWBOX_KEY; });
 
 export default class MapD3 extends React.Component<MapSVGProps, MapD3State> {
+  uniqueID: string | undefined;
   constructor(props: MapSVGProps) {
     super(props);
     this.zoneFillColor = this.zoneFillColor.bind(this);
     this.zoneStrokeColor = this.zoneStrokeColor.bind(this);
     this.stateClickHandler = this.stateClickHandler.bind(this);
     this.clickHandler = this.clickHandler.bind(this);
-    this.buildStateCircles = this.buildStateCircles.bind(this);
     this.buildViewBox = this.buildViewBox.bind(this);
+    this.createMap = this.createMap.bind(this);
     this.state = {
       defaultFill: props.defaultFill ? props.defaultFill : 'rgba(0,0,0,0)',
       defaultStroke: props.defaultStroke ? props.defaultStroke : 'rgba(0,0,0,0)',
@@ -57,6 +69,7 @@ export default class MapD3 extends React.Component<MapSVGProps, MapD3State> {
       currentQueue,
       doneBuildingPaths: false
     });
+    this.createMap();
   }
 
   componentWillReceiveProps(props: MapSVGProps) {
@@ -69,7 +82,55 @@ export default class MapD3 extends React.Component<MapSVGProps, MapD3State> {
     });
   }
 
+  createMap() {
+    // width={500}
+    // height={500}
+    var width = 500;
+    var height = 500;
+    var projection = d3Geo.geoAlbersUsa()
+    .scale(1000)
+    .translate([width / 2, height / 2]);
+    var path = d3Geo.geoPath().projection(projection);
+    var svg;
+    if (this.uniqueID) {
+      svg = d3.select('#' + this.uniqueID).append('svg');
+    } else {
+      svg = d3.select('body').append('svg');
+    }
+    svg.attr('width', width).attr('height', height);
+    // var svg = d3.select('body').append('svg')
+    //   .attr('width', width)
+    //   .attr('height', height);
+    // TODO: load the json externally like this:
+    //  d3.json("/d/4090846/us.json", function(error, us) {
+    var us = usTopoJsonData;
+    svg.insert('path', '.graticule')
+      .datum(topojson.feature(us, us.objects.land))
+      .attr('class', 'land')
+      .attr('d', path);
+
+    let mesh = topojson.mesh(us, us.objects.counties, 
+        function(a: GeometryObject, b: GeometryObject) { 
+          // tslint:disable-next-line
+          return a !== b && !((a.id as number) / 1000 ^ (b.id as number) / 1000); 
+        });
+    svg.insert('path', '.graticule')
+      .datum(mesh)
+      .attr('class', 'county-boundary')
+      .attr('d', path);
+    svg.insert('path', '.graticule')
+      .datum(topojson.mesh(us, us.objects.states, 
+        function(a: GeometryObject, b: GeometryObject) { 
+          return a !== b;
+        }
+      ))
+      .attr('class', 'state-boundary')
+      .attr('d', path);
+      // });
+  }
+
   buildViewBox(isStateMap: boolean): string {
+    // build zoom and pan adjustments here?
     if (isStateMap) {
       // we need to pad the width of the state map since we're adding state circle shapes
       let stateDimensions = stateData[VIEWBOX_KEY].split(' ');
@@ -110,84 +171,13 @@ export default class MapD3 extends React.Component<MapSVGProps, MapD3State> {
       this.props.onStateClick(state);
     }
   }
-
-  buildStateCircles() {
-    if (this.props.mapType !== 'state') {
-      return;
-    }
-    let smallStates = ['VT', 'NH', 'MA', 'RI', 'CT', 'NJ', 'DE', 'MD', 'DC'];
-    let radius = 35;
-    let circleY = 185;
-    let textYOffset = 15;
-    let yStep = 45;
-    let leftX = 915;
-    let rightX = 995;
-    return smallStates.map((stateAbbreviation: string, indx: number) => {
-      // odd # items on the right, evens on the left
-      let rightColumn = (((indx + 1) % 2) === 1);
-      return (
-        <g key={indx} className={'state-label ' + stateAbbreviation}>
-          <circle
-            data-name={stateAbbreviation}
-            fill={this.zoneFillColor(stateAbbreviation)}
-            stroke={this.state.outerStroke}
-            strokeWidth="3"
-            cx={rightColumn ? rightX : leftX}
-            cy={circleY + yStep * indx}
-            r={radius}
-            opacity="1"
-          />
-          <text
-            textAnchor="middle"
-            fontSize="35"
-            fontWeight="500"
-            letterSpacing="1"
-            x={rightColumn ? rightX : leftX}
-            y={circleY + textYOffset + yStep * indx}
-          >
-            {stateAbbreviation}
-          </text>
-        </g>
-      );
-    });
+  componentWillMount() {
+    this.uniqueID = newMapID();
   }
 
   render() {
     return (
-      <svg
-        className="us-map"
-        xmlns="http://www.w3.org/2000/svg"
-        width={this.props.width}
-        height={this.props.height}
-        viewBox={this.state.viewBox}
-      >
-        <g className="bg" fill="#F2F2F2" stroke={this.state.outerStroke} strokeWidth="4">
-          <use xlinkHref={this.props.mapType === 'state' ? '#state-map-outline' : '#district-map-outline'} />
-        </g>
-        <g className="outlines">
-          <g className="DC state">
-            <path
-              className="DC1"
-              fill={this.zoneFillColor('DC1')}
-              stroke={this.zoneStrokeColor('DC1')}
-              d="M801.8,253.8 l-1.1-1.6 -1-0.8 1.1-1.6 2.2,1.5z"
-            />
-            <circle
-              className="DC2"
-              onClick={() => { this.stateClickHandler('DC'); }}
-              data-name={'DC'}
-              fill={this.zoneFillColor('DC')}
-              stroke={this.zoneStrokeColor('DC')}
-              strokeWidth="1.5"
-              cx="801.3"
-              cy="251.8"
-              r="5"
-              opacity="1"
-            />
-          </g>
-          {this.buildStateCircles()}
-        </g>
-      </svg>
+      <div id={this.uniqueID} />
     );
   }
 }
