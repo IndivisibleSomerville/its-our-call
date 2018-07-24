@@ -55,7 +55,6 @@ declare module 'react-tiny-popover' {
       arrowSize?: number;
       // tslint:disable-next-line:no-any
       arrowColor?: any;
-      // arrowColor?: React.CSSWideKeyword | any;
       arrowStyle?: React.CSSProperties;
   }
 
