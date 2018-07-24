@@ -1,10 +1,26 @@
 .MissingPage404 {
-
+  font-family: 'Montserrat', sans-serif;
+  font-size: 26px;
+  color: #444444;
+  text-align: center;
+  min-height: 500px;
 }
 
-.MissingPage404 .copy {
-  height: 400px;
+.MissingPage404 .content {
   display: flex;
   justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  width: 284px;
+  margin: 0 auto;
+}
+
+.MissingPage404 h1 {
+  margin: 139px 0 0 0;
+  font-weight: 500;
+  font-size: 150px;
+  color: #ABABAB;
+}
+
+.MissingPage404 p {
+  margin: 0;
 }
