@@ -3,13 +3,9 @@
   font-size: 26px;
   color: #444444;
   text-align: center;
-  min-height: 500px;
 }
 
 .MissingPage404 .content {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
   width: 284px;
   margin: 0 auto;
 }
