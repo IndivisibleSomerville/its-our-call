@@ -1,0 +1,11 @@
+.MapD3 {
+    width: 100%;
+    height: 16rem;
+}
+
+.MapD3 svg {
+    width: 100%;
+    height: 100%;
+    fill: transparent;
+    stroke: black;
+}
