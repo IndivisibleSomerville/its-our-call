@@ -132,9 +132,9 @@ class IssueView extends React.Component<IssueViewProps, IssueViewState> {
     let requiresCloture = hashed.requiresThreeFifth ? hashed.requiresThreeFifth === 'true' : false;
     let adjustForTiebreaker = hashed.adjustForTiebreaker ? hashed.adjustForTiebreaker === 'true' : true;
     // ^ simple or three-fifths majority
-    let percentYea = hashed.percentYea ? Number.parseInt(hashed.percentYea) : 55;
-    let percentNay = hashed.percentNay ? Number.parseInt(hashed.percentNay) : 40;
-    let percentUncommitted = hashed.percentUncommitted ? Number.parseInt(hashed.percentUncommitted) : 5;
+    let percentYea = hashed.percentYea ? Number.parseInt(hashed.percentYea, 10) : 55;
+    let percentNay = hashed.percentNay ? Number.parseInt(hashed.percentNay, 10) : 40;
+    let percentUncommitted = hashed.percentUncommitted ? Number.parseInt(hashed.percentUncommitted, 10) : 5;
     this.setState({
       isLoadingIssue: false, expandedOverview: false,
       adjustForTiebreaker,
