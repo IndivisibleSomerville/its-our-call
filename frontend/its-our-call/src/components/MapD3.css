@@ -9,3 +9,10 @@
     fill: transparent;
     stroke: black;
 }
+.MapD3 svg .county  {
+    fill: white;
+    stroke: black;
+}
+.MapD3 svg .county:hover {
+    fill: red;
+}
