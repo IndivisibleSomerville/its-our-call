@@ -10,8 +10,9 @@ const FIPStoPO = (() => {
     }
     return ret;
 })();
+// BUG: some states and districts and fips are mapped completely
 
-// we might need the reverse mappings instead.
+// we might need the reverse mappings instead, so heres the easiest way to build those.
 // tslint:disable-next-line:no-any
 function swap (json: any) {
     var ret = {};
