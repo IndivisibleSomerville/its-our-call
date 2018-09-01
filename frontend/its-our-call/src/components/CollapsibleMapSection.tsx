@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Legislator as LegislatorData } from '../data/Legislator';
 import PlusMinusButton from './PlusMinusButton';
 import PartyBreakDown from './PartyBreakDown';
-// import MapComponent from './MapSVG';
+
 import MapComponent from './MapD3';
 import LegislatorRow, { LegislatorRowDataProps } from '../components/LegislatorRow';
 

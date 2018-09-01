@@ -6,14 +6,14 @@ import { FIPStoPO } from '../data/mappings';
 
 import './MapD3.css';
 
-// available resolutions 20m 5m
+// available resolutions 20m 5m, please replace this with a backend
 // tslint:disable-next-line:max-line-length
 const topoJsonSource = 'https://raw.githubusercontent.com/andrewtremblay/andrewtremblay.github.com/master/json/_temp/topoJSON';
 const congressionalDistrictsTopoJsonURL = `${topoJsonSource}/cb_2017_us_cd115_5m.json`;
 const statesTopoJsonURL = `${topoJsonSource}/cb_2017_us_state_5m.json`;
 
 // tslint:disable:no-console
-interface MapSVGProps {
+interface MapD3Props {
   width: number | string;
   height: number | string;
   mapType: 'state' | 'district';
@@ -37,11 +37,11 @@ let newMapID = function() {
   return `map${lastMapId}`;
 };
 
-export default class MapD3 extends React.Component<MapSVGProps, MapD3State> {
+export default class MapD3 extends React.Component<MapD3Props, MapD3State> {
   uniqueID: string | undefined;
   // tslint:disable-next-line:no-any
   svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>;
-  constructor(props: MapSVGProps) {
+  constructor(props: MapD3Props) {
     super(props);
     this.topoJsonUrlFromProps = this.topoJsonUrlFromProps.bind(this);
     this.selectFeaturesFromJson = this.selectFeaturesFromJson.bind(this); 
@@ -71,7 +71,7 @@ export default class MapD3 extends React.Component<MapSVGProps, MapD3State> {
     this.createMap(this.props);
   }
 
-  componentWillReceiveProps(props: MapSVGProps) {
+  componentWillReceiveProps(props: MapD3Props) {
     let currentQueue = this.state.currentQueue + 1;
     this.setState({
       currentQueue,
@@ -80,7 +80,7 @@ export default class MapD3 extends React.Component<MapSVGProps, MapD3State> {
     this.createMap(props);
   }
 
-  topoJsonUrlFromProps(props: MapSVGProps) {
+  topoJsonUrlFromProps(props: MapD3Props) {
     if (props.mapType === 'district') {
       return congressionalDistrictsTopoJsonURL;
     } else if (props.mapType === 'state') { 
@@ -92,7 +92,7 @@ export default class MapD3 extends React.Component<MapSVGProps, MapD3State> {
   }
 
   // tslint:disable-next-line:no-any
-  selectFeaturesFromJson(props: MapSVGProps, dataJson: any) {
+  selectFeaturesFromJson(props: MapD3Props, dataJson: any) {
     // tslint:disable-next-line:no-any  
     let jsonData: any = {};
     // available resolutions 20m 5m
@@ -142,7 +142,7 @@ export default class MapD3 extends React.Component<MapSVGProps, MapD3State> {
     return this.props.defaultClick;
   }
 
-  createMap(props: MapSVGProps) {
+  createMap(props: MapD3Props) {
     var width = 938;
     var height = 500;
     if (!this.uniqueID) {
@@ -186,13 +186,20 @@ export default class MapD3 extends React.Component<MapSVGProps, MapD3State> {
           })
         .attr('d', path);
       // add pan & zoom to the map zones
-      thisComponent.svg.call(d3.zoom()
-        .on('zoom', () => { 
-          zones.attr('transform', d3.event.transform);
-          zones.attr('stroke-width', function() {
-            return 1 / d3.event.transform.k;
-          });
-        }));
+      thisComponent.svg.call(
+        d3.zoom()
+          .scaleExtent([1, 25])
+          .translateExtent([[0, 0], [width, height]])
+          .on('zoom', () => { 
+            console.log(d3.event.transform);
+            zones.attr('transform', d3.event.transform);
+            zones.attr('stroke-width', function() {
+              return 1 / d3.event.transform.k;
+            });
+          })
+      );
+      // add zoom in and out and zoom-reset buttons
+      // thisComponent.svg.append('')
     });
   }
 
