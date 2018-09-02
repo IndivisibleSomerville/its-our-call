@@ -2,7 +2,8 @@ import * as React from 'react';
 import { Legislator as LegislatorData } from '../data/Legislator';
 import PlusMinusButton from './PlusMinusButton';
 import PartyBreakDown from './PartyBreakDown';
-import MapSVG from './MapSVG';
+
+import MapComponent from './MapD3';
 import LegislatorRow, { LegislatorRowDataProps } from '../components/LegislatorRow';
 
 import InfoButton from './InfoButton';
@@ -115,7 +116,7 @@ class CollapsibleMapSection extends React.Component<CollapsibleMapSectionWrapped
       <div className="map-and-details">
         <div className="topShadow">&nbsp;</div>
         <div className="map">
-          <MapSVG
+          <MapComponent
             width={'95%'}
             height={'95%'}
             mapType={this.props.data.mapType}
