@@ -145,7 +145,6 @@ class IssueViewTabContent extends React.Component<IssueViewTabContentProps, Issu
               legislatorRowProps: this.props.committedYeaLegislatorProps,
               lastUpdated: '3 days ago',
               confidencePercentage: '90%',
-              mapType: this.state.mapType,
             } as CollapsibleMapSectionDataProps}
           />
           <CollapsibleMapSection
@@ -158,7 +157,6 @@ class IssueViewTabContent extends React.Component<IssueViewTabContentProps, Issu
               legislatorRowProps: this.props.committedNayLegislatorProps,
               lastUpdated: '3 days ago',
               confidencePercentage: '90%',
-              mapType: this.state.mapType,
             } as CollapsibleMapSectionDataProps}
           />
         </div>
