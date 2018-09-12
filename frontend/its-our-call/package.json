@@ -16,6 +16,7 @@
     "react-scripts-ts": "2.13.0",
     "react-tiny-popover": "^3.4.0",
     "redux": "^3.7.2",
+    "topojson": "^3.0.2",
     "uuid": "^3.2.1"
   },
   "scripts": {
@@ -35,8 +36,11 @@
     "@types/react-dom": "^16.0.4",
     "@types/react-icons": "^2.2.5",
     "@types/react-router-dom": "^4.2.6",
+    "@types/topojson": "^3.2.1",
     "@types/uuid": "^3.4.3",
     "enzyme": "^3.3.0",
+    "install": "^0.12.1",
+    "npm": "^6.4.1",
     "typescript": "^2.7.2"
   }
 }
