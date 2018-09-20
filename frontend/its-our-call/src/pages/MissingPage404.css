@@ -1,0 +1,21 @@
+.MissingPage404 {
+  font-size: 1.64rem;
+  color: #444444;
+  text-align: center;
+}
+
+.MissingPage404 .content {
+  width: 284px;
+  margin: 0 auto;
+}
+
+.MissingPage404 h1 {
+  margin: 139px 0 0 0;
+  font-weight: 500;
+  font-size: 150px;
+  color: #ABABAB;
+}
+
+.MissingPage404 p {
+  margin: 0;
+}

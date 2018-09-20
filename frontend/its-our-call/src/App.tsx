@@ -60,6 +60,7 @@ class App extends React.Component<AppProps, AppState> {
             <Route exact={true} path={urls.urlFmtIssueView(':id')} component={pages.IssueView}/>
             <Route exact={true} path={urls.urlLegislatorsList()} component={pages.LegislatorList}/>
             <Route exact={true} path={urls.urlFmtLegislatorView(':id')} component={pages.LegislatorView}/>
+            <Route component={pages.MissingPage404} />
           </Switch>
           <SearchOverlay open={this.state.overlay === Overlay.Search} />
           <MainMenu
